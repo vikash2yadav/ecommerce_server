@@ -4,7 +4,7 @@
 
 module.exports = {
   async up(queryInterface, Sequelize) {
-    return queryInterface.bulkInsert('user_addresses', [{
+    return await queryInterface.bulkInsert('user_addresses', [{
       user_id: 1,
       street: 'new area',
       area: 'area',

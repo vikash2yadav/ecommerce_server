@@ -64,7 +64,8 @@ exports.STATUS_MESSAGES = {
         EMAIL_SUBSCRIBER: 'Email is already in our subscriber list.',
         PRODUCT: 'This product slug is already in our system.',
         CATEGORY: 'This category slug is already in our system.',
-        PRODUCT_REVIEW: 'Your review is already in our system for this product.'
+        PRODUCT_REVIEW: 'Your review is already in our system for this product.',
+        CART_PRODUCT: 'This Product is available in the cart'
     },
 
     NOT_FOUND: {
@@ -90,7 +91,8 @@ exports.STATUS_MESSAGES = {
         PRODUCT: 'Product is not available in our system.',
         CATEGORY: 'Category is not available in our system.',
         ORDER: 'Order is not available in our system.',
-        PRODUCT_REVIEW: 'Product review is not found in our system.'
+        PRODUCT_REVIEW: 'Product review is not found in our system.',
+        CART_PRODUCT: 'Product is not found in your cart.'
     },
     PASSWORD: {
         MISMATCH: "Provided password do not match",
@@ -146,6 +148,11 @@ exports.STATUS_MESSAGES = {
         ADDED: "Product review has been placed successfully.",
         UPDATED: "Product review been updated successfully.",
         DELETED: "Product review been deleted successfully.",
+    },
+    CART_PRODUCT:{
+        ADDED: "Product has been added in the cart.",
+        UPDATED: "Product been updated in the cart.",
+        DELETED: "Product been deleted in the cart.",
     },
     EMAIL_SUBSCRIBER:{
         ADDED: "Email added in subscribers list.",
