@@ -76,9 +76,9 @@ module.exports = {
         allowNull: true,
         type: Sequelize.STRING(255)
       },
-      address: {
-        allowNull: true,
-        type: Sequelize.TEXT
+      user_addresses_id: {
+        allowNull: false,
+        type: Sequelize.BIGINT(20).UNSIGNED
       },
       status: {
         allowNull: false,
