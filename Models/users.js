@@ -5,7 +5,6 @@ const jwt = require('jsonwebtoken');
 const moment = require('moment');
 const mailer = new (require('../Utils/mailer'));
 const { generateOtp } = require('../Utils/helpers');
-const { where } = require('sequelize');
 
 class userModel {
     // sign up
@@ -284,7 +283,8 @@ class userModel {
         // check already email
         let checkEmail = await userSchema.findOne({
             where: {
-                email: bodyData?.email
+                email: bodyData?.email,
+                id: { [Op.ne]: userInfo?.id }
             }
         })
 
@@ -298,7 +298,8 @@ class userModel {
          // check already username
          let checkUsername = await userSchema.findOne({
             where: {
-                username: bodyData?.username
+                username: bodyData?.username,
+                id: { [Op.ne]: userInfo?.id }
             }
         })
 
