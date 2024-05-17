@@ -15,4 +15,7 @@ module.exports = (app) => {
     // categories route
     app.use("/category", require("./categories"));
 
+    // orders route
+    app.use("/order", require("./orders"));
+
 };

@@ -63,7 +63,7 @@ exports.STATUS_MESSAGES = {
         ROLE: 'Role is already exist!',
         EMAIL_SUBSCRIBER: 'Email is already in our subscriber list.',
         PRODUCT: 'This product slug is already in our system.',
-        CATEGORY: 'This category slug is already in our system.'
+        CATEGORY: 'This category slug is already in our system.',
     },
 
     NOT_FOUND: {
@@ -87,7 +87,8 @@ exports.STATUS_MESSAGES = {
         EMAIL_SUBSCRIBER: 'Email is not found in our system.',
         TEAM_MEMBER: 'Team member is not found in our system.',
         PRODUCT: 'Product is not available in our system.',
-        CATEGORY: 'Category is not available in our system.'
+        CATEGORY: 'Category is not available in our system.',
+        ORDER: 'Order is not available in our system.'
     },
     PASSWORD: {
         MISMATCH: "Provided password do not match",
@@ -134,10 +135,10 @@ exports.STATUS_MESSAGES = {
         DELETED: "Category been deleted successfully.",
         INACTIVE: 'Category status is in active.'
     },
-    ACCOUNT_TYPE: {
-        ADDED: "Account type has been added successfully.",
-        UPDATED: "Account type been updated successfully.",
-        DELETED: "Account type been deleted successfully.",
+    ORDER: {
+        ADDED: "Order has been placed successfully.",
+        UPDATED: "Order been updated successfully.",
+        DELETED: "Order been deleted successfully.",
     },
     EMAIL_SUBSCRIBER:{
         ADDED: "Email added in subscribers list.",
