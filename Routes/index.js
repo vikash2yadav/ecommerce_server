@@ -9,4 +9,7 @@ module.exports = (app) => {
     // product route
     app.use("/product", require("./products"));
 
+     // role route
+     app.use("/role", require("./roles"));
+
 };
