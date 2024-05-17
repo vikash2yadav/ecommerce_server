@@ -80,9 +80,9 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: true,
       type: DataTypes.STRING(255)
     },
-    address: {
-      allowNull: true,
-      type: DataTypes.TEXT
+    user_addresses_id: {
+      allowNull: false,
+      type: DataTypes.BIGINT(20).UNSIGNED
     },
     status: {
       allowNull: false,
