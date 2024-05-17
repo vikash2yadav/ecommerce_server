@@ -64,6 +64,7 @@ exports.STATUS_MESSAGES = {
         EMAIL_SUBSCRIBER: 'Email is already in our subscriber list.',
         PRODUCT: 'This product slug is already in our system.',
         CATEGORY: 'This category slug is already in our system.',
+        PRODUCT_REVIEW: 'Your review is already in our system for this product.'
     },
 
     NOT_FOUND: {
@@ -88,7 +89,8 @@ exports.STATUS_MESSAGES = {
         TEAM_MEMBER: 'Team member is not found in our system.',
         PRODUCT: 'Product is not available in our system.',
         CATEGORY: 'Category is not available in our system.',
-        ORDER: 'Order is not available in our system.'
+        ORDER: 'Order is not available in our system.',
+        PRODUCT_REVIEW: 'Product review is not found in our system.'
     },
     PASSWORD: {
         MISMATCH: "Provided password do not match",
@@ -139,6 +141,11 @@ exports.STATUS_MESSAGES = {
         ADDED: "Order has been placed successfully.",
         UPDATED: "Order been updated successfully.",
         DELETED: "Order been deleted successfully.",
+    },
+    PRODUCT_REVIEW:{
+        ADDED: "Product review has been placed successfully.",
+        UPDATED: "Product review been updated successfully.",
+        DELETED: "Product review been deleted successfully.",
     },
     EMAIL_SUBSCRIBER:{
         ADDED: "Email added in subscribers list.",
