@@ -21,4 +21,7 @@ module.exports = (app) => {
     // product reviews route
     app.use("/product_review", require("./product_reviews"));
 
+    // cart route
+    app.use("/cart", require("./carts"));
+
 };

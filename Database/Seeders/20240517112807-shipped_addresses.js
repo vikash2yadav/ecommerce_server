@@ -3,7 +3,7 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up (queryInterface, Sequelize) {
-    return queryInterface.bulkInsert("shipped_addresses", [
+    return await queryInterface.bulkInsert("shipped_addresses", [
       {
         order_id: 1,
         street: 'new area',

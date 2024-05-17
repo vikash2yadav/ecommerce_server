@@ -3,7 +3,7 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up (queryInterface, Sequelize) {
-    return queryInterface.bulkInsert('categories', [{
+    return await queryInterface.bulkInsert('categories', [{
       name: "electronic",
       slug: "electronic_gadgets",
       description: 'this is electronic category',
