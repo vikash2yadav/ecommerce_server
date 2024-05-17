@@ -61,7 +61,8 @@ exports.STATUS_MESSAGES = {
         TITLE: "This title already exist",
         EMAIL_ALREADY_EXISTS: "This email is already registered.!",
         ROLE: 'Role is already exist!',
-        EMAIL_SUBSCRIBER: 'Email is already in our subscriber list.'
+        EMAIL_SUBSCRIBER: 'Email is already in our subscriber list.',
+        PRODUCT: 'This product slug is already in our system.'
     },
 
     NOT_FOUND: {
@@ -83,7 +84,8 @@ exports.STATUS_MESSAGES = {
         NOTIFICATION: 'Notification is not available in our system.',
         EMOJI: 'Emoji is not available in our system.',
         EMAIL_SUBSCRIBER: 'Email is not found in our system.',
-        TEAM_MEMBER: 'Team member is not found in our system.'
+        TEAM_MEMBER: 'Team member is not found in our system.',
+        PRODUCT: 'Product is not available in our system.'
     },
     PASSWORD: {
         MISMATCH: "Provided password do not match",
@@ -117,6 +119,12 @@ exports.STATUS_MESSAGES = {
         NOT_VERIFIED: "Your email address is not verified.",
         INACTIVE: "Your email address is not active.",
         INVALID: "Please enter valid email & password."
+    },
+    PRODUCT: {
+        ADDED: "Product has been added successfully.",
+        UPDATED: "Product been updated successfully.",
+        DELETED: "Product been deleted successfully.",
+        INACTIVE: 'Product status is in active.'
     },
     ACCOUNT_TYPE: {
         ADDED: "Account type has been added successfully.",
@@ -275,6 +283,7 @@ exports.IMG_FOLDER_NAME = {
 
 // Generic Status
 exports.STATUS = {
+    ZERO: 0,
     NO: 0,
     YES: 1,
     UNREAD: 0,

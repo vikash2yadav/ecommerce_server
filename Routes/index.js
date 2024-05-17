@@ -6,4 +6,7 @@ module.exports = (app) => {
     // user route
     app.use("/user", require("./users"));
 
+    // product route
+    app.use("/product", require("./products"));
+
 };
