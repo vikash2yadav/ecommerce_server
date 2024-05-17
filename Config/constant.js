@@ -165,9 +165,9 @@ exports.STATUS_MESSAGES = {
         DELETED: "Notification been deleted successfully.",
     },
     ROLE: {
-        ROLE_ADD: "Role has been added successfully.",
-        ROLE_UPDATE: "Role has been updated successfully.",
-        ROLE_DELETE: "Role has been deleted successfully.",
+        ADDED: "Role has been added successfully.",
+        UPDATED: "Role has been updated successfully.",
+        DELETED: "Role has been deleted successfully.",
         ROLE_GET: "Role has been loaded successfully"
     },
     EMOJI:{
