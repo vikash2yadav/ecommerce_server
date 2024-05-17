@@ -2,51 +2,42 @@
 const {
   Model
 } = require('sequelize');
-const {STATUS} = require('../../Config/constant');
 module.exports = (sequelize, DataTypes) => {
-  class orders extends Model {
+  class order_items extends Model {
     static associate(models) {
       // define association here
     }
   }
-  orders.init({
+  order_items.init({
     id: {
       allowNull: false,
       autoIncrement: true,
       primaryKey: true,
       type: DataTypes.BIGINT(20).UNSIGNED
     },
-    user_id: {
+    order_id: {
       allowNull: false,
       type: DataTypes.BIGINT(20).UNSIGNED
     },
-    orderd_date: {
-      allowNull: false,
-      type: DataTypes.DATE
-    },
-    shipped_date: {
-      allowNull: true,
-      type: DataTypes.DATE
-    },
-    shipped_addresses_id: {
+    product_id: {
       allowNull: false,
       type: DataTypes.BIGINT(20).UNSIGNED
     },
-    total_amoumt: {
+    quantity:{
       allowNull: false,
       type: DataTypes.BIGINT(20)
     },
-    status: {
+    unit_price:{
       allowNull: false,
-      type: DataTypes.TINYINT(1),
-      defaultValue: STATUS?.ACTIVE,
-      comment: "0 => In Active 1 => Active"
+      type: DataTypes.BIGINT(20)
     },
-    is_delete: {
+    discount:{
       allowNull: false,
-      type: DataTypes.TINYINT(1),
-      defaultValue: STATUS?.NOTDELETED,
-      comment: "0 => Not Deleted 1 => Deleted"
+      type: DataTypes.BIGINT(20)
+    },
+    totoal_amount:{
+      allowNull: false,
+      type: DataTypes.BIGINT(20)
     },
     createdAt: {
       allowNull: false,
@@ -58,7 +49,7 @@ module.exports = (sequelize, DataTypes) => {
     }
   }, {
     sequelize,
-    modelName: 'orders',
+    modelName: 'order_items',
   });
-  return orders;
+  return order_items;
 };

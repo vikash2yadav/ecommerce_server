@@ -2,51 +2,46 @@
 const {
   Model
 } = require('sequelize');
-const {STATUS} = require('../../Config/constant');
 module.exports = (sequelize, DataTypes) => {
-  class orders extends Model {
+  class shipped_addresses extends Model {
     static associate(models) {
       // define association here
     }
   }
-  orders.init({
+  shipped_addresses.init({
     id: {
       allowNull: false,
       autoIncrement: true,
       primaryKey: true,
       type: DataTypes.BIGINT(20).UNSIGNED
     },
-    user_id: {
+    order_id: {
       allowNull: false,
       type: DataTypes.BIGINT(20).UNSIGNED
     },
-    orderd_date: {
+    street: {
       allowNull: false,
-      type: DataTypes.DATE
+      type: DataTypes.STRING(255)
     },
-    shipped_date: {
-      allowNull: true,
-      type: DataTypes.DATE
+    area: {
+      allowNull: false,
+      type: DataTypes.STRING(255)
     },
-    shipped_addresses_id: {
+    pin_code: {
+      allowNull: false,
+      type: DataTypes.BIGINT(6)
+    },
+    city_id: {
       allowNull: false,
       type: DataTypes.BIGINT(20).UNSIGNED
     },
-    total_amoumt: {
+    state_id: {
       allowNull: false,
-      type: DataTypes.BIGINT(20)
+      type: DataTypes.BIGINT(20).UNSIGNED
     },
-    status: {
+    country_id: {
       allowNull: false,
-      type: DataTypes.TINYINT(1),
-      defaultValue: STATUS?.ACTIVE,
-      comment: "0 => In Active 1 => Active"
-    },
-    is_delete: {
-      allowNull: false,
-      type: DataTypes.TINYINT(1),
-      defaultValue: STATUS?.NOTDELETED,
-      comment: "0 => Not Deleted 1 => Deleted"
+      type: DataTypes.BIGINT(20).UNSIGNED
     },
     createdAt: {
       allowNull: false,
@@ -58,7 +53,7 @@ module.exports = (sequelize, DataTypes) => {
     }
   }, {
     sequelize,
-    modelName: 'orders',
+    modelName: 'shipped_addresses',
   });
-  return orders;
+  return shipped_addresses;
 };

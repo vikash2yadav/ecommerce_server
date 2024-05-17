@@ -1,47 +1,41 @@
 'use strict';
 /** @type {import('sequelize-cli').Migration} */
-const {STATUS} = require('../../Config/constant');
-
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('orders', {
+    await queryInterface.createTable('shipped_addresses', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.BIGINT(20).UNSIGNED
       },
-      user_id: {
+      order_id: {
         allowNull: false,
         type: Sequelize.BIGINT(20).UNSIGNED
       },
-      orderd_date: {
+      street: {
         allowNull: false,
-        type: Sequelize.DATE
+        type: Sequelize.STRING(255)
       },
-      shipped_date: {
-        allowNull: true,
-        type: Sequelize.DATE
+      area: {
+        allowNull: false,
+        type: Sequelize.STRING(255)
       },
-      shipped_addresses_id: {
+      pin_code: {
+        allowNull: false,
+        type: Sequelize.BIGINT(6)
+      },
+      city_id: {
         allowNull: false,
         type: Sequelize.BIGINT(20).UNSIGNED
       },
-      total_amoumt: {
+      state_id: {
         allowNull: false,
-        type: Sequelize.BIGINT(20)
+        type: Sequelize.BIGINT(20).UNSIGNED
       },
-      status: {
+      country_id: {
         allowNull: false,
-        type: Sequelize.TINYINT(1),
-        defaultValue: STATUS?.ACTIVE,
-        comment: "0 => In Active 1 => Active"
-      },
-      is_delete: {
-        allowNull: false,
-        type: Sequelize.TINYINT(1),
-        defaultValue: STATUS?.NOTDELETED,
-        comment: "0 => Not Deleted 1 => Deleted"
+        type: Sequelize.BIGINT(20).UNSIGNED
       },
       createdAt: {
         allowNull: false,
@@ -54,6 +48,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('orders');
+    await queryInterface.dropTable('shipped_addresses');
   }
 };

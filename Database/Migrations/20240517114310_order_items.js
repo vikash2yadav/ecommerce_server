@@ -1,47 +1,37 @@
 'use strict';
 /** @type {import('sequelize-cli').Migration} */
-const {STATUS} = require('../../Config/constant');
-
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('orders', {
+    await queryInterface.createTable('order_items', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.BIGINT(20).UNSIGNED
       },
-      user_id: {
+      order_id: {
         allowNull: false,
         type: Sequelize.BIGINT(20).UNSIGNED
       },
-      orderd_date: {
-        allowNull: false,
-        type: Sequelize.DATE
-      },
-      shipped_date: {
-        allowNull: true,
-        type: Sequelize.DATE
-      },
-      shipped_addresses_id: {
+      product_id: {
         allowNull: false,
         type: Sequelize.BIGINT(20).UNSIGNED
       },
-      total_amoumt: {
+      quantity:{
         allowNull: false,
         type: Sequelize.BIGINT(20)
       },
-      status: {
+      unit_price:{
         allowNull: false,
-        type: Sequelize.TINYINT(1),
-        defaultValue: STATUS?.ACTIVE,
-        comment: "0 => In Active 1 => Active"
+        type: Sequelize.BIGINT(20)
       },
-      is_delete: {
+      discount:{
         allowNull: false,
-        type: Sequelize.TINYINT(1),
-        defaultValue: STATUS?.NOTDELETED,
-        comment: "0 => Not Deleted 1 => Deleted"
+        type: Sequelize.BIGINT(20)
+      },
+      totoal_amount:{
+        allowNull: false,
+        type: Sequelize.BIGINT(20)
       },
       createdAt: {
         allowNull: false,
@@ -54,6 +44,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('orders');
+    await queryInterface.dropTable('order_items');
   }
 };
