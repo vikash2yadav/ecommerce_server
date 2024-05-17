@@ -62,7 +62,8 @@ exports.STATUS_MESSAGES = {
         EMAIL_ALREADY_EXISTS: "This email is already registered.!",
         ROLE: 'Role is already exist!',
         EMAIL_SUBSCRIBER: 'Email is already in our subscriber list.',
-        PRODUCT: 'This product slug is already in our system.'
+        PRODUCT: 'This product slug is already in our system.',
+        CATEGORY: 'This category slug is already in our system.'
     },
 
     NOT_FOUND: {
@@ -85,7 +86,8 @@ exports.STATUS_MESSAGES = {
         EMOJI: 'Emoji is not available in our system.',
         EMAIL_SUBSCRIBER: 'Email is not found in our system.',
         TEAM_MEMBER: 'Team member is not found in our system.',
-        PRODUCT: 'Product is not available in our system.'
+        PRODUCT: 'Product is not available in our system.',
+        CATEGORY: 'Category is not available in our system.'
     },
     PASSWORD: {
         MISMATCH: "Provided password do not match",
@@ -125,6 +127,12 @@ exports.STATUS_MESSAGES = {
         UPDATED: "Product been updated successfully.",
         DELETED: "Product been deleted successfully.",
         INACTIVE: 'Product status is in active.'
+    },
+    CATEGORY: {
+        ADDED: "Category has been added successfully.",
+        UPDATED: "Category been updated successfully.",
+        DELETED: "Category been deleted successfully.",
+        INACTIVE: 'Category status is in active.'
     },
     ACCOUNT_TYPE: {
         ADDED: "Account type has been added successfully.",
