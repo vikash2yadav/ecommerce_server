@@ -9,7 +9,10 @@ module.exports = (app) => {
     // product route
     app.use("/product", require("./products"));
 
-     // role route
-     app.use("/role", require("./roles"));
+    // role route
+    app.use("/role", require("./roles"));
+
+    // categories route
+    app.use("/category", require("./categories"));
 
 };
