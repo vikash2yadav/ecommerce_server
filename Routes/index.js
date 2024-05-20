@@ -30,7 +30,10 @@ module.exports = (app) => {
     // product faq reaction route
     app.use("/product_faq_reaction", require("./product_faq_reactions"));
 
-     // payment route
-     app.use("/payment", require("./payments"));
+    // payment route
+    app.use("/payment", require("./payments"));
+
+    // wishlist route
+    app.use("/wishlist", require("./wishlists"));
 
 };
