@@ -24,10 +24,13 @@ module.exports = (app) => {
     // cart route
     app.use("/cart", require("./carts"));
 
-    // cart route
+    // product faq route
     app.use("/product_faq", require("./product_faqs"));
 
-    // cart route
+    // product faq reaction route
     app.use("/product_faq_reaction", require("./product_faq_reactions"));
+
+     // payment route
+     app.use("/payment", require("./payments"));
 
 };
