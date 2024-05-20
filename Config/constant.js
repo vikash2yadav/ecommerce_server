@@ -67,7 +67,7 @@ exports.STATUS_MESSAGES = {
         PRODUCT_REVIEW: 'Your review is already in our system for this product.',
         CART_PRODUCT: 'This Product is available in the cart',
         PRODUCT_FAQ: 'This Faq is available in our system',
-        WISH: 'This wish is available in our system'
+        WISH: 'This wish is available in our system',
     },
 
     NOT_FOUND: {
@@ -97,7 +97,8 @@ exports.STATUS_MESSAGES = {
         CART_PRODUCT: 'Product is not found in your cart.',
         PRODUCT_FAQ: 'Product faq is not found in our system.',
         PAYMENT: 'Payment is not found in our system.',
-        WISH: 'This wish is not found in our system.'
+        WISH: 'This wish is not found in our system.',
+        COUPON: 'This coupon code is not found in our system.'
     },
     PASSWORD: {
         MISMATCH: "Provided password do not match",
@@ -178,6 +179,11 @@ exports.STATUS_MESSAGES = {
         ADDED: "Wish has been added successfully.",
         UPDATED: "Wish been updated successfully.",
         DELETED: "Wish been deleted successfully.",
+    },
+    COUPON:{
+        ADDED: "Coupon has been added successfully.",
+        UPDATED: "Coupon been updated successfully.",
+        DELETED: "Coupon been deleted successfully.",
     },
     EMAIL_SUBSCRIBER:{
         ADDED: "Email added in subscribers list.",
@@ -352,7 +358,8 @@ exports.STATUS = {
     DEFAULT: 1,
     NOT_DEFAULT: 0,
     TRUE: true,
-    FALSE: false
+    FALSE: false,
+    NOT_EXPIRED: 0
 };
 
 // Notifications type

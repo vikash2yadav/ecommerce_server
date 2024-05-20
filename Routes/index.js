@@ -36,4 +36,7 @@ module.exports = (app) => {
     // wishlist route
     app.use("/wishlist", require("./wishlists"));
 
+    // coupon route
+    app.use("/coupon", require("./coupons"));
+
 };
