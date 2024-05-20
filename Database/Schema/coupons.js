@@ -42,6 +42,14 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       type: DataTypes.DATE
     },
+    created_by:{
+      allowNull: false,
+      type: DataTypes.BIGINT(20).UNSIGNED
+    },
+    updated_by:{
+      allowNull: true,
+      type: DataTypes.BIGINT(20).UNSIGNED
+    },
     createdAt: {
       allowNull: false,
       type: DataTypes.DATE
