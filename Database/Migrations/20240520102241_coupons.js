@@ -36,6 +36,14 @@ module.exports = {
         allowNull: false,
         type: Sequelize.DATE
       },
+      created_by:{
+        allowNull: false,
+        type: Sequelize.BIGINT(20).UNSIGNED
+      },
+      updated_by:{
+        allowNull: true,
+        type: Sequelize.BIGINT(20).UNSIGNED
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE

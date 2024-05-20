@@ -27,6 +27,10 @@ module.exports = {
         allowNull: false,
         type: Sequelize.BIGINT(20).UNSIGNED
       },
+      updated_by: {
+        allowNull: true,
+        type: Sequelize.BIGINT(20).UNSIGNED
+      },
       status: {
         allowNull: false,
         type: Sequelize.TINYINT(1),
