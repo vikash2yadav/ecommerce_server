@@ -95,6 +95,7 @@ exports.STATUS_MESSAGES = {
         PRODUCT_REVIEW: 'Product review is not found in our system.',
         CART_PRODUCT: 'Product is not found in your cart.',
         PRODUCT_FAQ: 'Product faq is not found in our system.',
+        PAYMENT: 'Payment is not found in our system.'
     },
     PASSWORD: {
         MISMATCH: "Provided password do not match",
@@ -165,6 +166,11 @@ exports.STATUS_MESSAGES = {
         ADDED: "Faq reaction has been added successfully.",
         UPDATED: "Faq reaction been updated in successfully.",
         DELETED: "Faq reaction been deleted in successfully.",
+    },
+    PAYMENT: {
+        ADDED: "Payment has been added successfully.",
+        UPDATED: "Payment been updated in successfully.",
+        DELETED: "Payment been deleted in successfully.",
     },
     EMAIL_SUBSCRIBER:{
         ADDED: "Email added in subscribers list.",
@@ -309,6 +315,12 @@ exports.STATUS_MESSAGES = {
     },
 
 };
+
+// payment status
+exports.PAYMENT_STATUS = {
+    FAILED: 0,
+    SUCCESS: 1
+}
 
 // File Path
 exports.IMG_FOLDER_NAME = {
