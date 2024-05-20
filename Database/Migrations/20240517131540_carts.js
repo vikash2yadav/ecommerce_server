@@ -1,4 +1,7 @@
 'use strict';
+
+const { STATUS } = require('../../Config/constant');
+
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
@@ -20,6 +23,18 @@ module.exports = {
       quantity: {
         allowNull: false,
         type: Sequelize.BIGINT(20)
+      },
+      status: {
+        allowNull: false,
+        type: Sequelize.TINYINT(1),
+        defaultValue: STATUS?.ACTIVE,
+        comment: "0 => In Active 1 => Active"
+      },
+      is_delete: {
+        allowNull: false,
+        type: Sequelize.TINYINT(1),
+        defaultValue: STATUS?.NOTDELETED,
+        comment: "0 => Not Deleted 1 => Deleted"
       },
       createdAt: {
         allowNull: false,

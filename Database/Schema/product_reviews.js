@@ -26,7 +26,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     rating: {
       allowNull: false,
-      type: DataTypes.STRING(255)
+      type: DataTypes.TINYINT(1),
     },
     comment: {
       allowNull: false,

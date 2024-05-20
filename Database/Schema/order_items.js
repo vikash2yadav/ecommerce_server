@@ -31,7 +31,11 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       type: DataTypes.BIGINT(20)
     },
-    discount:{
+    unit_discount:{
+      allowNull: false,
+      type: DataTypes.BIGINT(20)
+    },
+    total_discount:{
       allowNull: false,
       type: DataTypes.BIGINT(20)
     },

@@ -25,7 +25,11 @@ module.exports = {
         allowNull: false,
         type: Sequelize.BIGINT(20)
       },
-      discount:{
+      unit_discount:{
+        allowNull: false,
+        type: Sequelize.BIGINT(20)
+      },
+      total_discount:{
         allowNull: false,
         type: Sequelize.BIGINT(20)
       },

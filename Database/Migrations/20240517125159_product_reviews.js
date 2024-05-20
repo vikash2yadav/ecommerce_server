@@ -22,7 +22,7 @@ module.exports = {
       },
       rating: {
         allowNull: false,
-        type: Sequelize.STRING(255)
+        type: Sequelize.TINYINT(1),
       },
       comment: {
         allowNull: false,

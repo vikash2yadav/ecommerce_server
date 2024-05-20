@@ -2,6 +2,7 @@
 const {
   Model
 } = require('sequelize');
+const { STATUS } = require('../../Config/constant');
 module.exports = (sequelize, DataTypes) => {
   class carts extends Model {
     static associate(models) {
@@ -26,6 +27,18 @@ module.exports = (sequelize, DataTypes) => {
     quantity: {
       allowNull: false,
       type: DataTypes.BIGINT(20)
+    },
+    status: {
+      allowNull: false,
+      type: DataTypes.TINYINT(1),
+      defaultValue: STATUS?.ACTIVE,
+      comment: "0 => In Active 1 => Active"
+    },
+    is_delete: {
+      allowNull: false,
+      type: DataTypes.TINYINT(1),
+      defaultValue: STATUS?.NOTDELETED,
+      comment: "0 => Not Deleted 1 => Deleted"
     },
     createdAt: {
       allowNull: false,

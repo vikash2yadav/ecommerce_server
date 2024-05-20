@@ -9,16 +9,18 @@ module.exports = {
         product_id: 2,
         quantity: 1,
         unit_price: 200,
-        discount: 10,
-        totoal_amount: 200
+        unit_discount: 10,
+        total_discount: 10,
+        totoal_amount: 190
       },
       {
         order_id: 2,
         product_id: 3,
         quantity: 2,
         unit_price: 2000,
-        discount: 200,
-        totoal_amount: 200
+        unit_discount: 200,
+        total_discount: 400,
+        totoal_amount: 3600
       }
     ])
   },
