@@ -66,7 +66,8 @@ exports.STATUS_MESSAGES = {
         CATEGORY: 'This category slug is already in our system.',
         PRODUCT_REVIEW: 'Your review is already in our system for this product.',
         CART_PRODUCT: 'This Product is available in the cart',
-        PRODUCT_FAQ: 'This Faq is available in our system'
+        PRODUCT_FAQ: 'This Faq is available in our system',
+        WISH: 'This wish is available in our system'
     },
 
     NOT_FOUND: {
@@ -95,7 +96,8 @@ exports.STATUS_MESSAGES = {
         PRODUCT_REVIEW: 'Product review is not found in our system.',
         CART_PRODUCT: 'Product is not found in your cart.',
         PRODUCT_FAQ: 'Product faq is not found in our system.',
-        PAYMENT: 'Payment is not found in our system.'
+        PAYMENT: 'Payment is not found in our system.',
+        WISH: 'This wish is not found in our system.'
     },
     PASSWORD: {
         MISMATCH: "Provided password do not match",
@@ -164,13 +166,18 @@ exports.STATUS_MESSAGES = {
     },
     PRODUCT_FAQ_REACTION:{
         ADDED: "Faq reaction has been added successfully.",
-        UPDATED: "Faq reaction been updated in successfully.",
-        DELETED: "Faq reaction been deleted in successfully.",
+        UPDATED: "Faq reaction been updated successfully.",
+        DELETED: "Faq reaction been deleted successfully.",
     },
     PAYMENT: {
         ADDED: "Payment has been added successfully.",
-        UPDATED: "Payment been updated in successfully.",
-        DELETED: "Payment been deleted in successfully.",
+        UPDATED: "Payment been updated successfully.",
+        DELETED: "Payment been deleted successfully.",
+    },
+    WISH: {
+        ADDED: "Wish has been added successfully.",
+        UPDATED: "Wish been updated successfully.",
+        DELETED: "Wish been deleted successfully.",
     },
     EMAIL_SUBSCRIBER:{
         ADDED: "Email added in subscribers list.",
