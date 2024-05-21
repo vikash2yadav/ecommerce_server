@@ -68,6 +68,7 @@ exports.STATUS_MESSAGES = {
         CART_PRODUCT: 'This Product is available in the cart',
         PRODUCT_FAQ: 'This Faq is available in our system',
         WISH: 'This wish is available in our system',
+        USER_COUPON: 'This coupon is already assign to this user'
     },
 
     NOT_FOUND: {
@@ -98,7 +99,8 @@ exports.STATUS_MESSAGES = {
         PRODUCT_FAQ: 'Product faq is not found in our system.',
         PAYMENT: 'Payment is not found in our system.',
         WISH: 'This wish is not found in our system.',
-        COUPON: 'This coupon code is not found in our system.'
+        COUPON: 'This coupon code is not found in our system.',
+        USER_COUPON: 'This user coupon is not fount in our system'
     },
     PASSWORD: {
         MISMATCH: "Provided password do not match",
@@ -185,6 +187,11 @@ exports.STATUS_MESSAGES = {
         UPDATED: "Coupon been updated successfully.",
         DELETED: "Coupon been deleted successfully.",
     },
+    USER_COUPON: {
+        ADDED: "Users Coupon has been added successfully.",
+        UPDATED: "Users Coupon been updated successfully.",
+        DELETED: "Users Coupon been deleted successfully.",
+    },
     EMAIL_SUBSCRIBER:{
         ADDED: "Email added in subscribers list.",
         UPDATED: "Email updated successfully.",
@@ -251,6 +258,7 @@ exports.STATUS_MESSAGES = {
             SLUG: 'Please, enter slug',
             VALUE: 'Please, enter value',
             PRODUCT: 'Please, enter product.',
+            COUPON: 'Please, enter coupon',
             QUANTITY: 'Please, enter quantity',
             CODE: 'Please, enter code',
             DESCRIPTION: 'Please, enter description.',
