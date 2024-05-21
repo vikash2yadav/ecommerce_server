@@ -39,4 +39,7 @@ module.exports = (app) => {
     // coupon route
     app.use("/coupon", require("./coupons"));
 
+    // user coupon relations route
+    app.use("/user_coupon_relation", require("./user_coupon_relations"));
+
 };
