@@ -42,4 +42,7 @@ module.exports = (app) => {
     // user coupon relations route
     app.use("/user_coupon_relation", require("./user_coupon_relations"));
 
+    // language route
+    app.use("/language", require("./languages"));
+
 };

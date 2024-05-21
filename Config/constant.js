@@ -68,7 +68,9 @@ exports.STATUS_MESSAGES = {
         CART_PRODUCT: 'This Product is available in the cart',
         PRODUCT_FAQ: 'This Faq is available in our system',
         WISH: 'This wish is available in our system',
-        USER_COUPON: 'This coupon is already assign to this user'
+        USER_COUPON: 'This coupon is already assign to this user',
+        LANGUAGE: 'This language is already exist',
+        LANGUAGE_CODE: 'THis language code is already exist in our system'
     },
 
     NOT_FOUND: {
@@ -100,7 +102,8 @@ exports.STATUS_MESSAGES = {
         PAYMENT: 'Payment is not found in our system.',
         WISH: 'This wish is not found in our system.',
         COUPON: 'This coupon code is not found in our system.',
-        USER_COUPON: 'This user coupon is not fount in our system'
+        USER_COUPON: 'This user coupon is not fount in our system',
+        LANGUAGE: 'This language is not found in our system'
     },
     PASSWORD: {
         MISMATCH: "Provided password do not match",
@@ -191,6 +194,11 @@ exports.STATUS_MESSAGES = {
         ADDED: "Users Coupon has been added successfully.",
         UPDATED: "Users Coupon been updated successfully.",
         DELETED: "Users Coupon been deleted successfully.",
+    },
+    LANGUAGE: {
+        ADDED: "Language has been added successfully.",
+        UPDATED: "Language been updated successfully.",
+        DELETED: "Language been deleted successfully.",
     },
     EMAIL_SUBSCRIBER:{
         ADDED: "Email added in subscribers list.",
