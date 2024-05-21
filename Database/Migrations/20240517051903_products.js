@@ -13,7 +13,8 @@ module.exports = {
       },
       suplier_id: {
         allowNull: false,
-        type: Sequelize.BIGINT(20).UNSIGNED
+        type: Sequelize.BIGINT(20).UNSIGNED,
+        references: { model: 'users', key: 'id' }
       },
       name: {
         allowNull: false,
@@ -37,7 +38,8 @@ module.exports = {
       },
       category_id: {
         allowNull: false,
-        type: Sequelize.BIGINT(20).UNSIGNED
+        type: Sequelize.BIGINT(20).UNSIGNED,
+        references: { model: 'categories', key: 'id' }
       },
       price: {
         allowNull: false,
@@ -73,7 +75,8 @@ module.exports = {
       },
       last_updated_by: {
         allowNull: true,
-        type: Sequelize.BIGINT(20).UNSIGNED
+        type: Sequelize.BIGINT(20).UNSIGNED,
+        references: { model: 'users', key: 'id' }
       },
       status: {
         allowNull: false,

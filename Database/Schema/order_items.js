@@ -5,7 +5,14 @@ const {
 module.exports = (sequelize, DataTypes) => {
   class order_items extends Model {
     static associate(models) {
-      // define association here
+      order_items.belongsTo(models.orders, {
+        foreignKey: 'order_id',
+        onDelete: 'cascade'
+      });
+      order_items.belongsTo(models.products, {
+        foreignKey: 'product_id',
+        onDelete: 'cascade'
+      })
     }
   }
   order_items.init({
@@ -17,11 +24,13 @@ module.exports = (sequelize, DataTypes) => {
     },
     order_id: {
       allowNull: false,
-      type: DataTypes.BIGINT(20).UNSIGNED
+      type: DataTypes.BIGINT(20).UNSIGNED,
+      references: { model: 'orders', key: 'id' }
     },
     product_id: {
       allowNull: false,
-      type: DataTypes.BIGINT(20).UNSIGNED
+      type: DataTypes.BIGINT(20).UNSIGNED,
+      references: { model: 'products', key: 'id' }
     },
     quantity:{
       allowNull: false,

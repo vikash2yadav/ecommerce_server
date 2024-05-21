@@ -2,12 +2,59 @@
 const {
   Model
 } = require('sequelize');
-const {STATUS} = require('../../Config/constant');
+const { STATUS } = require('../../Config/constant');
 
 module.exports = (sequelize, DataTypes) => {
   class products extends Model {
     static associate(models) {
-      // define association here
+      products.hasMany(models.best_sellers, {
+        foreignKey: 'product_id',
+        onDelete: 'cascade'
+      });
+      products.hasMany(models.carts, {
+        foreignKey: 'product_id',
+        onDelete: 'cascade'
+      });
+      products.hasMany(models.new_releases, {
+        foreignKey: 'product_id',
+        onDelete: 'cascade'
+      });
+      products.hasMany(models.order_items, {
+        foreignKey: 'product_id',
+        onDelete: 'cascade'
+      });
+      products.hasMany(models.our_choices, {
+        foreignKey: 'product_id',
+        onDelete: 'cascade'
+      });
+      products.hasMany(models.product_category_relations, {
+        foreignKey: 'product_id',
+        onDelete: 'cascade'
+      });
+      products.hasMany(models.product_faqs, {
+        foreignKey: 'product_id',
+        onDelete: 'cascade'
+      });
+      products.hasMany(models.product_reviews, {
+        foreignKey: 'product_id',
+        onDelete: 'cascade'
+      });
+      products.belongsTo(models.users, {
+        foreignKey: 'suplier_id',
+        onDelete: 'cascade'
+      });
+      products.belongsTo(models.categories, {
+        foreignKey: 'category_id',
+        onDelete: 'cascade'
+      });
+      products.belongsTo(models.users, {
+        foreignKey: 'last_updated_by',
+        onDelete: 'cascade'
+      });
+      products.hasMany(models.wishlists, {
+        foreignKey: 'product_id',
+        onDelete: 'cascade'
+      });
     }
   }
   products.init({
@@ -19,7 +66,8 @@ module.exports = (sequelize, DataTypes) => {
     },
     suplier_id: {
       allowNull: false,
-      type: DataTypes.BIGINT(20).UNSIGNED
+      type: DataTypes.BIGINT(20).UNSIGNED,
+      references: { model: 'users', key: 'id' }
     },
     name: {
       allowNull: false,
@@ -37,13 +85,14 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       type: DataTypes.TEXT
     },
-    image:{
+    image: {
       allowNull: false,
       type: DataTypes.TEXT
     },
     category_id: {
       allowNull: false,
-      type: DataTypes.BIGINT(20).UNSIGNED
+      type: DataTypes.BIGINT(20).UNSIGNED,
+      references: { model: 'categories', key: 'id' }
     },
     price: {
       allowNull: false,
@@ -79,7 +128,8 @@ module.exports = (sequelize, DataTypes) => {
     },
     last_updated_by: {
       allowNull: true,
-      type: DataTypes.BIGINT(20).UNSIGNED
+      type: DataTypes.BIGINT(20).UNSIGNED,
+      references: { model: 'users', key: 'id' }
     },
     status: {
       allowNull: false,

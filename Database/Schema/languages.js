@@ -6,7 +6,14 @@ const {STATUS} = require('../../Config/constant');
 module.exports = (sequelize, DataTypes) => {
   class languages extends Model {
     static associate(models) {
-      // define association here
+      languages.hasMany(models.user_language_relations,{
+        foreignKey: 'language_id',
+        onDelete: 'cascade'
+      });
+      languages.hasMany(models.users,{
+        foreignKey: 'language_id',
+        onDelete: 'cascade'
+      });
     }
   }
   languages.init({

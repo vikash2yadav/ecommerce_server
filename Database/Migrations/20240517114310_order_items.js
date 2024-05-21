@@ -11,11 +11,13 @@ module.exports = {
       },
       order_id: {
         allowNull: false,
-        type: Sequelize.BIGINT(20).UNSIGNED
+        type: Sequelize.BIGINT(20).UNSIGNED,
+        references: { model: 'orders', key: 'id' }
       },
       product_id: {
         allowNull: false,
-        type: Sequelize.BIGINT(20).UNSIGNED
+        type: Sequelize.BIGINT(20).UNSIGNED,
+        references: { model: 'products', key: 'id' }
       },
       quantity:{
         allowNull: false,

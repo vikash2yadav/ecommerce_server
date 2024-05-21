@@ -5,7 +5,10 @@ const {
 module.exports = (sequelize, DataTypes) => {
   class user_otp_verifications extends Model {
     static associate(models) {
-      // define association here
+      user_otp_verifications.belongsTo(models.users, {
+        foreignKey: 'user_id',
+        onDelete: 'cascade'
+      });
     }
   }
   user_otp_verifications.init({
@@ -21,7 +24,8 @@ module.exports = (sequelize, DataTypes) => {
     },
     user_id: {
       allowNull: false,
-      type: DataTypes.BIGINT(20).UNSIGNED
+      type: DataTypes.BIGINT(20).UNSIGNED,
+      references: { model: 'users', key: 'id' }
     },
     expired_at:{
       allowNull: false,

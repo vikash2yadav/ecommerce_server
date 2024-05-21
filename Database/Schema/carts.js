@@ -6,7 +6,14 @@ const { STATUS } = require('../../Config/constant');
 module.exports = (sequelize, DataTypes) => {
   class carts extends Model {
     static associate(models) {
-      // define association here
+      carts.belongsTo(models.users, {
+        foreignKey: 'user_id',
+        onDelete: 'cascade'
+      });
+      carts.belongsTo(models.products, {
+        foreignKey: 'product_id',
+        onDelete: 'cascade'
+      });
     }
   }
   carts.init({
@@ -18,11 +25,13 @@ module.exports = (sequelize, DataTypes) => {
     },
     user_id: {
       allowNull: false,
-      type: DataTypes.BIGINT(20).UNSIGNED
+      type: DataTypes.BIGINT(20).UNSIGNED,
+      references: { model: 'users', key: 'id' }
     },
     product_id: {
       allowNull: false,
-      type: DataTypes.BIGINT(20).UNSIGNED
+      type: DataTypes.BIGINT(20).UNSIGNED,
+      references: { model: 'products', key: 'id' }
     },
     quantity: {
       allowNull: false,

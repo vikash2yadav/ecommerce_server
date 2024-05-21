@@ -14,11 +14,13 @@ module.exports = {
       },
       product_faq_id: {
         allowNull: false,
-        type: Sequelize.BIGINT(20).UNSIGNED
+        type: Sequelize.BIGINT(20).UNSIGNED,
+        references: { model: "product_faqs", key: 'id' }
       },
       user_id: {
         allowNull: false,
-        type: Sequelize.BIGINT(20).UNSIGNED
+        type: Sequelize.BIGINT(20).UNSIGNED,
+        references: { model: "users", key: 'id' }
       },
       reaction_type: {
         allowNull: false,

@@ -3,6 +3,7 @@ const router = require('express').Router();
 const validate = require("../Middleware/validator").validate;
 const { body } = require("express-validator");
 const { STATUS_MESSAGES } = require('../Config/constant');
+const {userAuth} = new(require("../Middleware/authentication"));
 
 // sign up
 router.route('/sign_up').post(validate([
@@ -11,12 +12,13 @@ router.route('/sign_up').post(validate([
     body("email").notEmpty().withMessage(STATUS_MESSAGES.VALIDATION.REQUIRED.INVALID_EMAIL),
     body("email").isEmail().withMessage(STATUS_MESSAGES.VALIDATION.REQUIRED.EMAIL),
     body("username").notEmpty().withMessage(STATUS_MESSAGES.VALIDATION.REQUIRED.USERNAME),
-    body("password").notEmpty().withMessage(STATUS_MESSAGES.VALIDATION.REQUIRED.PASSWORD),
+    body('password').isLength({ min: 8 }).withMessage(STATUS_MESSAGES?.VALIDATION?.LENGTH?.PASSWORD),
     body("confirm_password").notEmpty().withMessage(STATUS_MESSAGES.VALIDATION.REQUIRED.CONFIRM_PASSWORD),
     body("birth_date").notEmpty().withMessage(STATUS_MESSAGES.VALIDATION.REQUIRED.BIRTH_DATE),
     body("gender").notEmpty().withMessage(STATUS_MESSAGES.VALIDATION.REQUIRED.GENDER),
     body("country_code").notEmpty().withMessage(STATUS_MESSAGES.VALIDATION.REQUIRED.COUNTRY_CODE),
     body("contact_no").notEmpty().withMessage(STATUS_MESSAGES.VALIDATION.REQUIRED.CONTACT),
+    body("language_id").notEmpty().withMessage(STATUS_MESSAGES.VALIDATION.REQUIRED.LANGUAGE),
     body("user_addresses_id").notEmpty().withMessage(STATUS_MESSAGES.VALIDATION.REQUIRED.ADDRESS),
 ]), userController.signUp);
 
@@ -24,7 +26,7 @@ router.route('/sign_up').post(validate([
 router.route('/sign_in').post(validate([
     body("email").notEmpty().withMessage(STATUS_MESSAGES.VALIDATION.REQUIRED.INVALID_EMAIL),
     body("email").isEmail().withMessage(STATUS_MESSAGES.VALIDATION.REQUIRED.EMAIL),
-    body("password").notEmpty().withMessage(STATUS_MESSAGES.VALIDATION.REQUIRED.PASSWORD),
+    body('password').isLength({ min: 8 }).withMessage(STATUS_MESSAGES?.VALIDATION?.LENGTH?.PASSWORD),
 ]), userController.signIn);
 
 // forgot password
@@ -55,10 +57,16 @@ router.route("/update/profile").put(validate([
     body("gender").notEmpty().withMessage(STATUS_MESSAGES.VALIDATION.REQUIRED.GENDER),
     body("country_code").notEmpty().withMessage(STATUS_MESSAGES.VALIDATION.REQUIRED.COUNTRY_CODE),
     body("contact_no").notEmpty().withMessage(STATUS_MESSAGES.VALIDATION.REQUIRED.CONTACT),
+    body("language_id").notEmpty().withMessage(STATUS_MESSAGES.VALIDATION.REQUIRED.LANGUAGE),
     body("user_addresses_id").notEmpty().withMessage(STATUS_MESSAGES.VALIDATION.REQUIRED.ADDRESS),
 ]), userController.updateProfile);
 
-
+// change password
+router.route("/change_password").put(userAuth, validate([
+    body('old_password').notEmpty().withMessage(STATUS_MESSAGES?.VALIDATION?.REQUIRED?.OLD_PASSWORD),
+    body('new_password').isLength({ min: 8 }).withMessage(STATUS_MESSAGES?.VALIDATION?.LENGTH?.PASSWORD),
+    body('confirm_password').notEmpty().withMessage(STATUS_MESSAGES?.VALIDATION?.REQUIRED?.CONFIRM_PASSWORD)
+]), userController.changePassword);
 
 
 // // admin route

@@ -12,11 +12,13 @@ module.exports = {
       },
       category_id: {
         allowNull: false,
-        type: Sequelize.BIGINT(20).UNSIGNED
+        type: Sequelize.BIGINT(20).UNSIGNED,
+        references: { model: 'categories', key: 'id' }
       },
       product_id: {
         allowNull: false,
-        type: Sequelize.BIGINT(20).UNSIGNED
+        type: Sequelize.BIGINT(20).UNSIGNED,
+        references: { model: 'products', key: 'id' }
       },
       status: {
         allowNull: false,

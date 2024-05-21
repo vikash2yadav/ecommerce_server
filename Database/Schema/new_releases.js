@@ -6,7 +6,14 @@ const { STATUS } = require('../../Config/constant');
 module.exports = (sequelize, DataTypes) => {
   class new_releases extends Model {
     static associate(models) {
-      // define association here
+      new_releases.belongsTo(models.categories, {
+        foreignKey: 'category_id',
+        onDelete: 'cascade'
+      });
+      new_releases.belongsTo(models.products, {
+        foreignKey: 'product_id',
+        onDelete: 'cascade'
+      })
     }
   }
   new_releases.init({
@@ -18,11 +25,13 @@ module.exports = (sequelize, DataTypes) => {
     },
     category_id: {
       allowNull: false,
-      type: DataTypes.BIGINT(20).UNSIGNED
+      type: DataTypes.BIGINT(20).UNSIGNED,
+      references: { model: 'categories', key: 'id' }
     },
     product_id: {
       allowNull: false,
-      type: DataTypes.BIGINT(20).UNSIGNED
+      type: DataTypes.BIGINT(20).UNSIGNED,
+      references: { model: 'products', key: 'id' }
     },
     status: {
       allowNull: false,

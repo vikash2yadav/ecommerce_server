@@ -7,6 +7,26 @@ const mailer = new (require('../Utils/mailer'));
 const { generateOtp } = require('../Utils/helpers');
 
 class userModel {
+
+    // Get user info by token
+    async getUserTokenInfo(access_token) {
+        return await userTokenSchema.findOne({
+            where: {
+                access_token,
+            },
+            include: [
+                {
+                    model: userSchema,
+                    attributes: { exclude: ["createdAt", "updatedAt", "password"] },
+                    where: {
+                        status: STATUS?.ACTIVE,
+                        is_delete: STATUS?.NOTDELETED
+                    },
+                },
+            ],
+        });
+    }
+
     // sign up
     async signUp(bodyData) {
 
@@ -288,22 +308,22 @@ class userModel {
             }
         })
 
-        if(checkEmail){
+        if (checkEmail) {
             return {
                 status: STATUS_CODES.ALREADY_REPORTED,
                 message: STATUS_MESSAGES.EXISTS.EMAIL
             }
         }
 
-         // check already username
-         let checkUsername = await userSchema.findOne({
+        // check already username
+        let checkUsername = await userSchema.findOne({
             where: {
                 username: bodyData?.username,
                 id: { [Op.ne]: userInfo?.id }
             }
         })
 
-        if(checkUsername){
+        if (checkUsername) {
             return {
                 status: STATUS_CODES.ALREADY_REPORTED,
                 message: STATUS_MESSAGES.EXISTS.USERNAME
@@ -313,6 +333,28 @@ class userModel {
         return await userSchema.update({ bodyData }, {
             where: {
                 id: userInfo?.id
+            }
+        })
+    }
+
+    // change password 
+    async changePassword(bodyData, userInfo) {
+
+        console.log(userInfo);
+        if (bodyData?.new_password !== bodyData?.confirm_password) {
+            return {
+                status: STATUS_CODES.NOT_VALID_DATA
+            }
+        }
+
+        // hashing new password
+        let hashedPassword = await bcrypt.hash(bodyData?.new_password, 10);
+
+        return await userSchema.update({ password: hashedPassword }, {
+            where: {
+                id: userInfo?.id,
+                status: STATUS.ACTIVE,
+                is_delete: STATUS.NOTDELETED
             }
         })
     }

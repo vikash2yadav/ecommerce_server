@@ -5,7 +5,14 @@ const {
 module.exports = (sequelize, DataTypes) => {
   class user_language_relations extends Model {
     static associate(models) {
-      // define association here
+      user_language_relations.belongsTo(models.users, {
+        foreignKey: 'user_id',
+        onDelete: 'cascade'
+      });
+      user_language_relations.belongsTo(models.languages, {
+        foreignKey: 'language_id',
+        onDelete: 'cascade'
+      });
     }
   }
   user_language_relations.init({
@@ -17,11 +24,13 @@ module.exports = (sequelize, DataTypes) => {
     },
     user_id: {
       allowNull: false,
-      type: DataTypes.BIGINT(20).UNSIGNED
+      type: DataTypes.BIGINT(20).UNSIGNED,
+      references: { model: 'users', key: 'id' }
     },
     language_id: {
       allowNull: false,
-      type: DataTypes.BIGINT(20).UNSIGNED
+      type: DataTypes.BIGINT(20).UNSIGNED,
+      references: { model: 'languages', key: 'id' }
     },
     createdAt: {
       allowNull: false,

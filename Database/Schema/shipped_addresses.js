@@ -5,7 +5,10 @@ const {
 module.exports = (sequelize, DataTypes) => {
   class shipped_addresses extends Model {
     static associate(models) {
-      // define association here
+      shipped_addresses.belongsTo(models.orders,{
+        foreignKey: 'order_id',
+        onDelete: 'cascade'
+      });
     }
   }
   shipped_addresses.init({
@@ -17,7 +20,8 @@ module.exports = (sequelize, DataTypes) => {
     },
     order_id: {
       allowNull: false,
-      type: DataTypes.BIGINT(20).UNSIGNED
+      type: DataTypes.BIGINT(20).UNSIGNED,
+      references: { model: 'orders', key: 'id' }
     },
     street: {
       allowNull: false,

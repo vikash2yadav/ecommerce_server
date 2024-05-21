@@ -2,11 +2,30 @@
 const {
   Model
 } = require('sequelize');
-const {STATUS} = require('../../Config/constant');
+const { STATUS } = require('../../Config/constant');
 module.exports = (sequelize, DataTypes) => {
   class orders extends Model {
     static associate(models) {
-      // define association here
+      orders.belongsTo(models.users, {
+        foreignKey: 'user_id',
+        onDelete: 'cascade'
+      });
+      orders.belongsTo(models.shipped_addresses, {
+        foreignKey: 'shipped_address_id',
+        onDelete: 'cascade'
+      });
+      orders.hasMany(models.payments, {
+        foreignKey: 'order_id',
+        onDelete: 'cascade'
+      });
+      orders.hasMany(models.shipped_addresses,{
+        foreignKey: 'order_id',
+        onDelete: 'cascade'
+      });
+      orders.hasMany(models.order_items, {
+        foreignKey: 'order_id',
+        onDelete: 'cascade'
+      });
     }
   }
   orders.init({
@@ -18,7 +37,8 @@ module.exports = (sequelize, DataTypes) => {
     },
     user_id: {
       allowNull: false,
-      type: DataTypes.BIGINT(20).UNSIGNED
+      type: DataTypes.BIGINT(20).UNSIGNED,
+      references: { model: 'users', key: 'id' }
     },
     orderd_date: {
       allowNull: false,
@@ -28,9 +48,10 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: true,
       type: DataTypes.DATE
     },
-    shipped_addresses_id: {
+    shipped_address_id: {
       allowNull: false,
-      type: DataTypes.BIGINT(20).UNSIGNED
+      type: DataTypes.BIGINT(20).UNSIGNED,
+      references: { model: 'shipped_addresses', key: 'id' }
     },
     total_amoumt: {
       allowNull: false,

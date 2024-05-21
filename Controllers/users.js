@@ -83,7 +83,7 @@ class userController {
         try {
             let data = await userModel.resetPassword(req?.body, req?.params?.id);
 
-            if(data.status === STATUS_CODES.NOT_VALID_DATA){
+            if (data.status === STATUS_CODES.NOT_VALID_DATA) {
                 return res.handler.validationError(undefined, STATUS_MESSAGES.PASSWORD.NOT_SAME)
             }
 
@@ -96,7 +96,7 @@ class userController {
 
     // sign out
     async signOut(req, res) {
-        try{
+        try {
 
             let data = await userModel.signOut(req?.userInfo, req?.headers);
 
@@ -107,7 +107,7 @@ class userController {
 
             return res.handler.success(data, STATUS_MESSAGES.TOKEN.LOGOUT);
 
-        }catch(error){
+        } catch (error) {
             res.handler.serverError(error);
         }
     }
@@ -118,15 +118,31 @@ class userController {
 
             let data = await userModel.updateProfile(req?.userInfo, req?.body);
 
-            if(data.status === STATUS_CODES?.NOT_FOUND){
+            if (data.status === STATUS_CODES?.NOT_FOUND) {
                 return res.handler.notFound(undefined, STATUS_MESSAGES.NOT_FOUND.USER);
             }
 
-            if(data.status === STATUS_CODES?.ALREADY_REPORTED){
+            if (data.status === STATUS_CODES?.ALREADY_REPORTED) {
                 return res.handler.notFound(undefined, data?.message);
             }
 
             return res.handler.success(data, STATUS_MESSAGES.USER.UPDATED)
+
+        } catch (error) {
+            res.handler.serverError(error);
+        }
+    }
+
+    // change password
+    async changePassword(req, res) {
+        try {
+            let data = await userModel.changePassword(req?.body, req?.userInfo);
+
+            if(data.status === STATUS_CODES.NOT_VALID_DATA){
+                return res.handler.validationError(undefined);
+            }
+
+            return res.handler.success(data, STATUS_MESSAGES.PASSWORD.CHANGED);
 
         } catch (error) {
             res.handler.serverError(error);

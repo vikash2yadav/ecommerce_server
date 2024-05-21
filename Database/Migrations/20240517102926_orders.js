@@ -13,7 +13,8 @@ module.exports = {
       },
       user_id: {
         allowNull: false,
-        type: Sequelize.BIGINT(20).UNSIGNED
+        type: Sequelize.BIGINT(20).UNSIGNED,
+        references: { model: 'users', key: 'id' }
       },
       orderd_date: {
         allowNull: false,
@@ -23,9 +24,10 @@ module.exports = {
         allowNull: true,
         type: Sequelize.DATE
       },
-      shipped_addresses_id: {
+      shipped_address_id: {
         allowNull: false,
-        type: Sequelize.BIGINT(20).UNSIGNED
+        type: Sequelize.BIGINT(20).UNSIGNED,
+        references: { model: 'shipped_addresses', key: 'id' }
       },
       total_amoumt: {
         allowNull: false,

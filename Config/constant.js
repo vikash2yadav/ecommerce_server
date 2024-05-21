@@ -287,6 +287,7 @@ exports.STATUS_MESSAGES = {
             SLUG: 'Please, enter slug',
             VALUE: 'Please, enter value',
             PRODUCT: 'Please, enter product.',
+            OLD_PASSWORD: 'Please, enter old password',
             COUPON: 'Please, enter coupon',
             QUANTITY: 'Please, enter quantity',
             CODE: 'Please, enter code',
@@ -433,7 +434,9 @@ exports.NOTIFICATION_TYPE ={
 
 // User type
 exports.ROLE_TYPES = {
-
+    ADMIN: 1,
+    SUPPLIER: 2,
+    CUSTOMER: 3
 }
 
 exports.ROLE_TYPES_ID = {

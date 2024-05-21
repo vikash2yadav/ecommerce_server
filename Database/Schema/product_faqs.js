@@ -6,7 +6,14 @@ const { STATUS } = require('../../Config/constant');
 module.exports = (sequelize, DataTypes) => {
   class product_faqs extends Model {
     static associate(models) {
-      // define association here
+      product_faqs.hasMany(models.product_faq_reactions, {
+        foreignKey: 'product_faq_id',
+        onDelete: 'cascade'
+      });
+      product_faqs.belongsTo(models.products, {
+        foreignKey: 'product_id',
+        onDelete: 'cascade'
+      })
     }
   }
   product_faqs.init({
@@ -18,7 +25,8 @@ module.exports = (sequelize, DataTypes) => {
     },
     product_id: {
       allowNull: false,
-      type: DataTypes.BIGINT(20).UNSIGNED
+      type: DataTypes.BIGINT(20).UNSIGNED,
+      references: { model: 'products', key: 'id' }
     },
     question: {
       allowNull: false,
