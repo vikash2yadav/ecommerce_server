@@ -45,4 +45,7 @@ module.exports = (app) => {
     // language route
     app.use("/language", require("./languages"));
 
+    // new_release route
+    app.use("/new_release", require("./new_releases"));
+
 };

@@ -70,7 +70,10 @@ exports.STATUS_MESSAGES = {
         WISH: 'This wish is available in our system',
         USER_COUPON: 'This coupon is already assign to this user',
         LANGUAGE: 'This language is already exist',
-        LANGUAGE_CODE: 'THis language code is already exist in our system'
+        LANGUAGE_CODE: 'THis language code is already exist in our system',
+        NEW_RELEASE: 'This data is already exist in new release',
+        OUR_CHOICE: 'This data is already exist in our choice',
+        BEST_SELLER: 'This data is already exist in best seller'
     },
 
     NOT_FOUND: {
@@ -91,6 +94,7 @@ exports.STATUS_MESSAGES = {
         POST_SHARE: "This data is not found.",
         NOTIFICATION: 'Notification is not available in our system.',
         EMOJI: 'Emoji is not available in our system.',
+        OUR_CHOICE: 'This data in not found in our choice',
         EMAIL_SUBSCRIBER: 'Email is not found in our system.',
         TEAM_MEMBER: 'Team member is not found in our system.',
         PRODUCT: 'Product is not available in our system.',
@@ -103,7 +107,9 @@ exports.STATUS_MESSAGES = {
         WISH: 'This wish is not found in our system.',
         COUPON: 'This coupon code is not found in our system.',
         USER_COUPON: 'This user coupon is not fount in our system',
-        LANGUAGE: 'This language is not found in our system'
+        LANGUAGE: 'This language is not found in our system',
+        NEW_RELEASE: 'This data is not found in our new release list',
+        BEST_SELLER: 'This data is not found in our best seller'
     },
     PASSWORD: {
         MISMATCH: "Provided password do not match",
@@ -143,6 +149,11 @@ exports.STATUS_MESSAGES = {
         UPDATED: "Product been updated successfully.",
         DELETED: "Product been deleted successfully.",
         INACTIVE: 'Product status is in active.'
+    },
+    OUR_CHOICE: {
+        ADDED: "Our choice has been added successfully.",
+        UPDATED: "Our choice been updated successfully.",
+        DELETED: "Our choice been deleted successfully.",
     },
     CATEGORY: {
         ADDED: "Category has been added successfully.",
@@ -199,6 +210,16 @@ exports.STATUS_MESSAGES = {
         ADDED: "Language has been added successfully.",
         UPDATED: "Language been updated successfully.",
         DELETED: "Language been deleted successfully.",
+    },
+    NEW_RELEASE: {
+        ADDED: "New release has been added successfully.",
+        UPDATED: "New release been updated successfully.",
+        DELETED: "New release been deleted successfully.",
+    },
+    BEST_SELLER:{
+        ADDED: "Best seller has been added successfully.",
+        UPDATED: "Best seller been updated successfully.",
+        DELETED: "Best seller been deleted successfully.",
     },
     EMAIL_SUBSCRIBER:{
         ADDED: "Email added in subscribers list.",
