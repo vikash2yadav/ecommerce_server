@@ -1,35 +1,37 @@
 'use strict';
 /** @type {import('sequelize-cli').Migration} */
-const { STATUS } = require('../../Config/constant');
+const {STATUS} = require('../../Config/constant');
 
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('categories', {
+    await queryInterface.createTable('orders', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.BIGINT(20).UNSIGNED
       },
-      name: {
+      user_id: {
         allowNull: false,
-        type: Sequelize.STRING(255)
+        type: Sequelize.BIGINT(20).UNSIGNED,
+        references: {model: 'users', key: 'id'}
       },
-      slug: {
+      orderd_date: {
         allowNull: false,
-        type: Sequelize.TEXT
+        type: Sequelize.DATE
       },
-      description: {
-        allowNull: false,
-        type: Sequelize.STRING(255)
-      },
-      created_by: {
-        allowNull: false,
-        type: Sequelize.BIGINT(20).UNSIGNED
-      },
-      updated_by: {
+      shipped_date: {
         allowNull: true,
-        type: Sequelize.BIGINT(20).UNSIGNED
+        type: Sequelize.DATE
+      },
+      shipped_addresses_id: {
+        allowNull: false,
+        type: Sequelize.BIGINT(20).UNSIGNED,
+        references: {model: 'shipped_addresses', key: 'id'}
+      },
+      total_amoumt: {
+        allowNull: false,
+        type: Sequelize.BIGINT(20)
       },
       status: {
         allowNull: false,
@@ -54,6 +56,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('categories');
+    await queryInterface.dropTable('orders');
   }
 };

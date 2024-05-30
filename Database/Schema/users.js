@@ -6,7 +6,74 @@ const { STATUS } = require('../../Config/constant');
 module.exports = (sequelize, DataTypes) => {
   class users extends Model {
     static associate(models) {
-      
+      users.belongsTo(models.languages, {
+        foreignKey: 'language_id',
+        onDelete: 'cascade'
+      });
+      users.belongsTo(models.user_addresses, {
+        foreignKey: 'user_address_id',
+        onDelete: 'cascade'
+      });
+      users.hasMany(models.user_tokens, {
+        foreignKey: 'user_id',
+        onDelete: 'cascade'
+      })
+      users.hasMany(models.user_otp_verifications, {
+        foreignKey: 'user_id',
+        onDelete: 'cascade'
+      })
+      users.hasMany(models.products, {
+        foreignKey: 'suplier_id',
+        onDelete: 'cascade'
+      })
+      users.hasMany(models.products, {
+        foreignKey: 'last_updated_by',
+        onDelete: 'cascade'
+      })
+      users.hasMany(models.categories, {
+        foreignKey: 'created_by',
+        onDelete: 'cascade'
+      })
+      users.hasMany(models.categories, {
+        foreignKey: 'updated_by',
+        onDelete: 'cascade'
+      })
+      users.hasMany(models.orders, {
+        foreignKey: 'user_id',
+        onDelete: 'cascade'
+      })
+      users.hasMany(models.product_reviews, {
+        foreignKey: 'user_id',
+        onDelete: 'cascade'
+      })
+      users.hasMany(models.carts, {
+        foreignKey: 'user_id',
+        onDelete: 'cascade'
+      })
+      users.hasMany(models.product_faq_reactions, {
+        foreignKey: 'user_id',
+        onDelete: 'cascade'
+      });
+      users.hasMany(models.wishlists,{
+        foreignKey: 'user_id',
+        onDelete: 'cascade'
+      })
+      users.hasMany(models.coupons, {
+        foreignKey: 'created_by',
+        onDelete: 'cascade'
+      })
+      users.hasMany(models.coupons, {
+        foreignKey: 'created_by',
+        onDelete: 'cascade'
+      })
+      users.hasMany(models.user_coupon_relations,{
+        foreignKey: 'user_id',
+        onDelete: 'cascade'
+      })
+      users.hasMany(models.user_language_relations,{
+        foreignKey: 'user_id',
+        onDelete: 'cascade'
+      })
     }
   }
   users.init({
@@ -43,16 +110,12 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       type: DataTypes.STRING(255)
     },
-    username: {
-      allowNull: false,
-      type: DataTypes.STRING(255)
-    },
     password: {
       allowNull: false,
       type: DataTypes.STRING(255)
     },
     birth_date: {
-      allowNull: false,
+      allowNull: true,
       type: DataTypes.DATE
     },
     profile_image: {
@@ -60,16 +123,16 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING(500)
     },
     gender: {
-      allowNull: false,
+      allowNull: true,
       type: DataTypes.STRING(255)
     },
     country_code: {
-      allowNull: false,
+      allowNull: true,
       type: DataTypes.STRING(5),
       defaultValue: '91'
     },
     contact_no: {
-      allowNull: false,
+      allowNull: true,
       type: DataTypes.STRING(255)
     },
     alternative_country_code: {
@@ -80,9 +143,15 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: true,
       type: DataTypes.STRING(255)
     },
-    user_addresses_id: {
-      allowNull: false,
-      type: DataTypes.BIGINT(20).UNSIGNED
+    user_address_id: {
+      allowNull: true,
+      type: DataTypes.BIGINT(20).UNSIGNED,
+      references: { model: 'user_addresses', key: 'id' }
+    },
+    language_id: {
+      allowNull: true,
+      type: DataTypes.BIGINT(20).UNSIGNED,
+      references: { model: 'languages', key: 'id' }
     },
     status: {
       allowNull: false,

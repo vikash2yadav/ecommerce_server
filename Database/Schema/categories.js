@@ -6,7 +6,34 @@ const {STATUS} = require('../../Config/constant');
 module.exports = (sequelize, DataTypes) => {
   class categories extends Model {
     static associate(models) {
-      // define association here
+      categories.hasMany(models.products , {
+        foreignKey: 'category_id',
+        onDelete: 'cascade'
+      });
+      categories.belongsTo(models.users,{
+          foreignKey: 'created_by',
+          onDelete: 'cascade'
+      });
+      categories.belongsTo(models.users,{
+        foreignKey: 'updated_by',
+        onDelete: 'cascade'
+      });
+      categories.hasMany(models.product_category_relations,{
+        foreignKey: 'category_id',
+        onDelete: 'cascade'
+      })
+      categories.hasMany(models.new_releases,{
+        foreignKey: 'category_id',
+        onDelete: 'cascade'
+      })
+      categories.hasMany(models.our_choices,{
+        foreignKey: 'category_id',
+        onDelete: 'cascade'
+      })
+      categories.hasMany(models.best_sellers,{
+        foreignKey: 'category_id',
+        onDelete: 'cascade'
+      })
     }
   }
   categories.init({
@@ -30,11 +57,13 @@ module.exports = (sequelize, DataTypes) => {
     },
     created_by: {
       allowNull: false,
-      type: DataTypes.BIGINT(20).UNSIGNED
+      type: DataTypes.BIGINT(20).UNSIGNED,
+      references: {model: 'users', key: 'id'}
     },
     updated_by: {
       allowNull: true,
-      type: DataTypes.BIGINT(20).UNSIGNED
+      type: DataTypes.BIGINT(20).UNSIGNED,
+      references: {model: 'users', key: 'id'}
     },
     status: {
       allowNull: false,

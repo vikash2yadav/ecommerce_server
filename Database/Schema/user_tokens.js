@@ -6,7 +6,10 @@ const { STATUS } = require('../../Config/constant');
 module.exports = (sequelize, DataTypes) => {
   class user_tokens extends Model {
     static associate(models) {
-      // define association here
+      user_tokens.belongsTo(models.users,{
+        foreignKey: 'user_id',
+        onDelete: 'cascade'
+      })
     }
   }
   user_tokens.init({
@@ -22,7 +25,8 @@ module.exports = (sequelize, DataTypes) => {
     },
     user_id: {
       allowNull: false,
-      type: DataTypes.BIGINT(20).UNSIGNED
+      type: DataTypes.BIGINT(20).UNSIGNED,
+      references: { model: 'users', key: 'id' }
     },
     status: {
       allowNull: false,

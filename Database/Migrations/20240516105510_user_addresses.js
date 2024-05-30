@@ -2,24 +2,36 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('user_otp_verifications', {
+    await queryInterface.createTable('user_addresses', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.BIGINT(20).UNSIGNED
       },
-      otp: {
+      street: {
         allowNull: false,
-        type: Sequelize.TEXT
+        type: Sequelize.STRING(255)
       },
-      user_id: {
+      area: {
+        allowNull: false,
+        type: Sequelize.STRING(255)
+      },
+      pin_code: {
+        allowNull: false,
+        type: Sequelize.BIGINT(6)
+      },
+      city_id: {
         allowNull: false,
         type: Sequelize.BIGINT(20).UNSIGNED
       },
-      expired_at:{
+      state_id: {
         allowNull: false,
-        type: Sequelize.DATE
+        type: Sequelize.BIGINT(20).UNSIGNED
+      },
+      country_id: {
+        allowNull: false,
+        type: Sequelize.BIGINT(20).UNSIGNED
       },
       createdAt: {
         allowNull: false,
@@ -32,6 +44,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('user_otp_verifications');
+    await queryInterface.dropTable('user_addresses');
   }
 };

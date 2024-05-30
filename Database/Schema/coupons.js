@@ -6,7 +6,18 @@ const {STATUS} = require("../../Config/constant");
 module.exports = (sequelize, DataTypes) => {
   class coupons extends Model {
     static associate(models) {
-      // define association here
+      coupons.belongsTo(models.users, {
+        foreignKey: 'created_by',
+        onDelete: 'cascade'
+      })
+      coupons.belongsTo(models.users, {
+        foreignKey: 'updated_by',
+        onDelete: 'cascade'
+      })
+      coupons.hasMany(models.user_coupon_relations,{
+        foreignKey: 'coupon_id',
+        onDelete: 'cascade'
+      })
     }
   }
   coupons.init({
@@ -44,11 +55,13 @@ module.exports = (sequelize, DataTypes) => {
     },
     created_by:{
       allowNull: false,
-      type: DataTypes.BIGINT(20).UNSIGNED
+      type: DataTypes.BIGINT(20).UNSIGNED,
+      references: { model: 'users', key: 'id' }
     },
     updated_by:{
       allowNull: true,
-      type: DataTypes.BIGINT(20).UNSIGNED
+      type: DataTypes.BIGINT(20).UNSIGNED,
+      references: { model: 'users', key: 'id' }
     },
     createdAt: {
       allowNull: false,

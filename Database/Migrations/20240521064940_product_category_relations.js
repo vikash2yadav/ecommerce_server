@@ -12,17 +12,13 @@ module.exports = {
       },
       product_id: {
         allowNull: false,
-        type: Sequelize.BIGINT(20).UNSIGNED
+        type: Sequelize.BIGINT(20).UNSIGNED,
+        references: { model: 'products', key: 'id' }
       },
       category_id: {
         allowNull: false,
-        type: Sequelize.BIGINT(20).UNSIGNED
-      },
-      status: {
-        allowNull: false,
-        type: Sequelize.TINYINT(1),
-        defaultValue: STATUS?.ACTIVE,
-        comment: "0 => In Active 1 => Active"
+        type: Sequelize.BIGINT(20).UNSIGNED,
+        references: { model: 'categories', key: 'id' }
       },
       createdAt: {
         allowNull: false,

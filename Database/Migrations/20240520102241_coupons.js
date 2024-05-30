@@ -38,11 +38,13 @@ module.exports = {
       },
       created_by:{
         allowNull: false,
-        type: Sequelize.BIGINT(20).UNSIGNED
+        type: Sequelize.BIGINT(20).UNSIGNED,
+        references: { model: 'users', key: 'id' }
       },
       updated_by:{
         allowNull: true,
-        type: Sequelize.BIGINT(20).UNSIGNED
+        type: Sequelize.BIGINT(20).UNSIGNED,
+        references: { model: 'users', key: 'id' }
       },
       createdAt: {
         allowNull: false,

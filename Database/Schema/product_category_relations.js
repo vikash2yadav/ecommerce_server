@@ -6,7 +6,14 @@ const { STATUS } = require('../../Config/constant');
 module.exports = (sequelize, DataTypes) => {
   class product_category_relations extends Model {
     static associate(models) {
-      // define association here
+      product_category_relations.belongsTo(models.products,{
+        foreignKey: 'product_id',
+        onDelete: 'cascade'
+      })
+      product_category_relations.belongsTo(models.categories,{
+        foreignKey: 'category_id',
+        onDelete: 'cascade'
+      })
     }
   }
   product_category_relations.init({
@@ -18,17 +25,13 @@ module.exports = (sequelize, DataTypes) => {
     },
     product_id: {
       allowNull: false,
-      type: DataTypes.BIGINT(20).UNSIGNED
+      type: DataTypes.BIGINT(20).UNSIGNED,
+      references: { model: 'products', key: 'id' }
     },
     category_id: {
       allowNull: false,
-      type: DataTypes.BIGINT(20).UNSIGNED
-    },
-    status: {
-      allowNull: false,
-      type: DataTypes.TINYINT(1),
-      defaultValue: STATUS?.ACTIVE,
-      comment: "0 => In Active 1 => Active"
+      type: DataTypes.BIGINT(20).UNSIGNED,
+      references: { model: 'categories', key: 'id' }
     },
     createdAt: {
       allowNull: false,

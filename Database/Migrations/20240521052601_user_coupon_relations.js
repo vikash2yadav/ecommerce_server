@@ -11,11 +11,13 @@ module.exports = {
       },
       user_id: {
         allowNull: false,
-        type: Sequelize.BIGINT(20).UNSIGNED
+        type: Sequelize.BIGINT(20).UNSIGNED,
+        references: { model: 'users', key: 'id' }
       },
       coupon_id: {
         allowNull: false,
-        type: Sequelize.BIGINT(20).UNSIGNED
+        type: Sequelize.BIGINT(20).UNSIGNED,
+        references: { model: 'coupons', key: 'id' }
       },
       createdAt: {
         allowNull: false,
