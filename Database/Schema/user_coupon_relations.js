@@ -5,7 +5,14 @@ const {
 module.exports = (sequelize, DataTypes) => {
   class user_coupon_relations extends Model {
     static associate(models) {
-      // define association here
+      user_coupon_relations.belongsTo(models.users,{
+        foreignKey: 'user_id',
+        onDelete: 'cascade'
+      })
+      user_coupon_relations.belongsTo(models.coupons,{
+        foreignKey: 'coupon_id',
+        onDelete: 'cascade'
+      })
     }
   }
   user_coupon_relations.init({
@@ -17,11 +24,13 @@ module.exports = (sequelize, DataTypes) => {
     },
     user_id: {
       allowNull: false,
-      type: DataTypes.BIGINT(20).UNSIGNED
+      type: DataTypes.BIGINT(20).UNSIGNED,
+      references: { model: 'users', key: 'id' }
     },
     coupon_id: {
       allowNull: false,
-      type: DataTypes.BIGINT(20).UNSIGNED
+      type: DataTypes.BIGINT(20).UNSIGNED,
+      references: { model: 'coupons', key: 'id' }
     },
     createdAt: {
       allowNull: false,

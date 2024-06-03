@@ -1,37 +1,35 @@
 'use strict';
+
 /** @type {import('sequelize-cli').Migration} */
-const {STATUS} = require('../../Config/constant');
+const { STATUS } = require('../../Config/constant');
+
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('payments', {
+    await queryInterface.createTable('user_tokens', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.BIGINT(20).UNSIGNED
-      },
-      order_id: {
+      }, 
+      access_token: {
         allowNull: false,
-        type: Sequelize.BIGINT(20).UNSIGNED
+        type: Sequelize.STRING(500)
       },
-      mode: {
+      user_id: {
         allowNull: false,
-        type: Sequelize.STRING(255)
-      },
-      amount: {
-        allowNull: false,
-        type: Sequelize.BIGINT(20)
+        type: Sequelize.BIGINT(20).UNSIGNED,
+        references: { model: 'users', key: 'id' }
       },
       status: {
         allowNull: false,
         type: Sequelize.TINYINT(1),
-        comment: "0 => Failed 1 => Success"
+        defaultValue: STATUS?.ACTIVE,
+        comment: "0 => In Active 1 => Active"
       },
-      is_delete: {
+      expires_at:{
         allowNull: false,
-        type: Sequelize.TINYINT(1),
-        defaultValue: STATUS?.NOTDELETED,
-        comment: "0 => Not Deleted 1 => Deleted"
+        type: Sequelize.DATE
       },
       createdAt: {
         allowNull: false,
@@ -44,6 +42,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('payments');
+    await queryInterface.dropTable('user_tokens');
   }
 };

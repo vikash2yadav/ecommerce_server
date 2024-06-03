@@ -39,16 +39,12 @@ module.exports = {
         allowNull: false,
         type: Sequelize.STRING(255)
       },
-      username: {
-        allowNull: false,
-        type: Sequelize.STRING(255)
-      },
       password: {
         allowNull: false,
         type: Sequelize.STRING(255)
       },
       birth_date: {
-        allowNull: false,
+        allowNull: true,
         type: Sequelize.DATE
       },
       profile_image: {
@@ -56,16 +52,16 @@ module.exports = {
         type: Sequelize.STRING(500)
       },
       gender: {
-        allowNull: false,
+        allowNull: true,
         type: Sequelize.STRING(255)
       },
       country_code: {
-        allowNull: false,
+        allowNull: true,
         type: Sequelize.STRING(5),
         defaultValue: '91'
       },
       contact_no: {
-        allowNull: false,
+        allowNull: true,
         type: Sequelize.STRING(255)
       },
       alternative_country_code: {
@@ -76,9 +72,15 @@ module.exports = {
         allowNull: true,
         type: Sequelize.STRING(255)
       },
-      user_addresses_id: {
-        allowNull: false,
-        type: Sequelize.BIGINT(20).UNSIGNED
+      user_address_id: {
+        allowNull: true,
+        type: Sequelize.BIGINT(20).UNSIGNED,
+        references: { model: 'user_addresses', key: 'id' }
+      },
+      language_id: {
+        allowNull: true,
+        type: Sequelize.BIGINT(20).UNSIGNED,
+        references: { model: 'languages', key: 'id' }
       },
       status: {
         allowNull: false,

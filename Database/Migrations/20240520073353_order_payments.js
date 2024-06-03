@@ -1,41 +1,32 @@
 'use strict';
 /** @type {import('sequelize-cli').Migration} */
 const {STATUS} = require('../../Config/constant');
-
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('orders', {
+    await queryInterface.createTable('order_payments', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.BIGINT(20).UNSIGNED
       },
-      user_id: {
+      order_id: {
         allowNull: false,
-        type: Sequelize.BIGINT(20).UNSIGNED
+        type: Sequelize.BIGINT(20).UNSIGNED,
+        references: {model: 'orders', key: 'id'}
       },
-      orderd_date: {
+      mode: {
         allowNull: false,
-        type: Sequelize.DATE
+        type: Sequelize.STRING(255)
       },
-      shipped_date: {
-        allowNull: true,
-        type: Sequelize.DATE
-      },
-      shipped_addresses_id: {
-        allowNull: false,
-        type: Sequelize.BIGINT(20).UNSIGNED
-      },
-      total_amoumt: {
+      amount: {
         allowNull: false,
         type: Sequelize.BIGINT(20)
       },
       status: {
         allowNull: false,
         type: Sequelize.TINYINT(1),
-        defaultValue: STATUS?.ACTIVE,
-        comment: "0 => In Active 1 => Active"
+        comment: "0 => Failed 1 => Success"
       },
       is_delete: {
         allowNull: false,
@@ -54,6 +45,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('orders');
+    await queryInterface.dropTable('order_payments');
   }
 };

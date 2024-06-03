@@ -5,7 +5,14 @@ const {
 module.exports = (sequelize, DataTypes) => {
   class wishlists extends Model {
     static associate(models) {
-      // define association here
+      wishlists.belongsTo(models.users,{
+        foreignKey: 'user_id',
+        onDelete: 'cascade'
+      })
+      wishlists.belongsTo(models.products,{
+        foreignKey: 'product_id',
+        onDelete: 'cascade'
+      })
     }
   }
   wishlists.init({
@@ -17,11 +24,13 @@ module.exports = (sequelize, DataTypes) => {
     },
     user_id: {
       allowNull: false,
-      type: DataTypes.BIGINT(20).UNSIGNED
+      type: DataTypes.BIGINT(20).UNSIGNED,
+      references: { model: 'users', key: 'id' }
     },
     product_id: {
       allowNull: false,
-      type: DataTypes.BIGINT(20).UNSIGNED
+      type: DataTypes.BIGINT(20).UNSIGNED,
+      references: { model: 'products', key: 'id' }
     },
     createdAt: {
       allowNull: false,

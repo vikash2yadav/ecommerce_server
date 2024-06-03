@@ -1,32 +1,24 @@
 'use strict';
-
 /** @type {import('sequelize-cli').Migration} */
-const { STATUS } = require('../../Config/constant');
-
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('user_tokens', {
+    await queryInterface.createTable('user_otp_verifications', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.BIGINT(20).UNSIGNED
       },
-      access_token: {
+      otp: {
         allowNull: false,
-        type: Sequelize.STRING(500)
+        type: Sequelize.TEXT
       },
       user_id: {
         allowNull: false,
-        type: Sequelize.BIGINT(20).UNSIGNED
+        type: Sequelize.BIGINT(20).UNSIGNED,
+        references: {model: 'users', key: 'id'}
       },
-      status: {
-        allowNull: false,
-        type: Sequelize.TINYINT(1),
-        defaultValue: STATUS?.ACTIVE,
-        comment: "0 => In Active 1 => Active"
-      },
-      expires_at:{
+      expired_at:{
         allowNull: false,
         type: Sequelize.DATE
       },
@@ -41,6 +33,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('user_tokens');
+    await queryInterface.dropTable('user_otp_verifications');
   }
 };
