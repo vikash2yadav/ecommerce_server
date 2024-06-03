@@ -4,24 +4,23 @@ const {
 } = require('sequelize');
 const { STATUS } = require('../../Config/constant');
 module.exports = (sequelize, DataTypes) => {
-  class roles extends Model {
-
+  class modules extends Model {
     static associate(models) {
-      roles.hasMany(models.admins,{
-        foreignKey: 'role_id',
+      modules.belongsTo(models.admins, {
+        foreignKey: 'created_by',
         onDelete: 'cascade'
       });
-      roles.hasMany(models.partners,{
-        foreignKey: 'role_id',
+      modules.belongsTo(models.admins, {
+        foreignKey: 'updated_by',
         onDelete: 'cascade'
       });
-      roles.hasMany(models.permissions, {
-        foreignKey: 'role_id',
+      modules.hasMany(models.permissions, {
+        foreignKey: 'module_id',
         onDelete: 'cascade'
       });
     }
   }
-  roles.init({
+  modules.init({
     id: {
       allowNull: false,
       autoIncrement: true,
@@ -31,6 +30,16 @@ module.exports = (sequelize, DataTypes) => {
     name: {
       allowNull: false,
       type: DataTypes.STRING(255)
+    },
+    created_by: {
+      allowNull: false,
+      type: DataTypes.BIGINT(20).UNSIGNED,
+      references: {model: 'admins', key: 'id'}
+    },
+    updated_by: {
+      allowNull: true,
+      type: DataTypes.BIGINT(20).UNSIGNED,
+      references: {model: 'admins', key: 'id'}
     },
     status: {
       allowNull: false,
@@ -54,7 +63,7 @@ module.exports = (sequelize, DataTypes) => {
     }
   }, {
     sequelize,
-    modelName: 'roles',
+    modelName: 'modules',
   });
-  return roles;
+  return modules;
 };
