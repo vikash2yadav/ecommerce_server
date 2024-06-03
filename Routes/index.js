@@ -54,4 +54,7 @@ module.exports = (app) => {
     // new_release route
     app.use("/new_release", require("./new_releases"));
 
+    // modules route
+    app.use("/module", require("./modules"));
+
 };

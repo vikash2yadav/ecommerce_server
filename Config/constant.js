@@ -62,6 +62,7 @@ exports.STATUS_MESSAGES = {
         EMAIL_ALREADY_EXISTS: "This email is already registered.!",
         ROLE: 'Role is already exist!',
         EMAIL_SUBSCRIBER: 'Email is already in our subscriber list.',
+        MODULE: "This Module is already exist in our system",
         PRODUCT: 'This product slug is already in our system.',
         CATEGORY: 'This category slug is already in our system.',
         PRODUCT_REVIEW: 'Your review is already in our system for this product.',
@@ -83,6 +84,7 @@ exports.STATUS_MESSAGES = {
         ROLE: "Role is not available in our system!",
         EMAIL: "Email is not available in our system!",
         IMAGE: "Image not available.",
+        MODULE: "This module is not found in our system",
         ACCOUNT: "We can't find this account",
         USER_LOOKUP: "User is not available in our system!",
         PAGE: "Page is not available in our system!",
@@ -162,6 +164,11 @@ exports.STATUS_MESSAGES = {
         ADDED: "Our choice has been added successfully.",
         UPDATED: "Our choice been updated successfully.",
         DELETED: "Our choice been deleted successfully.",
+    },
+    MODULE: {
+        ADDED: "Module has been added successfully.",
+        UPDATED: "Module been updated successfully.",
+        DELETED: "Module been deleted successfully.",
     },
     CATEGORY: {
         ADDED: "Category has been added successfully.",
@@ -292,6 +299,7 @@ exports.STATUS_MESSAGES = {
     VALIDATION: {
         REQUIRED: {
             NAME: 'Please, enter name',
+            MODULE: 'Please, enter module',
             SLUG: 'Please, enter slug',
             VALUE: 'Please, enter value',
             PRODUCT: 'Please, enter product.',
