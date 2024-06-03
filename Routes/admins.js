@@ -12,7 +12,7 @@ router.route('/add').post(validate([
     body("email").notEmpty().withMessage(STATUS_MESSAGES.VALIDATION.REQUIRED.INVALID_EMAIL),
     body("email").isEmail().withMessage(STATUS_MESSAGES.VALIDATION.REQUIRED.EMAIL),
     body("password").notEmpty().withMessage(STATUS_MESSAGES.VALIDATION.REQUIRED.PASSWORD),
-]), adminController.add);
+]), adminAuth, adminController.add);
 
 // sign in
 router.route('/sign_in').post(validate([
@@ -21,7 +21,7 @@ router.route('/sign_in').post(validate([
     body("password").notEmpty().withMessage(STATUS_MESSAGES.VALIDATION.REQUIRED.PASSWORD),
 ]), adminController.signIn);
 
-// forgot password
+// forgot password at login time 
 router.route('/forgot_password').post(adminAuth, adminController.forgotPassword);
 
 // otp verifications
