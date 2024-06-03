@@ -1,5 +1,7 @@
 var jwt = require('jsonwebtoken');
 const { STATUS_MESSAGES } = require('../Config/constant');
+const partnerModel = new(require('../Models/partners'));
+const adminModel = new(require('../Models/admins'));
 const userModel = new(require('../Models/users'))
 
 class Authentication {
@@ -26,6 +28,45 @@ class Authentication {
         req.userInfo = userToken? userToken.user? userToken.user['dataValues'] : null : null;
         next();
     }
+
+    async adminAuth(req, res, next) {
+        let authToken = req.headers.authorization;
+
+        if (!authToken) {
+            res.handler.validationError(undefined, STATUS_MESSAGES.TOKEN.INVALID);
+            return false
+        }
+
+        const adminToken = await adminModel.getAdminTokenInfo(authToken);
+        
+        if (!adminToken) {
+            res.handler.unauthorized();
+            return;
+        }
+        
+        req.adminInfo = adminToken? adminToken.admin? adminToken.admin['dataValues'] : null : null;
+        next();
+    }
+
+    async partnerAuth(req, res, next) {
+        let authToken = req.headers.authorization;
+
+        if (!authToken) {
+            res.handler.validationError(undefined, STATUS_MESSAGES.TOKEN.INVALID);
+            return false
+        }
+
+        const partnerToken = await partnerModel.getPartnerTokenInfo(authToken);
+        
+        if (!partnerToken) {
+            res.handler.unauthorized();
+            return;
+        }
+        
+        req.partnerInfo = partnerToken? partnerToken.partner? partnerToken.partner['dataValues'] : null : null;
+        next();
+    }
+
 
     checkAccess(currentModule, access, options = { }) {
         let { exception, key, value } = options;

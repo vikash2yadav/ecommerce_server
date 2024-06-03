@@ -9,7 +9,7 @@ module.exports = {
         user_id: 2
       },
       {
-        product_id:3,
+        product_id:2,
         user_id: 1
       }
     ])

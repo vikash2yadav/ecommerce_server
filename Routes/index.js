@@ -6,6 +6,12 @@ module.exports = (app) => {
     // user route
     app.use("/user", require("./users"));
 
+    // admin route
+    app.use("/admin", require("./admins"));
+
+    // partner route
+    app.use("/partner", require("./partners"));
+
     // product route
     app.use("/product", require("./products"));
 

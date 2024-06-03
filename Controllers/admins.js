@@ -1,11 +1,11 @@
-const userModel = new (require('../Models/users'));
+const adminModel = new (require('../Models/admins'));
 const { STATUS_CODES, STATUS_MESSAGES } = require("../Config/constant");
-class userController {
+class adminController {
 
-    // sign up
-    async signUp(req, res) {
+    // add admin
+    async add(req, res) {
         try {
-            let data = await userModel.signUp(req?.body);
+            let data = await adminModel.add(req?.body);
 
             if (data.status == STATUS_CODES.ALREADY_REPORTED) {
                 return res.handler.validationError(undefined, data?.message);
@@ -15,7 +15,7 @@ class userController {
                 return res.handler.notFound(undefined, STATUS_MESSAGES.PASSWORD.NOT_SAME);
             }
 
-            return res.handler.success(data);
+            return res.handler.success(data, STATUS_MESSAGES?.ADMIN?.ADDED);
         } catch (error) {
             res.handler.serverError(error);
         }
@@ -24,7 +24,7 @@ class userController {
     // sign in
     async signIn(req, res) {
         try {
-            let data = await userModel.signIn(req?.body);
+            let data = await adminModel.signIn(req?.body);
 
             if (data.status === STATUS_CODES.NOT_FOUND) {
                 return res.handler.notFound(undefined, data?.message)
@@ -43,7 +43,7 @@ class userController {
     // forgot password
     async forgotPassword(req, res) {
         try {
-            let data = await userModel.forgotPassword(req?.body);
+            let data = await adminModel.forgotPassword(req?.adminInfo);
 
             if (data.status === STATUS_CODES.NOT_FOUND) {
                 return res.handler.notFound(undefined, STATUS_MESSAGES.NOT_FOUND.EMAIL)
@@ -59,7 +59,7 @@ class userController {
     async otpVerificationByOtp(req, res) {
         try {
 
-            let data = await userModel.otpVerificationByOtp(req?.body);
+            let data = await adminModel.otpVerificationByOtp(req?.body);
 
             if (data?.status === STATUS_CODES?.NOT_FOUND) {
                 res.handler.notFound(undefined, STATUS_MESSAGES?.OTP?.INVALID);
@@ -81,7 +81,7 @@ class userController {
     // reset password
     async resetPassword(req, res) {
         try {
-            let data = await userModel.resetPassword(req?.body, req?.params?.id);
+            let data = await adminModel.resetPassword(req?.body, req?.adminInfo);
 
             if (data.status === STATUS_CODES.NOT_VALID_DATA) {
                 return res.handler.validationError(undefined, STATUS_MESSAGES.PASSWORD.NOT_SAME)
@@ -98,7 +98,7 @@ class userController {
     async signOut(req, res) {
         try {
 
-            let data = await userModel.signOut(req?.userInfo, req?.headers);
+            let data = await adminModel.signOut(req?.adminInfo, req?.headers);
 
             if (data?.status === STATUS_CODES?.NOT_FOUND) {
                 res.handler.notFound(undefined, STATUS_MESSAGES?.NOT_FOUND?.USER);
@@ -112,18 +112,18 @@ class userController {
         }
     }
 
-    // update profile
+    // update self profile
     async updateSelfProfile(req, res) {
         try {
 
-            let data = await userModel.updateSelfProfile(req?.userInfo, req?.body);
+            let data = await adminModel.updateSelfProfile(req?.adminInfo, req?.body);
 
             if (data.status === STATUS_CODES?.NOT_FOUND) {
                 return res.handler.notFound(undefined, STATUS_MESSAGES.NOT_FOUND.USER);
             }
 
             if (data.status === STATUS_CODES?.ALREADY_REPORTED) {
-                return res.handler.notFound(undefined, data?.message);
+                return res.handler.conflict(undefined, data?.message);
             }
 
             return res.handler.success(data, STATUS_MESSAGES.USER.UPDATED)
@@ -133,13 +133,34 @@ class userController {
         }
     }
 
-    // user status change
-    async userStatusChange(req, res) {
+    // update profile
+    async updateProfile(req, res) {
         try {
 
-            let data = await userModel.userStatusChange(req?.adminInfo, req?.body);
+            let data = await adminModel.updateProfile(req?.adminInfo, req?.body);
 
-            if (data.status === STATUS_CODES.NOT_FOUND) {
+            if (data.status === STATUS_CODES?.NOT_FOUND) {
+                return res.handler.notFound(undefined, STATUS_MESSAGES.NOT_FOUND.USER);
+            }
+
+            if (data.status === STATUS_CODES?.ALREADY_REPORTED) {
+                return res.handler.conflict(undefined, STATUS_MESSAGES.EXISTS.EMAIL);
+            }
+
+            return res.handler.success(data, STATUS_MESSAGES.USER.UPDATED);
+
+        } catch (error) {
+            res.handler.serverError(error);
+        }
+    }
+
+    // admin status change
+    async adminStatusChange(req, res) {
+        try {
+
+            let data = await adminModel.adminStatusChange(req?.adminInfo, req?.body);
+
+            if(data.status === STATUS_CODES.NOT_FOUND){
                 return res.handler.notFound(undefined, STATUS_MESSAGES.NOT_FOUND.USER);
             }
 
@@ -150,91 +171,50 @@ class userController {
         }
     }
 
-    // add user
-    async addUser(req, res) {
+    // delete admin
+    async deleteAdmin(req, res) {
         try {
-            let data = await userModel.addUser(req?.body);
-
-            if (data.status == STATUS_CODES.ALREADY_REPORTED) {
-                return res.handler.validationError(undefined, data?.message);
+            let data = await adminModel.deleteAdmin(req?.adminInfo, req?.params?.id);
+            
+            if(data.status === STATUS_CODES.NOT_FOUND){
+                return res.handler.notFound(undefined, STATUS_MESSAGES.NOT_FOUND.USER);
             }
 
-            if (data.status == STATUS_CODES.NOT_VALID_DATA) {
-                return res.handler.notFound(undefined, STATUS_MESSAGES.PASSWORD.NOT_SAME);
-            }
-
-            return res.handler.success(data, STATUS_MESSAGES.USER.ADDED);
+            return res.handler.success(data, STATUS_MESSAGES.ADMIN.DELETED);
 
         } catch (error) {
-            res.handler.serverError(error);
+            return res.handler.serverError(error);
         }
     }
 
-    // update user
-    async updateUser(req, res) {
+    // get by id
+    async getAdminById(req,res) {
         try {
-            let data = await userModel.updateUser(req?.userInfo, req?.body);
-
-            if (data.status == STATUS_CODES.NOT_FOUND) {
-                return res.handler.validationError(undefined, STATUS_MESSAGES.NOT_FOUND.USER);
-            }
-
-            if (data.status == STATUS_CODES.ALREADY_REPORTED) {
-                return res.handler.validationError(undefined, data?.message);
-            }
-
-            return res.handler.success(data, STATUS_MESSAGES.USER.UPDATED);
-
-        } catch (error) {
-            res.handler.serverError(error);
-        }
-    }
-
-    // delete user
-    async deleteUser(req, res) {
-        try {
-            let data = await userModel.deleteUser(req?.params?.id);
-
-            if (data.status == STATUS_CODES.NOT_FOUND) {
-                return res.handler.validationError(undefined, STATUS_MESSAGES.NOT_FOUND.USER);
-            }
-
-            return res.handler.success(data, STATUS_MESSAGES.USER.DELETED);
-
-        } catch (error) {
-            res.handler.serverError(error);
-        }
-    }
-
-    // delete user
-    async getUserById(req, res) {
-        try {
-            let data = await userModel.getUserById(req?.params?.id);
-
-            if (data.status == STATUS_CODES.NOT_FOUND) {
-                return res.handler.validationError(undefined, STATUS_MESSAGES.NOT_FOUND.USER);
+            let data = await adminModel.getAdminById(req?.params?.id);
+            
+            if(data.status === STATUS_CODES.NOT_FOUND){
+                return res.handler.notFound(undefined, STATUS_MESSAGES.NOT_FOUND.USER);
             }
 
             return res.handler.success(data);
 
         } catch (error) {
-            res.handler.serverError(error);
+            return res.handler.serverError(error);
         }
     }
 
-    // delete user
-    async getUserList(req, res) {
+     // list
+     async getAdminList(req,res) {
         try {
-            let data = await userModel.getUserList(req?.body);
-
+            let data = await adminModel.getAdminList();
+            
             return res.handler.success(data);
-
+            
         } catch (error) {
-            res.handler.serverError(error);
+            return res.handler.serverError(error);
         }
     }
-
 
 }
 
-module.exports = userController;
+module.exports = adminController;

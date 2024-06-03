@@ -1,5 +1,5 @@
 const { STATUS_CODES, STATUS, STATUS_MESSAGES } = require('../Config/constant');
-const { users: userSchema, user_tokens: userTokenSchema, user_otp_verifications: userOtpSchema } = require("../Database/Schema");
+const { partners: partnerSchema, partner_tokens: partnerTokenSchema, partner_otp_verifications: partnerOtpSchema } = require("../Database/Schema");
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const moment = require('moment');
@@ -7,17 +7,17 @@ const mailer = new (require('../Utils/mailer'));
 const { generateOtp } = require('../Utils/helpers');
 const { Op } = require('sequelize');
 
-class userModel {
+class partnerModel {
 
     // get token info
-    async getUserTokenInfo(access_token) {
-        return await userTokenSchema.findOne({
+    async getPartnerTokenInfo(access_token) {
+        return await partnerTokenSchema.findOne({
             where: {
-                access_token,
+                access_token: access_token,
             },
             include: [
                 {
-                    model: userSchema,
+                    model: partnerSchema,
                     where: {
                         status: STATUS?.ACTIVE,
                     },
@@ -26,11 +26,11 @@ class userModel {
         })
     }
 
-    // sign up
-    async signUp(bodyData) {
+    // add
+    async add(bodyData) {
 
         // check email
-        let checkEmail = await userSchema.findOne({
+        let checkEmail = await partnerSchema.findOne({
             where: {
                 email: bodyData?.email
             }
@@ -45,10 +45,10 @@ class userModel {
 
         let hashedPassword = await bcrypt.hash(bodyData?.password, 10);
 
-        return await userSchema.create({
+        return await partnerSchema.create({
             ...bodyData,
             password: hashedPassword
-        })
+        });
 
     }
 
@@ -56,7 +56,7 @@ class userModel {
     async signIn(bodyData) {
 
         // check email
-        let checkEmail = await userSchema.findOne({
+        let checkEmail = await partnerSchema.findOne({
             where: {
                 email: bodyData?.email,
                 is_delete: STATUS.NOTDELETED
@@ -95,9 +95,9 @@ class userModel {
         let currentDate = moment();
         let expireTokenTime = await moment(currentDate).add(48, 'hours');
 
-        userTokenSchema.create({
+        partnerTokenSchema.create({
             access_token,
-            user_id: checkEmail?.id,
+            partner_id: checkEmail?.id,
             expires_at: expireTokenTime
         })
 
@@ -106,7 +106,6 @@ class userModel {
             first_name: checkEmail?.first_name,
             last_name: checkEmail?.last_name,
             full_name: checkEmail?.full_name,
-            username: checkEmail?.username,
             email: checkEmail?.email,
             profile_image: checkEmail?.profile_image,
             country_code: checkEmail?.country_code,
@@ -125,7 +124,7 @@ class userModel {
 
         let email = data?.email;
 
-        let checkEmail = await userSchema.findOne({
+        let checkEmail = await partnerSchema.findOne({
             where: {
                 email: email,
                 status: STATUS?.ACTIVE,
@@ -152,11 +151,11 @@ class userModel {
 
             let registerData = {
                 otp: hashedOtp,
-                user_id: id,
+                partner_id: id,
                 expired_at: date
             }
 
-            return await userOtpSchema.create(registerData);
+            return await partnerOtpSchema.create(registerData);
         }
         else {
             return {
@@ -171,7 +170,7 @@ class userModel {
         var otp = data?.otp;
         var date = new Date();
 
-        let getOtp = await userOtpSchema.findAll({
+        let getOtp = await partnerOtpSchema.findAll({
             order: [['createdAt', 'DESC']]
         })
 
@@ -194,7 +193,7 @@ class userModel {
 
             let oldDate = transformedArray[0]?.expired_at;
 
-            await userOtpSchema.destroy({
+            await partnerOtpSchema.destroy({
                 where: {
                     otp: oldOtp
                 }
@@ -208,7 +207,7 @@ class userModel {
             }
 
             return {
-                user_id: transformedArray[0]?.user_id
+                partner_id: transformedArray[0]?.partner_id
             }
         }
         return {
@@ -218,6 +217,18 @@ class userModel {
 
     // reset password
     async resetPassword(bodyData, id) {
+        let checkPartner = await partnerSchema.findOne({
+            where: {
+                id: id,
+                is_delete: STATUS.NOTDELETED
+            }
+        })
+
+        if (!checkPartner) {
+            return {
+                status: STATUS_CODES.NOT_FOUND
+            }
+        }
 
         if (bodyData?.password !== bodyData?.confirm_password) {
             return {
@@ -228,7 +239,7 @@ class userModel {
         // hashing new password
         let hashedPassword = await bcrypt.hash(bodyData?.password, 10);
 
-        return await userSchema.update({ password: hashedPassword }, {
+        return await partnerSchema.update({ password: hashedPassword }, {
             where: {
                 id,
                 status: STATUS.ACTIVE,
@@ -239,22 +250,22 @@ class userModel {
     }
 
     // sign out
-    async signOut(userInfo, headers) {
+    async signOut(partnerInfo, headers) {
 
-        if (userInfo !== null) {
-            let user = await userSchema.findOne({
+        if (partnerInfo !== null) {
+            let partner = await partnerSchema.findOne({
                 where: {
-                    id: userInfo?.id
+                    id: partnerInfo?.id
                 }
             })
 
-            if (!user) {
+            if (!partner) {
                 return {
                     status: STATUS_CODES.NOT_FOUND
                 }
             }
 
-            return userTokenSchema.destroy({
+            return partnerTokenSchema.destroy({
                 where: {
                     access_token: headers?.authorization
                 }
@@ -265,25 +276,25 @@ class userModel {
     }
 
     // update self profile 
-    async updateSelfProfile(userInfo, bodyData) {
+    async updateSelfProfile(partnerInfo, bodyData) {
 
-        let user = await userSchema.findOne({
+        let partner = await partnerSchema.findOne({
             where: {
-                id: userInfo?.id,
+                id: partnerInfo?.id,
             }
         })
 
-        if (!user) {
+        if (!partner) {
             return {
                 status: STATUS_CODES.NOT_FOUND
             }
         }
 
         // check already email
-        let checkEmail = await userSchema.findOne({
+        let checkEmail = await partnerSchema.findOne({
             where: {
                 email: bodyData?.email,
-                id: { [Op.ne]: userInfo?.id }
+                id: { [Op.ne]: partnerInfo?.id }
             }
         })
 
@@ -294,79 +305,31 @@ class userModel {
             }
         }
 
-        return await userSchema.update( bodyData , {
+        return await partnerSchema.update(bodyData, {
             where: {
-                id: userInfo?.id
+                id: partnerInfo?.id
             }
         })
     }
 
-    // user status change 
-    async userStatusChange(userInfo, bodyData) {
-        let user = await userSchema.findOne({
+    // update profile 
+    async updateProfile(partnerInfo, bodyData) {
+
+        let checkPartner = await partnerSchema.findOne({
             where: {
                 id: bodyData?.id,
                 is_delete: STATUS.NOTDELETED
             }
         })
 
-        if (!user) {
-            return {
-                status: STATUS_CODES.NOT_FOUND
-            }
-        }
-
-        return await userSchema.update(bodyData, {
-            where: {
-                id: bodyData?.id
-            }
-        })
-
-    }
-
-    // add user
-    async addUser(bodyData) {
-        // check email
-        let checkEmail = await userSchema.findOne({
-            where: {
-                email: bodyData?.email
-            }
-        })
-
-        if (checkEmail) {
-            return {
-                status: STATUS_CODES.ALREADY_REPORTED,
-                message: STATUS_MESSAGES.EXISTS.EMAIL
-            }
-        }
-
-        let hashedPassword = await bcrypt.hash(bodyData?.password, 10);
-
-        return await userSchema.create({
-            ...bodyData,
-            password: hashedPassword
-        });
-
-    }
-
-    // update user 
-    async updateUser(adminInfo, bodyData) {
-
-        let checUser = await userSchema.findOne({
-            where: {
-                id: bodyData?.id,
-                is_delete: STATUS.NOTDELETED
-            }
-        })
-
-        if (!checUser) {
+        if (!checkPartner) {
             return {
                 status: STATUS_CODES.NOT_FOUND
             }
         }
 
         // check already email
-        let checkEmail = await userSchema.findOne({
+        let checkEmail = await partnerSchema.findOne({
             where: {
                 email: bodyData?.email,
                 id: { [Op.ne]: bodyData?.id }
@@ -375,34 +338,57 @@ class userModel {
 
         if (checkEmail) {
             return {
-                status: STATUS_CODES.ALREADY_REPORTED
+                status: STATUS_CODES.ALREADY_REPORTED,
+                message: STATUS_MESSAGES.EXISTS.EMAIL
             }
         }
 
-        return await userSchema.update(bodyData, {
+        return await partnerSchema.update(bodyData, {
             where: {
                 id: bodyData?.id
             }
         })
     }
 
-    // delete user 
-    async deleteUser(id) {
+    // partner status change
+    async partnerStatusChange(partnerInfo, bodyData) {
 
-        let user = await userSchema.findOne({
+        let partner = await partnerSchema.findOne({
             where: {
-                id: id,
+                id: bodyData?.id,
                 is_delete: STATUS.NOTDELETED
             }
         })
 
-        if (!user) {
+        if (!partner) {
             return {
                 status: STATUS_CODES.NOT_FOUND
             }
         }
 
-        return await userSchema.update({ is_delete: STATUS.DELETED }, {
+        return await partnerSchema.update(bodyData, {
+            where: {
+                id: bodyData?.id
+            }
+        })
+
+    }
+
+    // delete partner
+    async deletePartner(id){
+        let data = await partnerSchema.findOne({
+            where: {
+                id: id,
+                is_delete: STATUS.NOTDELETED
+            }
+        })
+        if(!data){
+            return{
+                status: STATUS_CODES.NOT_FOUND
+            }
+        }
+
+        return await partnerSchema.update({ is_delete: STATUS.DELETED } , {
             where: {
                 id: id
             }
@@ -410,16 +396,16 @@ class userModel {
 
     }
 
-    // get user by id
-    async getUserById(id) {
-        let data = await userSchema.findOne({
+    // get by id partner
+    async getPartnerById(id){
+        let data = await partnerSchema.findOne({
             where: {
                 id: id,
                 is_delete: STATUS.NOTDELETED
             }
         })
-        if (!data) {
-            return {
+        if(!data){
+            return{
                 status: STATUS_CODES.NOT_FOUND
             }
         }
@@ -427,16 +413,14 @@ class userModel {
         return data;
     }
 
-    // list user
-    async getUserList() {
-
-        return await userSchema.findAll({
+    // get list
+    async getPartnerList(bodyData){
+        return await partnerSchema.findAll({
             where: {
-                is_delete: STATUS.NOTDELETED
+               is_delete: STATUS.NOTDELETED
             }
-        })
-
+        });
     }
 }
 
-module.exports = userModel;
+module.exports = partnerModel;

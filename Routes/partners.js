@@ -1,45 +1,45 @@
-const userController = new (require('../Controllers/users'));
+const partnerController = new (require('../Controllers/partners'));
 const router = require('express').Router();
 const validate = require("../Middleware/validator").validate;
 const { body } = require("express-validator");
 const { STATUS_MESSAGES } = require('../Config/constant');
-const { userAuth, adminAuth } = new (require("../Middleware/authentication"));
+const {adminAuth, partnerAuth} = new(require('../Middleware/authentication'));
 
-// sign up
-router.route('/sign_up').post(validate([
+// add partner
+router.route('/add').post(validate([
     body("first_name").notEmpty().withMessage(STATUS_MESSAGES.VALIDATION.REQUIRED.FIRST_NAME),
     body("last_name").notEmpty().withMessage(STATUS_MESSAGES.VALIDATION.REQUIRED.LAST_NAME),
     body("email").notEmpty().withMessage(STATUS_MESSAGES.VALIDATION.REQUIRED.INVALID_EMAIL),
     body("email").isEmail().withMessage(STATUS_MESSAGES.VALIDATION.REQUIRED.EMAIL),
     body("password").notEmpty().withMessage(STATUS_MESSAGES.VALIDATION.REQUIRED.PASSWORD),
-]), userController.signUp);
+]), adminAuth, partnerController.add);
 
 // sign in
 router.route('/sign_in').post(validate([
     body("email").notEmpty().withMessage(STATUS_MESSAGES.VALIDATION.REQUIRED.EMAIL),
     body("email").isEmail().withMessage(STATUS_MESSAGES.VALIDATION.REQUIRED.INVALID_EMAIL),
     body("password").notEmpty().withMessage(STATUS_MESSAGES.VALIDATION.REQUIRED.PASSWORD),
-]), userController.signIn);
+]), partnerController.signIn);
 
 // forgot password
 router.route('/forgot_password').post(validate([
     body("email").notEmpty().withMessage(STATUS_MESSAGES.VALIDATION.REQUIRED.INVALID_EMAIL),
     body("email").isEmail().withMessage(STATUS_MESSAGES.VALIDATION.REQUIRED.EMAIL),
-]), userController.forgotPassword);
+]), partnerController.forgotPassword);
 
 // otp verifications
 router.route('/otp_verification').post(validate([
     body("otp").notEmpty().withMessage(STATUS_MESSAGES.VALIDATION.REQUIRED.OTP),
-]), userController.otpVerificationByOtp);
+]), partnerController.otpVerificationByOtp);
 
 // reset password
 router.route('/reset_password/:id').post(validate([
     body("password").notEmpty().withMessage(STATUS_MESSAGES.VALIDATION.REQUIRED.NEW_PASSWORD),
     body("confirm_password").notEmpty().withMessage(STATUS_MESSAGES.VALIDATION.REQUIRED.CONFIRM_PASSWORD),
-]), userController.resetPassword);
+]), partnerController.resetPassword);
 
 // sign out
-router.route('/sign_out').post(userAuth, userController.signOut);
+router.route('/sign_out').post(partnerAuth, partnerController.signOut);
 
 // update profile
 router.route("/update/self/profile").put(validate([
@@ -47,40 +47,32 @@ router.route("/update/self/profile").put(validate([
     body("last_name").notEmpty().withMessage(STATUS_MESSAGES.VALIDATION.REQUIRED.LAST_NAME),
     body("birth_date").notEmpty().withMessage(STATUS_MESSAGES.VALIDATION.REQUIRED.BIRTH_DATE),
     body("gender").notEmpty().withMessage(STATUS_MESSAGES.VALIDATION.REQUIRED.GENDER),
-]), userAuth, userController.updateSelfProfile);
+]), partnerAuth, partnerController.updateSelfProfile);
+
 
 // status change
 router.route("/status_change").put(validate([
     body("id").notEmpty().withMessage(STATUS_MESSAGES.VALIDATION.REQUIRED.ID),
     body("status").notEmpty().withMessage(STATUS_MESSAGES.VALIDATION.REQUIRED.STATUS)
-]), adminAuth, userController.userStatusChange);
+]), adminAuth, partnerController.partnerStatusChange);
 
-// // admin route add user
-router.route('/add').post(validate([
-    body("first_name").notEmpty().withMessage(STATUS_MESSAGES.VALIDATION.REQUIRED.FIRST_NAME),
-    body("last_name").notEmpty().withMessage(STATUS_MESSAGES.VALIDATION.REQUIRED.LAST_NAME),
-    body("email").notEmpty().withMessage(STATUS_MESSAGES.VALIDATION.REQUIRED.INVALID_EMAIL),
-    body("email").isEmail().withMessage(STATUS_MESSAGES.VALIDATION.REQUIRED.EMAIL),
-    body("password").notEmpty().withMessage(STATUS_MESSAGES.VALIDATION.REQUIRED.PASSWORD),
-]), adminAuth, userController.addUser);
 
-// // admin route update user
-router.route('/update').put(validate([
+// update partner profile
+router.route("/update").put(validate([
     body("id").notEmpty().withMessage(STATUS_MESSAGES.VALIDATION.REQUIRED.ID),
     body("first_name").notEmpty().withMessage(STATUS_MESSAGES.VALIDATION.REQUIRED.FIRST_NAME),
     body("last_name").notEmpty().withMessage(STATUS_MESSAGES.VALIDATION.REQUIRED.LAST_NAME),
     body("email").notEmpty().withMessage(STATUS_MESSAGES.VALIDATION.REQUIRED.INVALID_EMAIL),
     body("email").isEmail().withMessage(STATUS_MESSAGES.VALIDATION.REQUIRED.EMAIL),
-    body("password").notEmpty().withMessage(STATUS_MESSAGES.VALIDATION.REQUIRED.PASSWORD),
-]), adminAuth, userController.updateUser);
+]), adminAuth, partnerController.updateProfile);
 
-// // admin route update user
-router.route('/delete/:id').delete(adminAuth, userController.deleteUser);
+// delete partner
+router.route("/delete/:id").delete(adminAuth, partnerController.deletePartner);
 
-// // admin route get user by id
-router.route('/get/:id').get(adminAuth, userController.getUserById);
+// get by id partner
+router.route("/get/:id").get(adminAuth, partnerController.getPartnerById);
 
-// // admin route get user list
-router.route('/get/list').post(adminAuth, userController.getUserList);
+// get all list partner
+router.route("/get/list").post(adminAuth, partnerController.getPartnerList);
 
 module.exports = router
