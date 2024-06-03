@@ -11,7 +11,7 @@ module.exports = {
       },
       {
         product_faq_id: 2,
-        user_id: 5,
+        user_id: 1,
         reaction_type: 0,
       }
     ]);

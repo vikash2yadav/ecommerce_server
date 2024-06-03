@@ -14,6 +14,14 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: 'language_id',
         onDelete: 'cascade'
       })
+      languages.hasMany(models.admins,{
+        foreignKey: 'language_id',
+        onDelete: 'cascade'
+      });
+      languages.hasMany(models.partners,{
+        foreignKey: 'language_id',
+        onDelete: 'cascade'
+      });
     }
   }
   languages.init({

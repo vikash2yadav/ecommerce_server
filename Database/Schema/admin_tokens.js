@@ -4,29 +4,29 @@ const {
 } = require('sequelize');
 const { STATUS } = require('../../Config/constant');
 module.exports = (sequelize, DataTypes) => {
-  class roles extends Model {
-
+  class admin_tokens extends Model {
     static associate(models) {
-      roles.hasMany(models.admins,{
-        foreignKey: 'role_id',
+      admin_tokens.belongsTo(models.admins,{
+        foreignKey: 'admin_id',
         onDelete: 'cascade'
-      });
-      roles.hasMany(models.partners,{
-        foreignKey: 'role_id',
-        onDelete: 'cascade'
-      });
+      })
     }
   }
-  roles.init({
+  admin_tokens.init({
     id: {
       allowNull: false,
       autoIncrement: true,
       primaryKey: true,
       type: DataTypes.BIGINT(20).UNSIGNED
-    },
-    name: {
+    }, 
+    access_token: {
       allowNull: false,
-      type: DataTypes.STRING(255)
+      type: DataTypes.STRING(500)
+    },
+    admin_id: {
+      allowNull: false,
+      type: DataTypes.BIGINT(20).UNSIGNED,
+      references: { model: 'admins', key: 'id' }
     },
     status: {
       allowNull: false,
@@ -34,11 +34,9 @@ module.exports = (sequelize, DataTypes) => {
       defaultValue: STATUS?.ACTIVE,
       comment: "0 => In Active 1 => Active"
     },
-    is_delete: {
+    expires_at:{
       allowNull: false,
-      type: DataTypes.TINYINT(1),
-      defaultValue: STATUS?.NOTDELETED,
-      comment: "0 => Not Deleted 1 => Deleted"
+      type: DataTypes.DATE
     },
     createdAt: {
       allowNull: false,
@@ -50,7 +48,7 @@ module.exports = (sequelize, DataTypes) => {
     }
   }, {
     sequelize,
-    modelName: 'roles',
+    modelName: 'admin_tokens',
   });
-  return roles;
+  return admin_tokens;
 };

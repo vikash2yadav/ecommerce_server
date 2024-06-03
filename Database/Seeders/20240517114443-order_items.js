@@ -15,7 +15,7 @@ module.exports = {
       },
       {
         order_id: 2,
-        product_id: 3,
+        product_id: 1,
         quantity: 2,
         unit_price: 2000,
         unit_discount: 200,

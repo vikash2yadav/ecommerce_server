@@ -131,6 +131,14 @@ exports.STATUS_MESSAGES = {
         EXPIRED: "Your token has been expired.",
         LOGOUT: "You have been successfully logged out."
     },
+    ADMIN: {
+        ADDED: 'Admin added successfully',
+        DELETED: 'Admin deleted successfully',
+        UPDATED: 'Admin updated successfully',
+        STATUS_CHANGED: 'Admin status changed successfully',
+        SIGN_IN: 'You have logged in successfully',
+        INACTIVE: 'now, You are inactive'
+    },
     USER: {
         SIGN_UP: 'You have signed up successfully.',
         REGISTERED: 'You have been registered successfully.',
@@ -401,6 +409,14 @@ exports.IMG_FOLDER_NAME = {
     USER_PROFILE: '/User/Profile',
     COVER_PROFILE: '/User/Cover'
 };
+
+// role id
+exports.ROLE = {
+    SUPER_ADMIN: 1,
+    ADMIN: 2,
+    VENDOR: 3,
+    DELIVERY_PARTNER: 4
+}
 
 // Generic Status
 exports.STATUS = {

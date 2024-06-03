@@ -11,11 +11,7 @@ module.exports = {
       {
         user_id: 2,
         coupon_id: 1
-      },
-      {
-        user_id: 3,
-        coupon_id: 2
-      },
+      }
     ])
   },
 

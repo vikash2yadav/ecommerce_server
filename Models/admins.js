@@ -1,5 +1,5 @@
 const { STATUS_CODES, STATUS, STATUS_MESSAGES } = require('../Config/constant');
-const { users: userSchema, user_tokens: userTokenSchema, user_otp_verifications: userOtpSchema } = require("../Database/Schema");
+const { admins: adminSchema, admin_tokens: adminTokenSchema, admin_otp_verifications: adminOtpSchema } = require("../Database/Schema");
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const moment = require('moment');
@@ -7,17 +7,17 @@ const mailer = new (require('../Utils/mailer'));
 const { generateOtp } = require('../Utils/helpers');
 const { Op } = require('sequelize');
 
-class userModel {
+class adminModel {
 
     // get token info
-    async getUserTokenInfo(access_token) {
-        return await userTokenSchema.findOne({
+    async getAdminTokenInfo(access_token) {
+        return await adminTokenSchema.findOne({
             where: {
                 access_token,
             },
             include: [
                 {
-                    model: userSchema,
+                    model: adminSchema,
                     where: {
                         status: STATUS?.ACTIVE,
                     },
@@ -26,11 +26,10 @@ class userModel {
         })
     }
 
-    // sign up
-    async signUp(bodyData) {
-
+    // add
+    async add(bodyData) {
         // check email
-        let checkEmail = await userSchema.findOne({
+        let checkEmail = await adminSchema.findOne({
             where: {
                 email: bodyData?.email
             }
@@ -45,10 +44,10 @@ class userModel {
 
         let hashedPassword = await bcrypt.hash(bodyData?.password, 10);
 
-        return await userSchema.create({
+        return await adminSchema.create({
             ...bodyData,
             password: hashedPassword
-        })
+        });
 
     }
 
@@ -56,7 +55,7 @@ class userModel {
     async signIn(bodyData) {
 
         // check email
-        let checkEmail = await userSchema.findOne({
+        let checkEmail = await adminSchema.findOne({
             where: {
                 email: bodyData?.email,
                 is_delete: STATUS.NOTDELETED
@@ -73,7 +72,7 @@ class userModel {
         if (checkEmail.status == STATUS.INACTIVE) {
             return {
                 status: STATUS_CODES.NOT_FOUND,
-                message: STATUS_MESSAGES.USER.INACTIVE
+                message: STATUS_MESSAGES.ADMIN.INACTIVE
             }
         }
 
@@ -95,18 +94,17 @@ class userModel {
         let currentDate = moment();
         let expireTokenTime = await moment(currentDate).add(48, 'hours');
 
-        userTokenSchema.create({
+        adminTokenSchema.create({
             access_token,
-            user_id: checkEmail?.id,
+            admin_id: checkEmail?.id,
             expires_at: expireTokenTime
-        })
+        });
 
         return {
             id: checkEmail?.id,
             first_name: checkEmail?.first_name,
             last_name: checkEmail?.last_name,
             full_name: checkEmail?.full_name,
-            username: checkEmail?.username,
             email: checkEmail?.email,
             profile_image: checkEmail?.profile_image,
             country_code: checkEmail?.country_code,
@@ -121,11 +119,12 @@ class userModel {
     }
 
     // forgot password
-    async forgotPassword(data) {
+    async forgotPassword(adminInfo) {
+        console.log(adminInfo)
 
-        let email = data?.email;
+        let email = adminInfo?.email;
 
-        let checkEmail = await userSchema.findOne({
+        let checkEmail = await adminSchema.findOne({
             where: {
                 email: email,
                 status: STATUS?.ACTIVE,
@@ -152,11 +151,11 @@ class userModel {
 
             let registerData = {
                 otp: hashedOtp,
-                user_id: id,
+                admin_id: id,
                 expired_at: date
             }
 
-            return await userOtpSchema.create(registerData);
+            return await adminOtpSchema.create(registerData);
         }
         else {
             return {
@@ -171,7 +170,7 @@ class userModel {
         var otp = data?.otp;
         var date = new Date();
 
-        let getOtp = await userOtpSchema.findAll({
+        let getOtp = await adminOtpSchema.findAll({
             order: [['createdAt', 'DESC']]
         })
 
@@ -194,7 +193,7 @@ class userModel {
 
             let oldDate = transformedArray[0]?.expired_at;
 
-            await userOtpSchema.destroy({
+            await adminOtpSchema.destroy({
                 where: {
                     otp: oldOtp
                 }
@@ -208,7 +207,7 @@ class userModel {
             }
 
             return {
-                user_id: transformedArray[0]?.user_id
+                admin_id: transformedArray[0]?.admin_id
             }
         }
         return {
@@ -217,7 +216,7 @@ class userModel {
     }
 
     // reset password
-    async resetPassword(bodyData, id) {
+    async resetPassword(bodyData, adminInfo) {
 
         if (bodyData?.password !== bodyData?.confirm_password) {
             return {
@@ -228,9 +227,9 @@ class userModel {
         // hashing new password
         let hashedPassword = await bcrypt.hash(bodyData?.password, 10);
 
-        return await userSchema.update({ password: hashedPassword }, {
+        return await adminSchema.update({ password: hashedPassword }, {
             where: {
-                id,
+                id: adminInfo?.id,
                 status: STATUS.ACTIVE,
                 is_delete: STATUS.NOTDELETED
             }
@@ -239,22 +238,22 @@ class userModel {
     }
 
     // sign out
-    async signOut(userInfo, headers) {
+    async signOut(adminInfo, headers) {
 
-        if (userInfo !== null) {
-            let user = await userSchema.findOne({
+        if (adminInfo !== null) {
+            let admin = await adminSchema.findOne({
                 where: {
-                    id: userInfo?.id
+                    id: adminInfo?.id
                 }
             })
 
-            if (!user) {
+            if (!admin) {
                 return {
                     status: STATUS_CODES.NOT_FOUND
                 }
             }
 
-            return userTokenSchema.destroy({
+            return adminTokenSchema.destroy({
                 where: {
                     access_token: headers?.authorization
                 }
@@ -265,25 +264,26 @@ class userModel {
     }
 
     // update self profile 
-    async updateSelfProfile(userInfo, bodyData) {
+    async updateSelfProfile(adminInfo, bodyData) {
 
-        let user = await userSchema.findOne({
+        let admin = await adminSchema.findOne({
             where: {
-                id: userInfo?.id,
+                id: adminInfo?.id,
+                is_delete: STATUS.NOTDELETED
             }
         })
 
-        if (!user) {
+        if (!admin) {
             return {
                 status: STATUS_CODES.NOT_FOUND
             }
         }
 
         // check already email
-        let checkEmail = await userSchema.findOne({
+        let checkEmail = await adminSchema.findOne({
             where: {
                 email: bodyData?.email,
-                id: { [Op.ne]: userInfo?.id }
+                id: { [Op.ne]: adminInfo?.id }
             }
         })
 
@@ -294,79 +294,31 @@ class userModel {
             }
         }
 
-        return await userSchema.update( bodyData , {
+        return await adminSchema.update(bodyData, {
             where: {
-                id: userInfo?.id
+                id: adminInfo?.id
             }
         })
     }
 
-    // user status change 
-    async userStatusChange(userInfo, bodyData) {
-        let user = await userSchema.findOne({
+    // update profile 
+    async updateProfile(adminInfo, bodyData) {
+
+        let checkAdmin = await adminSchema.findOne({
             where: {
                 id: bodyData?.id,
                 is_delete: STATUS.NOTDELETED
             }
         })
 
-        if (!user) {
-            return {
-                status: STATUS_CODES.NOT_FOUND
-            }
-        }
-
-        return await userSchema.update(bodyData, {
-            where: {
-                id: bodyData?.id
-            }
-        })
-
-    }
-
-    // add user
-    async addUser(bodyData) {
-        // check email
-        let checkEmail = await userSchema.findOne({
-            where: {
-                email: bodyData?.email
-            }
-        })
-
-        if (checkEmail) {
-            return {
-                status: STATUS_CODES.ALREADY_REPORTED,
-                message: STATUS_MESSAGES.EXISTS.EMAIL
-            }
-        }
-
-        let hashedPassword = await bcrypt.hash(bodyData?.password, 10);
-
-        return await userSchema.create({
-            ...bodyData,
-            password: hashedPassword
-        });
-
-    }
-
-    // update user 
-    async updateUser(adminInfo, bodyData) {
-
-        let checUser = await userSchema.findOne({
-            where: {
-                id: bodyData?.id,
-                is_delete: STATUS.NOTDELETED
-            }
-        })
-
-        if (!checUser) {
+        if (!checkAdmin) {
             return {
                 status: STATUS_CODES.NOT_FOUND
             }
         }
 
         // check already email
-        let checkEmail = await userSchema.findOne({
+        let checkEmail = await adminSchema.findOne({
             where: {
                 email: bodyData?.email,
                 id: { [Op.ne]: bodyData?.id }
@@ -379,30 +331,54 @@ class userModel {
             }
         }
 
-        return await userSchema.update(bodyData, {
+        return await adminSchema.update(bodyData, {
             where: {
                 id: bodyData?.id
             }
         })
     }
 
-    // delete user 
-    async deleteUser(id) {
+    // admin status change
+    async adminStatusChange(adminInfo, bodyData) {
 
-        let user = await userSchema.findOne({
+        let admin = await adminSchema.findOne({
+            where: {
+                id: bodyData?.id,
+                is_delete: STATUS.NOTDELETED
+            }
+        })
+
+        if (!admin) {
+            return {
+                status: STATUS_CODES.NOT_FOUND
+            }
+        }
+
+        return await adminSchema.update(bodyData, {
+            where: {
+                id: bodyData?.id
+            }
+        })
+
+    }
+
+    // delete admin 
+    async deleteAdmin(adminInfo, id) {
+
+        let admin = await adminSchema.findOne({
             where: {
                 id: id,
                 is_delete: STATUS.NOTDELETED
             }
         })
 
-        if (!user) {
+        if (!admin) {
             return {
                 status: STATUS_CODES.NOT_FOUND
             }
         }
 
-        return await userSchema.update({ is_delete: STATUS.DELETED }, {
+        return await adminSchema.update({ is_delete: STATUS.DELETED }, {
             where: {
                 id: id
             }
@@ -410,15 +386,15 @@ class userModel {
 
     }
 
-    // get user by id
-    async getUserById(id) {
-        let data = await userSchema.findOne({
-            where: {
+    // get by id
+    async getAdminById(id){
+        let data = await adminSchema.findOne({
+            where:{
                 id: id,
                 is_delete: STATUS.NOTDELETED
             }
         })
-        if (!data) {
+        if(!data){
             return {
                 status: STATUS_CODES.NOT_FOUND
             }
@@ -427,16 +403,18 @@ class userModel {
         return data;
     }
 
-    // list user
-    async getUserList() {
+      // list
+      async getAdminList(){
 
-        return await userSchema.findAll({
-            where: {
+        return await adminSchema.findAll({
+            where:{
                 is_delete: STATUS.NOTDELETED
             }
         })
-
+       
     }
+
+
 }
 
-module.exports = userModel;
+module.exports = adminModel;
