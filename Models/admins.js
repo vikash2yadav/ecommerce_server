@@ -26,8 +26,8 @@ class adminModel {
         })
     }
 
-    // add
-    async add(bodyData) {
+    // add admin
+    async add(bodyData, adminInfo) {
         // check email
         let checkEmail = await adminSchema.findOne({
             where: {
@@ -42,6 +42,7 @@ class adminModel {
             }
         }
 
+        bodyData.created_by = adminInfo?.id;
         let hashedPassword = await bcrypt.hash(bodyData?.password, 10);
 
         return await adminSchema.create({
@@ -119,10 +120,9 @@ class adminModel {
     }
 
     // forgot password
-    async forgotPassword(adminInfo) {
-        console.log(adminInfo)
+    async forgotPassword(bodyData) {
 
-        let email = adminInfo?.email;
+        let email = bodyData?.email;
 
         let checkEmail = await adminSchema.findOne({
             where: {
@@ -216,7 +216,7 @@ class adminModel {
     }
 
     // reset password
-    async resetPassword(bodyData, adminInfo) {
+    async resetPassword(bodyData, id) {
 
         if (bodyData?.password !== bodyData?.confirm_password) {
             return {
@@ -229,7 +229,7 @@ class adminModel {
 
         return await adminSchema.update({ password: hashedPassword }, {
             where: {
-                id: adminInfo?.id,
+                id: id,
                 status: STATUS.ACTIVE,
                 is_delete: STATUS.NOTDELETED
             }
@@ -331,6 +331,8 @@ class adminModel {
             }
         }
 
+        bodyData.updated_by = adminInfo?.id;
+
         return await adminSchema.update(bodyData, {
             where: {
                 id: bodyData?.id
@@ -353,6 +355,8 @@ class adminModel {
                 status: STATUS_CODES.NOT_FOUND
             }
         }
+
+        bodyData.status_changed_by = adminInfo?.id;
 
         return await adminSchema.update(bodyData, {
             where: {
@@ -378,7 +382,7 @@ class adminModel {
             }
         }
 
-        return await adminSchema.update({ is_delete: STATUS.DELETED }, {
+        return await adminSchema.update({ is_delete: STATUS.DELETED, deleted_by: adminInfo?.id }, {
             where: {
                 id: id
             }
@@ -404,7 +408,7 @@ class adminModel {
     }
 
       // list
-      async getAdminList(){
+      async getAdminList(bodyData){
 
         return await adminSchema.findAll({
             where:{

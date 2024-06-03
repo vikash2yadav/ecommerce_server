@@ -32,12 +32,6 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       type: DataTypes.STRING(255)
     },
-    status: {
-      allowNull: false,
-      type: DataTypes.TINYINT(1),
-      defaultValue: STATUS?.ACTIVE,
-      comment: "0 => In Active 1 => Active"
-    },
     is_delete: {
       allowNull: false,
       type: DataTypes.TINYINT(1),

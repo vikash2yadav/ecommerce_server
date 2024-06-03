@@ -6,7 +6,7 @@ class partnerController {
     // add partner
     async add(req, res) {
         try {
-            let data = await partnerModel.add(req?.body);
+            let data = await partnerModel.add(req?.body, req?.adminInfo);
 
             if (data.status == STATUS_CODES.ALREADY_REPORTED) {
                 return res.handler.validationError(undefined, data?.message);
@@ -121,7 +121,7 @@ class partnerController {
     async updateProfile(req, res) {
         try {
 
-            let data = await partnerModel.updateProfile(req?.adminInfo, req?.body);
+            let data = await partnerModel.updateProfile(req?.body, req?.adminInfo);
 
             if(data.status === STATUS_CODES?.NOT_FOUND){
                 return res.handler.notFound(undefined, STATUS_MESSAGES.NOT_FOUND.USER);
@@ -163,7 +163,7 @@ class partnerController {
     async partnerStatusChange(req, res) {
         try {
 
-            let data = await partnerModel.partnerStatusChange(req?.partnerInfo, req?.body);
+            let data = await partnerModel.partnerStatusChange(req?.body, req?.adminInfo,);
 
             if(data.status === STATUS_CODES.NOT_FOUND){
                 return res.handler.notFound(undefined, STATUS_MESSAGES.NOT_FOUND.USER);
@@ -179,7 +179,7 @@ class partnerController {
     // delete partner
     async deletePartner(req,res){
         try {
-            let data = await partnerModel.deletePartner(req?.params?.id);
+            let data = await partnerModel.deletePartner(req?.params?.id, req?.adminInfo);
 
             if(data.status === STATUS_CODES.NOT_FOUND){
                 return res.handler.notFound(undefined, STATUS_MESSAGES.NOT_FOUND.USER);

@@ -22,7 +22,10 @@ router.route('/sign_in').post(validate([
 ]), adminController.signIn);
 
 // forgot password at login time 
-router.route('/forgot_password').post(adminAuth, adminController.forgotPassword);
+router.route('/forgot_password').post(validate([
+    body("email").notEmpty().withMessage(STATUS_MESSAGES.VALIDATION.REQUIRED.EMAIL),
+    body("email").isEmail().withMessage(STATUS_MESSAGES.VALIDATION.REQUIRED.INVALID_EMAIL),
+]), adminController.forgotPassword);
 
 // otp verifications
 router.route('/otp_verification').post(validate([
@@ -30,10 +33,10 @@ router.route('/otp_verification').post(validate([
 ]), adminController.otpVerificationByOtp);
 
 // reset password
-router.route('/reset_password').put(validate([
+router.route('/reset_password/:id').put(validate([
     body("password").notEmpty().withMessage(STATUS_MESSAGES.VALIDATION.REQUIRED.NEW_PASSWORD),
     body("confirm_password").notEmpty().withMessage(STATUS_MESSAGES.VALIDATION.REQUIRED.CONFIRM_PASSWORD),
-]), adminAuth, adminController.resetPassword);
+]), adminController.resetPassword);
 
 // sign out
 router.route('/sign_out').post(adminAuth, adminController.signOut);

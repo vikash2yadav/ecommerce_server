@@ -31,6 +31,7 @@ module.exports = {
           contact_no: 6352417654,
           country_code: "+91",
           role_id: 2,
+          created_by: 1,
           createdAt: new Date(),
           updatedAt: new Date(),
       },

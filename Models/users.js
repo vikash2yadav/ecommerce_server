@@ -302,7 +302,7 @@ class userModel {
     }
 
     // user status change 
-    async userStatusChange(userInfo, bodyData) {
+    async userStatusChange(adminInfo, bodyData) {
         let user = await userSchema.findOne({
             where: {
                 id: bodyData?.id,
@@ -316,6 +316,8 @@ class userModel {
             }
         }
 
+        bodyData.status_changed_by = adminInfo?.id;
+        
         return await userSchema.update(bodyData, {
             where: {
                 id: bodyData?.id
@@ -325,7 +327,7 @@ class userModel {
     }
 
     // add user
-    async addUser(bodyData) {
+    async addUser(adminInfo, bodyData) {
         // check email
         let checkEmail = await userSchema.findOne({
             where: {
@@ -341,6 +343,7 @@ class userModel {
         }
 
         let hashedPassword = await bcrypt.hash(bodyData?.password, 10);
+        bodyData.created_by = adminInfo?.id;
 
         return await userSchema.create({
             ...bodyData,
@@ -379,6 +382,8 @@ class userModel {
             }
         }
 
+        bodyData.updated_by = adminInfo?.id;
+
         return await userSchema.update(bodyData, {
             where: {
                 id: bodyData?.id
@@ -387,7 +392,7 @@ class userModel {
     }
 
     // delete user 
-    async deleteUser(id) {
+    async deleteUser(adminInfo, id) {
 
         let user = await userSchema.findOne({
             where: {
@@ -401,8 +406,8 @@ class userModel {
                 status: STATUS_CODES.NOT_FOUND
             }
         }
-
-        return await userSchema.update({ is_delete: STATUS.DELETED }, {
+     
+        return await userSchema.update({ is_delete: STATUS.DELETED, deleted_by: adminInfo?.id }, {
             where: {
                 id: id
             }
