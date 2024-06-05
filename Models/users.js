@@ -238,6 +238,46 @@ class userModel {
 
     }
 
+    // change password 
+    async changePassword(bodyData, userInfo) {
+        let { old_password, new_password, confirm_password } = bodyData;
+
+        // check email
+        let checkEmail = await userSchema.findOne({
+            where: {
+                id: userInfo?.id,
+                is_delete: STATUS.NOTDELETED
+            }
+        })
+
+        let match_password = await bcrypt.compare(
+            old_password,
+            checkEmail?.password
+        );
+
+        if (!match_password) {
+            return {
+                status: STATUS_CODES.NOT_VALID_DATA,
+                message: STATUS_MESSAGES.OLD_PASSWORD.WRONG
+            }
+        }
+
+        if (new_password !== confirm_password) {
+            return {
+                status: STATUS_CODES.NOT_VALID_DATA,
+                message: STATUS_MESSAGES.PASSWORD.NOT_SAME
+            }
+        }
+        
+        let hashedPassword = await bcrypt.hash(new_password, 10);
+
+        return await userSchema.update({password: hashedPassword}, {
+            where: {
+                id: userInfo?.id
+            }
+        })
+    }
+
     // sign out
     async signOut(userInfo, headers) {
 
@@ -294,7 +334,7 @@ class userModel {
             }
         }
 
-        return await userSchema.update( bodyData , {
+        return await userSchema.update(bodyData, {
             where: {
                 id: userInfo?.id
             }
@@ -317,7 +357,7 @@ class userModel {
         }
 
         bodyData.status_changed_by = adminInfo?.id;
-        
+
         return await userSchema.update(bodyData, {
             where: {
                 id: bodyData?.id
@@ -406,7 +446,7 @@ class userModel {
                 status: STATUS_CODES.NOT_FOUND
             }
         }
-     
+
         return await userSchema.update({ is_delete: STATUS.DELETED, deleted_by: adminInfo?.id }, {
             where: {
                 id: id

@@ -94,6 +94,22 @@ class userController {
         }
     }
 
+    // change password
+    async changePassword(req, res){
+        try {
+            let data = await userModel.changePassword(req?.body, req?.userInfo);
+
+            if (data.status === STATUS_CODES.NOT_VALID_DATA) {
+                return res.handler.validationError(undefined, data?.message)
+            }
+
+            return res.handler.success(data, STATUS_MESSAGES.PASSWORD.CHANGED);
+
+        } catch (error) {
+            res.handler.serverError(error);
+        }
+    }
+
     // sign out
     async signOut(req, res) {
         try {
