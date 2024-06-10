@@ -55,6 +55,10 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: 'product_id',
         onDelete: 'cascade'
       })
+      products.hasMany(models.product_variants, {
+        foreignKey: 'product_id',
+        onDelete: 'cascade'
+      });
     }
   }
   products.init({
@@ -85,46 +89,10 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       type: DataTypes.TEXT
     },
-    image:{
-      allowNull: false,
-      type: DataTypes.TEXT
-    },
     category_id: {
       allowNull: false,
       type: DataTypes.BIGINT(20).UNSIGNED,
       references: {model: 'categories', key: 'id'}
-    },
-    price: {
-      allowNull: false,
-      type: DataTypes.BIGINT(20)
-    },
-    discount: {
-      allowNull: false,
-      type: DataTypes.BIGINT(3),
-      defaultValue: STATUS.ZERO,
-      comment: "percentages"
-    },
-    stock: {
-      allowNull: false,
-      type: DataTypes.BIGINT(20)
-    },
-    weight: {
-      allowNull: false,
-      type: DataTypes.STRING(255),
-      comment: "in kg"
-    },
-    dimensions: {
-      allowNull: false,
-      type: DataTypes.STRING(255),
-      comment: "lenght * width * height "
-    },
-    color: {
-      allowNull: false,
-      type: DataTypes.STRING(255)
-    },
-    material: {
-      allowNull: false,
-      type: DataTypes.STRING(255)
     },
     last_updated_by: {
       allowNull: true,

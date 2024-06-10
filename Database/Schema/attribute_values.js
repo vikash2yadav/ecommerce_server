@@ -5,10 +5,14 @@ const {
 module.exports = (sequelize, DataTypes) => {
   class attribute_values extends Model {
     static associate(models) {
-     attribute_values.belongsTo(models.attributes, {
-      foreignKey: 'attribute_id',
-      onDelete: 'cascade'
-     });
+      attribute_values.belongsTo(models.attributes, {
+        foreignKey: 'attribute_id',
+        onDelete: 'cascade'
+      });
+      attribute_values.hasMany(models.product_variants, {
+        foreignKey: 'attribute_value_id',
+        onDelete: 'cascade'
+      });
     }
   }
   attribute_values.init({

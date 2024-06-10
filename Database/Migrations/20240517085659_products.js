@@ -32,46 +32,10 @@ module.exports = {
         allowNull: false,
         type: Sequelize.TEXT
       },
-      image:{
-        allowNull: false,
-        type: Sequelize.TEXT
-      },
       category_id: {
         allowNull: false,
         type: Sequelize.BIGINT(20).UNSIGNED,
         references: {model: 'categories', key: 'id'}
-      },
-      price: {
-        allowNull: false,
-        type: Sequelize.BIGINT(20)
-      },
-      discount: {
-        allowNull: false,
-        type: Sequelize.BIGINT(3),
-        defaultValue: STATUS.ZERO,
-        comment: "percentages"
-      },
-      stock: {
-        allowNull: false,
-        type: Sequelize.BIGINT(20)
-      },
-      weight: {
-        allowNull: false,
-        type: Sequelize.STRING(255),
-        comment: "in kg"
-      },
-      dimensions: {
-        allowNull: false,
-        type: Sequelize.STRING(255),
-        comment: "lenght * width * height "
-      },
-      color: {
-        allowNull: false,
-        type: Sequelize.STRING(255)
-      },
-      material: {
-        allowNull: false,
-        type: Sequelize.STRING(255)
       },
       last_updated_by: {
         allowNull: true,

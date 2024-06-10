@@ -62,4 +62,7 @@ module.exports = (app) => {
 
     // attribute values route
     app.use("/attribute_value", require("./attribute_values"));
+
+    // product variants route
+    app.use("/product_variant", require("./product_variants"));
 };
