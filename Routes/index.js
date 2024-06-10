@@ -57,4 +57,9 @@ module.exports = (app) => {
     // modules route
     app.use("/module", require("./modules"));
 
+    // attributes route
+    app.use("/attribute", require("./attributes"));
+
+    // attribute values route
+    app.use("/attribute_value", require("./attribute_values"));
 };
