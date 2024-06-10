@@ -10,6 +10,10 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: 'attribute_id',
         onDelete: 'cascade'
        });
+       attributes.hasMany(models.product_variants, {
+        foreignKey: 'attribute_id',
+        onDelete: 'cascade'
+      });
     }
   }
   attributes.init({

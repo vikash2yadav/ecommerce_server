@@ -5,7 +5,7 @@ module.exports = {
   async up (queryInterface, Sequelize) {
     return await queryInterface.bulkInsert("attribute_values", [
       { attribute_id: 1, value: 'red' },
-      { attribute_id: 3, value: 'smalll' },
+      { attribute_id: 2, value: 'smalll' },
     ])
   },
 
