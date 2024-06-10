@@ -9,8 +9,7 @@ class languageModel {
 
         let existLanguage = await languageSchema.findOne({
             where: {
-                name: bodyData?.name,
-                code: bodyData?.code,
+                [Op.or]: [{name: bodyData?.name}, {code: bodyData?.code}]               
             }
         });
 
@@ -129,7 +128,11 @@ class languageModel {
     // get language list
     async getLanguageList(bodyData) {
 
-        return await languageSchema.findAndCountAll();
+        return await languageSchema.findAndCountAll({
+            where: {
+                is_delete: STATUS.NOTDELETED        
+            }
+        });
 
     }
 }

@@ -41,37 +41,6 @@ console.log("Route Crash -> ", error)
 const PORT = process.env.PORT || 9000
 const BACKEND_SERVER = process.env.BACKEND_SERVER_LINK
 
-// Swagger-doc
-const swaggerOptions = {
-    swaggerDefinition: {
-      info: {
-        title: 'ecommerce API Documentation',
-        description: `Server is running on ${BACKEND_SERVER}`,
-        version: '1.0.0',
-      },
-      servers: [
-        {
-          url: `http://localhost:5000`,
-          description: 'This is my local Server',
-        },
-      ],
-      securityDefinitions: {
-        AuthToken: {
-          type: 'apiKey',
-          name: 'Authorization',
-          in: 'header',
-          description: 'Set Authorization Token it will be applied wherever Authorization is defined',
-        },
-      },      
-    },
-    apis: ['./Swagger/*.js'], // Specify the path to your route file(s)
-  };
-
-  const swaggerSpec = swaggerJsdoc(swaggerOptions);
-
-// Serve Swagger UI
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
-
 
 //server
 server.listen(PORT, () => {
