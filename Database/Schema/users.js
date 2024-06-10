@@ -74,6 +74,38 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: 'user_id',
         onDelete: 'cascade'
       })
+      users.belongsTo(models.users, {
+        foreignKey: 'created_by',
+        onDelete: 'cascade'
+      });
+      users.belongsTo(models.users, {
+        foreignKey: 'updated_by',
+        onDelete: 'cascade'
+      });
+      users.hasMany(models.users, {
+        foreignKey: 'created_by',
+        onDelete: 'cascade'
+      });
+      users.hasMany(models.users, {
+        foreignKey: 'updated_by',
+        onDelete: 'cascade'
+      });
+      users.belongsTo(models.users,{
+        foreignKey: 'deleted_by',
+        onDelete: 'cascade'
+      });
+      users.hasMany(models.users,{
+        foreignKey: 'deleted_by',
+        onDelete: 'cascade'
+      });
+      users.belongsTo(models.users,{
+        foreignKey: 'status_changed_by',
+        onDelete: 'cascade'
+      });
+      users.hasMany(models.users,{
+        foreignKey: 'status_changed_by',
+        onDelete: 'cascade'
+      });
     }
   }
   users.init({
@@ -152,6 +184,26 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: true,
       type: DataTypes.BIGINT(20).UNSIGNED,
       references: { model: 'languages', key: 'id' }
+    },
+    created_by: {
+      allowNull: true,
+      type: DataTypes.BIGINT(20).UNSIGNED,
+      references: { model: 'users', key: 'id' }
+    },
+    updated_by: {
+      allowNull: true,
+      type: DataTypes.BIGINT(20).UNSIGNED,
+      references: { model: 'users', key: 'id' }
+    },
+    status_changed_by:{
+      allowNull: true,
+      type: DataTypes.BIGINT(20).UNSIGNED,
+      references: { model: 'users', key: 'id' }
+    },
+    deleted_by: {
+      allowNull: true,
+      type: DataTypes.BIGINT(20).UNSIGNED,
+      references: { model: 'users', key: 'id' }
     },
     status: {
       allowNull: false,

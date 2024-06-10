@@ -5,7 +5,7 @@ class adminController {
     // add admin
     async add(req, res) {
         try {
-            let data = await adminModel.add(req?.body);
+            let data = await adminModel.add(req?.body, req?.adminInfo);
 
             if (data.status == STATUS_CODES.ALREADY_REPORTED) {
                 return res.handler.validationError(undefined, data?.message);
@@ -43,7 +43,7 @@ class adminController {
     // forgot password
     async forgotPassword(req, res) {
         try {
-            let data = await adminModel.forgotPassword(req?.adminInfo);
+            let data = await adminModel.forgotPassword(req?.body);
 
             if (data.status === STATUS_CODES.NOT_FOUND) {
                 return res.handler.notFound(undefined, STATUS_MESSAGES.NOT_FOUND.EMAIL)
@@ -81,7 +81,7 @@ class adminController {
     // reset password
     async resetPassword(req, res) {
         try {
-            let data = await adminModel.resetPassword(req?.body, req?.adminInfo);
+            let data = await adminModel.resetPassword(req?.body, req?.params?.id);
 
             if (data.status === STATUS_CODES.NOT_VALID_DATA) {
                 return res.handler.validationError(undefined, STATUS_MESSAGES.PASSWORD.NOT_SAME)

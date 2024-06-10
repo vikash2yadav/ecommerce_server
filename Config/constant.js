@@ -48,6 +48,10 @@ exports.STATUS_MESSAGES = {
     IMAGE_REMOVED: 'Your image has been successfully removed.',
     RESET_PASSWORD_ALREADY: "You already have reset the password with this token.",
 
+    OLD_PASSWORD:{
+        WRONG: 'You old password is not right'
+    },
+
     EXISTS: {
         ACCOUNT_TYPE: 'Account Type is already exist!',
         USERNAME_OR_EMAIL: 'Username or email is already exist!',

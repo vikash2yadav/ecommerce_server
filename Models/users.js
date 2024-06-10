@@ -238,6 +238,46 @@ class userModel {
 
     }
 
+    // change password 
+    async changePassword(bodyData, userInfo) {
+        let { old_password, new_password, confirm_password } = bodyData;
+
+        // check email
+        let checkEmail = await userSchema.findOne({
+            where: {
+                id: userInfo?.id,
+                is_delete: STATUS.NOTDELETED
+            }
+        })
+
+        let match_password = await bcrypt.compare(
+            old_password,
+            checkEmail?.password
+        );
+
+        if (!match_password) {
+            return {
+                status: STATUS_CODES.NOT_VALID_DATA,
+                message: STATUS_MESSAGES.OLD_PASSWORD.WRONG
+            }
+        }
+
+        if (new_password !== confirm_password) {
+            return {
+                status: STATUS_CODES.NOT_VALID_DATA,
+                message: STATUS_MESSAGES.PASSWORD.NOT_SAME
+            }
+        }
+        
+        let hashedPassword = await bcrypt.hash(new_password, 10);
+
+        return await userSchema.update({password: hashedPassword}, {
+            where: {
+                id: userInfo?.id
+            }
+        })
+    }
+
     // sign out
     async signOut(userInfo, headers) {
 
@@ -294,7 +334,7 @@ class userModel {
             }
         }
 
-        return await userSchema.update( bodyData , {
+        return await userSchema.update(bodyData, {
             where: {
                 id: userInfo?.id
             }
@@ -302,7 +342,7 @@ class userModel {
     }
 
     // user status change 
-    async userStatusChange(userInfo, bodyData) {
+    async userStatusChange(adminInfo, bodyData) {
         let user = await userSchema.findOne({
             where: {
                 id: bodyData?.id,
@@ -316,6 +356,8 @@ class userModel {
             }
         }
 
+        bodyData.status_changed_by = adminInfo?.id;
+
         return await userSchema.update(bodyData, {
             where: {
                 id: bodyData?.id
@@ -325,7 +367,7 @@ class userModel {
     }
 
     // add user
-    async addUser(bodyData) {
+    async addUser(adminInfo, bodyData) {
         // check email
         let checkEmail = await userSchema.findOne({
             where: {
@@ -341,6 +383,7 @@ class userModel {
         }
 
         let hashedPassword = await bcrypt.hash(bodyData?.password, 10);
+        bodyData.created_by = adminInfo?.id;
 
         return await userSchema.create({
             ...bodyData,
@@ -379,6 +422,8 @@ class userModel {
             }
         }
 
+        bodyData.updated_by = adminInfo?.id;
+
         return await userSchema.update(bodyData, {
             where: {
                 id: bodyData?.id
@@ -387,7 +432,7 @@ class userModel {
     }
 
     // delete user 
-    async deleteUser(id) {
+    async deleteUser(adminInfo, id) {
 
         let user = await userSchema.findOne({
             where: {
@@ -402,7 +447,7 @@ class userModel {
             }
         }
 
-        return await userSchema.update({ is_delete: STATUS.DELETED }, {
+        return await userSchema.update({ is_delete: STATUS.DELETED, deleted_by: adminInfo?.id }, {
             where: {
                 id: id
             }

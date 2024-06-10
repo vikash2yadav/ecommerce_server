@@ -26,4 +26,17 @@ router.route('/get/:id').get(productReviewController.getProductReview);
 // get all list
 router.route('/get/list').post(productReviewController.getProductReviewList);
 
+
+
+
+/* ------------------- admin route ----------------------- */
+
+// add product review
+router.route('/new/add').post(validate([
+    body("rating").notEmpty().withMessage(STATUS_MESSAGES.VALIDATION.REQUIRED.RATING),
+    body("user_id").notEmpty().withMessage(STATUS_MESSAGES.VALIDATION.REQUIRED.USER),
+    body("product_id").notEmpty().withMessage(STATUS_MESSAGES.VALIDATION.REQUIRED.PRODUCT),
+    body("comment").notEmpty().withMessage(STATUS_MESSAGES.VALIDATION.REQUIRED.COMMENT),
+]), productReviewController.addNewProductReview);
+
 module.exports = router;

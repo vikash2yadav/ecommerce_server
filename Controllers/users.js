@@ -94,6 +94,22 @@ class userController {
         }
     }
 
+    // change password
+    async changePassword(req, res){
+        try {
+            let data = await userModel.changePassword(req?.body, req?.userInfo);
+
+            if (data.status === STATUS_CODES.NOT_VALID_DATA) {
+                return res.handler.validationError(undefined, data?.message)
+            }
+
+            return res.handler.success(data, STATUS_MESSAGES.PASSWORD.CHANGED);
+
+        } catch (error) {
+            res.handler.serverError(error);
+        }
+    }
+
     // sign out
     async signOut(req, res) {
         try {
@@ -153,7 +169,7 @@ class userController {
     // add user
     async addUser(req, res) {
         try {
-            let data = await userModel.addUser(req?.body);
+            let data = await userModel.addUser(req?.adminInfo, req?.body);
 
             if (data.status == STATUS_CODES.ALREADY_REPORTED) {
                 return res.handler.validationError(undefined, data?.message);
@@ -173,7 +189,7 @@ class userController {
     // update user
     async updateUser(req, res) {
         try {
-            let data = await userModel.updateUser(req?.userInfo, req?.body);
+            let data = await userModel.updateUser(req?.adminInfo, req?.body);
 
             if (data.status == STATUS_CODES.NOT_FOUND) {
                 return res.handler.validationError(undefined, STATUS_MESSAGES.NOT_FOUND.USER);
@@ -193,7 +209,7 @@ class userController {
     // delete user
     async deleteUser(req, res) {
         try {
-            let data = await userModel.deleteUser(req?.params?.id);
+            let data = await userModel.deleteUser(req?.adminInfo, req?.params?.id);
 
             if (data.status == STATUS_CODES.NOT_FOUND) {
                 return res.handler.validationError(undefined, STATUS_MESSAGES.NOT_FOUND.USER);

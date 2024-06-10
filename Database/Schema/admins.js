@@ -6,15 +6,15 @@ const { STATUS, ROLE } = require('../../Config/constant');
 module.exports = (sequelize, DataTypes) => {
   class admins extends Model {
     static associate(models) {
-      admins.belongsTo(models.languages,{
+      admins.belongsTo(models.languages, {
         foreignKey: 'language_id',
         onDelete: 'cascade'
       });
-      admins.belongsTo(models.roles,{
+      admins.belongsTo(models.roles, {
         foreignKey: 'role_id',
         onDelete: 'cascade'
       });
-      admins.hasMany(models.admin_tokens,{
+      admins.hasMany(models.admin_tokens, {
         foreignKey: 'admin_id',
         onDelete: 'cascade'
       })
@@ -28,6 +28,38 @@ module.exports = (sequelize, DataTypes) => {
       });
       admins.hasMany(models.modules, {
         foreignKey: 'updated_by',
+        onDelete: 'cascade'
+      });
+      admins.belongsTo(models.admins, {
+        foreignKey: 'created_by',
+        onDelete: 'cascade'
+      });
+      admins.belongsTo(models.admins, {
+        foreignKey: 'updated_by',
+        onDelete: 'cascade'
+      });
+      admins.hasMany(models.admins, {
+        foreignKey: 'created_by',
+        onDelete: 'cascade'
+      });
+      admins.hasMany(models.admins, {
+        foreignKey: 'updated_by',
+        onDelete: 'cascade'
+      });
+      admins.belongsTo(models.admins,{
+        foreignKey: 'deleted_by',
+        onDelete: 'cascade'
+      });
+      admins.hasMany(models.admins,{
+        foreignKey: 'deleted_by',
+        onDelete: 'cascade'
+      });
+      admins.belongsTo(models.admins,{
+        foreignKey: 'status_changed_by',
+        onDelete: 'cascade'
+      });
+      admins.hasMany(models.admins,{
+        foreignKey: 'status_changed_by',
         onDelete: 'cascade'
       });
     }
@@ -109,6 +141,26 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: true,
       type: DataTypes.BIGINT(20).UNSIGNED,
       references: { model: 'languages', key: 'id' }
+    },
+    created_by: {
+      allowNull: true,
+      type: DataTypes.BIGINT(20).UNSIGNED,
+      references: { model: 'admins', key: 'id' }
+    },
+    updated_by: {
+      allowNull: true,
+      type: DataTypes.BIGINT(20).UNSIGNED,
+      references: { model: 'admins', key: 'id' }
+    },
+    status_changed_by:{
+      allowNull: true,
+      type: DataTypes.BIGINT(20).UNSIGNED,
+      references: { model: 'admins', key: 'id' }
+    },
+    deleted_by: {
+      allowNull: true,
+      type: DataTypes.BIGINT(20).UNSIGNED,
+      references: { model: 'admins', key: 'id' }
     },
     status: {
       allowNull: false,

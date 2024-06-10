@@ -82,6 +82,26 @@ module.exports = {
         type: Sequelize.BIGINT(20).UNSIGNED,
         references: { model: 'languages', key: 'id' }
       },
+      created_by: {
+        allowNull: true,
+        type: Sequelize.BIGINT(20).UNSIGNED,
+        references: { model: 'users', key: 'id' }
+      },
+      updated_by: {
+        allowNull: true,
+        type: Sequelize.BIGINT(20).UNSIGNED,
+        references: { model: 'users', key: 'id' }
+      },
+      status_changed_by:{
+        allowNull: true,
+        type: Sequelize.BIGINT(20).UNSIGNED,
+        references: { model: 'users', key: 'id' }
+      },
+      deleted_by: {
+        allowNull: true,
+        type: Sequelize.BIGINT(20).UNSIGNED,
+        references: { model: 'users', key: 'id' }
+      },
       status: {
         allowNull: false,
         type: Sequelize.TINYINT(1),

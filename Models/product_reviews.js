@@ -101,6 +101,26 @@ class productReviewModel {
         return await productReviewSchema.findAndCountAll();
         
      }
+
+     // add new product review by admin
+     async addNewProductReview(bodyData){
+
+        let checkExist = await productReviewSchema.findOne({
+            where: {
+                user_id: bodyData?.user_id,
+                product_id: bodyData.product_id
+            }
+        });
+
+        if(checkExist){
+            return{
+                status: STATUS_CODES.ALREADY_REPORTED
+            }
+        }
+
+        return await productReviewSchema.create(bodyData);
+
+     }
 }
 
 module.exports = productReviewModel

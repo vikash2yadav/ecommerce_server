@@ -27,7 +27,7 @@ class partnerModel {
     }
 
     // add
-    async add(bodyData) {
+    async add(bodyData, adminInfo) {
 
         // check email
         let checkEmail = await partnerSchema.findOne({
@@ -44,6 +44,7 @@ class partnerModel {
         }
 
         let hashedPassword = await bcrypt.hash(bodyData?.password, 10);
+        bodyData.created_by = adminInfo?.id;
 
         return await partnerSchema.create({
             ...bodyData,
@@ -313,7 +314,7 @@ class partnerModel {
     }
 
     // update profile 
-    async updateProfile(partnerInfo, bodyData) {
+    async updateProfile(bodyData, adminInfo) {
 
         let checkPartner = await partnerSchema.findOne({
             where: {
@@ -343,6 +344,8 @@ class partnerModel {
             }
         }
 
+        bodyData.updated_by = adminInfo?.id;
+
         return await partnerSchema.update(bodyData, {
             where: {
                 id: bodyData?.id
@@ -351,7 +354,7 @@ class partnerModel {
     }
 
     // partner status change
-    async partnerStatusChange(partnerInfo, bodyData) {
+    async partnerStatusChange(bodyData, adminInfo) {
 
         let partner = await partnerSchema.findOne({
             where: {
@@ -366,6 +369,8 @@ class partnerModel {
             }
         }
 
+        bodyData.status_changed_by = adminInfo?.id;
+
         return await partnerSchema.update(bodyData, {
             where: {
                 id: bodyData?.id
@@ -375,7 +380,7 @@ class partnerModel {
     }
 
     // delete partner
-    async deletePartner(id){
+    async deletePartner(id, adminInfo){
         let data = await partnerSchema.findOne({
             where: {
                 id: id,
@@ -388,7 +393,7 @@ class partnerModel {
             }
         }
 
-        return await partnerSchema.update({ is_delete: STATUS.DELETED } , {
+        return await partnerSchema.update({ is_delete: STATUS.DELETED, deleted_by: adminInfo?.id } , {
             where: {
                 id: id
             }

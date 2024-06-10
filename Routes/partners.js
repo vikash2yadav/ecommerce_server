@@ -5,14 +5,8 @@ const { body } = require("express-validator");
 const { STATUS_MESSAGES } = require('../Config/constant');
 const {adminAuth, partnerAuth} = new(require('../Middleware/authentication'));
 
-// add partner
-router.route('/add').post(validate([
-    body("first_name").notEmpty().withMessage(STATUS_MESSAGES.VALIDATION.REQUIRED.FIRST_NAME),
-    body("last_name").notEmpty().withMessage(STATUS_MESSAGES.VALIDATION.REQUIRED.LAST_NAME),
-    body("email").notEmpty().withMessage(STATUS_MESSAGES.VALIDATION.REQUIRED.INVALID_EMAIL),
-    body("email").isEmail().withMessage(STATUS_MESSAGES.VALIDATION.REQUIRED.EMAIL),
-    body("password").notEmpty().withMessage(STATUS_MESSAGES.VALIDATION.REQUIRED.PASSWORD),
-]), adminAuth, partnerController.add);
+
+/* ------------------- partners routes ------------------- */
 
 // sign in
 router.route('/sign_in').post(validate([
@@ -41,13 +35,29 @@ router.route('/reset_password/:id').post(validate([
 // sign out
 router.route('/sign_out').post(partnerAuth, partnerController.signOut);
 
-// update profile
+// update self profile
 router.route("/update/self/profile").put(validate([
     body("first_name").notEmpty().withMessage(STATUS_MESSAGES.VALIDATION.REQUIRED.FIRST_NAME),
     body("last_name").notEmpty().withMessage(STATUS_MESSAGES.VALIDATION.REQUIRED.LAST_NAME),
     body("birth_date").notEmpty().withMessage(STATUS_MESSAGES.VALIDATION.REQUIRED.BIRTH_DATE),
     body("gender").notEmpty().withMessage(STATUS_MESSAGES.VALIDATION.REQUIRED.GENDER),
 ]), partnerAuth, partnerController.updateSelfProfile);
+
+
+
+
+
+
+/* -------------------- admin routes ------------- */
+
+// add partner
+router.route('/add').post(validate([
+    body("first_name").notEmpty().withMessage(STATUS_MESSAGES.VALIDATION.REQUIRED.FIRST_NAME),
+    body("last_name").notEmpty().withMessage(STATUS_MESSAGES.VALIDATION.REQUIRED.LAST_NAME),
+    body("email").notEmpty().withMessage(STATUS_MESSAGES.VALIDATION.REQUIRED.INVALID_EMAIL),
+    body("email").isEmail().withMessage(STATUS_MESSAGES.VALIDATION.REQUIRED.EMAIL),
+    body("password").notEmpty().withMessage(STATUS_MESSAGES.VALIDATION.REQUIRED.PASSWORD),
+]), adminAuth, partnerController.add);
 
 
 // status change

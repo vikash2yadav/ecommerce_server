@@ -40,6 +40,13 @@ router.route('/reset_password/:id').post(validate([
     body("confirm_password").notEmpty().withMessage(STATUS_MESSAGES.VALIDATION.REQUIRED.CONFIRM_PASSWORD),
 ]), userController.resetPassword);
 
+// change password
+router.route('/change_password').post(validate([
+    body("old_password").notEmpty().withMessage(STATUS_MESSAGES.VALIDATION.REQUIRED.PASSWORD),
+    body("new_password").notEmpty().withMessage(STATUS_MESSAGES.VALIDATION.REQUIRED.NEW_PASSWORD),
+    body("confirm_password").notEmpty().withMessage(STATUS_MESSAGES.VALIDATION.REQUIRED.CONFIRM_PASSWORD),
+]), userAuth, userController.changePassword);
+
 // sign out
 router.route('/sign_out').post(userAuth, userController.signOut);
 

@@ -1,6 +1,6 @@
 'use strict';
 /** @type {import('sequelize-cli').Migration} */
-const {STATUS, ROLE} = require("../../Config/constant");
+const { STATUS, ROLE } = require("../../Config/constant");
 module.exports = {
   async up(queryInterface, Sequelize) {
     await queryInterface.createTable('admins', {
@@ -69,6 +69,26 @@ module.exports = {
       alternative_contact_no: {
         allowNull: true,
         type: Sequelize.STRING(255)
+      },
+      created_by: {
+        allowNull: true,
+        type: Sequelize.BIGINT(20).UNSIGNED,
+        references: { model: 'admins', key: 'id' }
+      },
+      updated_by: {
+        allowNull: true,
+        type: Sequelize.BIGINT(20).UNSIGNED,
+        references: { model: 'admins', key: 'id' }
+      },
+      status_changed_by:{
+        allowNull: true,
+        type: Sequelize.BIGINT(20).UNSIGNED,
+        references: { model: 'admins', key: 'id' }
+      },
+      deleted_by: {
+        allowNull: true,
+        type: Sequelize.BIGINT(20).UNSIGNED,
+        references: { model: 'admins', key: 'id' }
       },
       role_id: {
         allowNull: true,

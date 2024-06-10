@@ -77,6 +77,21 @@ class productReviewController {
             res.handler.serverError(error);
         }
     }
+
+    // add product review by admin
+    async addNewProductReview(req, res) {
+        try {
+            let data = await productReviewModel.addNewProductReview(req?.body);
+
+            if (data.status === STATUS_CODES.ALREADY_REPORTED) {
+                return res.handler.conflict(undefined, STATUS_MESSAGES.EXISTS.PRODUCT_REVIEW);
+            }
+
+            return res.handler.success(data, STATUS_MESSAGES.PRODUCT_REVIEW.ADDED);
+        } catch (error) {
+            res.handler.serverError(error);
+        }
+    }
 }
 
 module.exports = productReviewController
