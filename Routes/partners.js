@@ -83,6 +83,13 @@ router.route("/delete/:id").delete(adminAuth, partnerController.deletePartner);
 router.route("/get/:id").get(adminAuth, partnerController.getPartnerById);
 
 // get all list partner
-router.route("/get/list").post(adminAuth, partnerController.getPartnerList);
+router.route("/get/list").post(partnerController.getPartnerList);
+
+// get all list partner
+router.route("/vendor/get/list").post(partnerController.getVendorList);
+
+// get all list partner
+router.route("/delivery_partner/get/list").post(partnerController.getDeliveryPartnerList);
+
 
 module.exports = router

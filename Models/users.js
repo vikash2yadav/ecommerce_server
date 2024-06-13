@@ -475,7 +475,7 @@ class userModel {
     // list user
     async getUserList() {
 
-        return await userSchema.findAll({
+        return await userSchema.findAndCountAll({
             where: {
                 is_delete: STATUS.NOTDELETED
             }

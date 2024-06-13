@@ -94,6 +94,6 @@ router.route('/delete/:id').delete(adminAuth, userController.deleteUser);
 router.route('/get/:id').get(adminAuth, userController.getUserById);
 
 // admin route get user list
-router.route('/get/list').post(adminAuth, userController.getUserList);
+router.route('/get/list').post(userController.getUserList);
 
 module.exports = router

@@ -87,7 +87,7 @@ module.exports = {
         type: Sequelize.BIGINT(20).UNSIGNED,
         references: { model: 'partners', key: 'id' }
       },
-      updated_by: {
+      updated_by: { 
         allowNull: true,
         type: Sequelize.BIGINT(20).UNSIGNED,
         references: { model: 'partners', key: 'id' }

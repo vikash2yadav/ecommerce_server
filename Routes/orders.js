@@ -30,4 +30,11 @@ router.route('/get/:id').get(orderController.getOrder);
 // get all list
 router.route('/get/list').post(orderController.getOrderList);
 
+
+
+// -------------------------- vendor routes ----------------------------
+
+// get all vendors orders
+router.route('/vendor/get/list').post(orderController.getVendorOrdersList);
+
 module.exports = router;

@@ -1,11 +1,11 @@
-const { orders: orderSchema } = require('../Database/Schema');
+const { orders: orderSchema, order_items: orderItemSchema, products: productSchema, partners: partnerSchema } = require('../Database/Schema');
 const { STATUS_CODES, STATUS } = require('../Config/constant');
 
 class orderModel {
 
     // add order
     async addOrder(bodyData) {
-        
+
         return await orderSchema.create(bodyData);
     }
 
@@ -37,8 +37,8 @@ class orderModel {
     // delete Order
     async deleteOrder(id) {
 
-         // check exists order
-         let checkOrder = await orderSchema.findOne({
+        // check exists order
+        let checkOrder = await orderSchema.findOne({
             where: {
                 id: id,
                 is_delete: STATUS.NOTDELETED
@@ -59,7 +59,7 @@ class orderModel {
     }
 
     // get Order
-    async getOrder(id) { 
+    async getOrder(id) {
 
         // check exists order
         let checkOrder = await orderSchema.findOne({
@@ -76,7 +76,7 @@ class orderModel {
         }
 
         return await orderSchema.findOne({
-            where:{
+            where: {
                 id: id
             }
         })
@@ -85,9 +85,38 @@ class orderModel {
     // get Order list
     async getOrderList(bodyData) {
 
-        return await orderSchema.findAndCountAll();
-        
-     }
+        return await orderSchema.findAndCountAll({
+            where: {
+                is_delete: STATUS.NOTDELETED
+            }
+        });
+
+    }
+
+
+    // --------------------------- vendor routes ---------------------------
+
+    // get vendor Order list
+    async getVendorOrdersList(bodyData) {
+
+        return await orderSchema.findAndCountAll({
+            where: {
+                is_delete: STATUS.NOTDELETED
+            },
+            include:
+            {
+                model: orderItemSchema,
+                include: {
+                    model: productSchema,
+                    include: {
+                        model: partnerSchema
+                    }
+                }
+            }
+
+        });
+
+    }
 }
 
 module.exports = orderModel

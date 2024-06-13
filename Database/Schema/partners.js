@@ -54,6 +54,10 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: 'status_changed_by',
         onDelete: 'cascade'
       });
+      partners.hasMany(models.products, {
+        foreignKey: 'suplier_id',
+        onDelete: 'cascade'
+      })
     }
   }
   partners.init({

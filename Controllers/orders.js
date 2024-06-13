@@ -77,6 +77,23 @@ class orderController {
             res.handler.serverError(error);
         }
     }
+
+
+
+    // ------------------ vendor controllers ---------------------
+
+    // get vendor order list
+    async getVendorOrdersList(req, res) {
+        
+        try {
+            let data = await orderModel.getVendorOrdersList(req?.body);
+
+            return res.handler.success(data);
+
+        } catch (error) {
+            res.handler.serverError(error);
+        }
+    }
 }
 
 module.exports = orderController

@@ -410,7 +410,7 @@ class adminModel {
       // list
       async getAdminList(bodyData){
 
-        return await adminSchema.findAll({
+        return await adminSchema.findAndCountAll({
             where:{
                 is_delete: STATUS.NOTDELETED
             }

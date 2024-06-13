@@ -221,6 +221,31 @@ class partnerController {
         }
     }
 
+    // get vendor list
+    async getVendorList(req,res){
+        try {
+            let data = await partnerModel.getVendorList(req?.body);
+
+            return res.handler.success(data);
+
+        } catch (error) {
+            return res.handler.serverError(error);
+        }
+    }
+
+
+     // get delivery partner list
+     async getDeliveryPartnerList(req,res){
+        try {
+            let data = await partnerModel.getDeliveryPartnerList(req?.body);
+
+            return res.handler.success(data);
+
+        } catch (error) {
+            return res.handler.serverError(error);
+        }
+    }
+
 }
 
 module.exports = partnerController;

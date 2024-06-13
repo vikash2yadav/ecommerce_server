@@ -1,4 +1,4 @@
-const { STATUS_CODES, STATUS, STATUS_MESSAGES } = require('../Config/constant');
+const { STATUS_CODES, STATUS, STATUS_MESSAGES, ROLE } = require('../Config/constant');
 const { partners: partnerSchema, partner_tokens: partnerTokenSchema, partner_otp_verifications: partnerOtpSchema } = require("../Database/Schema");
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
@@ -420,9 +420,29 @@ class partnerModel {
 
     // get list
     async getPartnerList(bodyData){
-        return await partnerSchema.findAll({
+        return await partnerSchema.findAndCountAll({
             where: {
                is_delete: STATUS.NOTDELETED
+            }
+        });
+    }
+
+    // get list
+    async getVendorList(bodyData){
+        return await partnerSchema.findAndCountAll({
+            where: {
+               is_delete: STATUS.NOTDELETED,
+               role_id: ROLE.VENDOR
+            }
+        });
+    }
+
+    // get list
+    async getDeliveryPartnerList(bodyData){
+        return await partnerSchema.findAndCountAll({
+            where: {
+               is_delete: STATUS.NOTDELETED,
+               role_id: ROLE.DELIVERY_PARTNER
             }
         });
     }

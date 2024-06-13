@@ -24,6 +24,9 @@ module.exports = (app) => {
     // orders route
     app.use("/order", require("./orders"));
 
+    // order items route
+    app.use("/order_item", require("./order_items"));
+
     // product reviews route
     app.use("/product_review", require("./product_reviews"));
 

@@ -14,7 +14,7 @@ module.exports = {
       suplier_id: {
         allowNull: false,
         type: Sequelize.BIGINT(20).UNSIGNED,
-        references: {model: 'users', key: 'id'}
+        references: {model: 'partners', key: 'id'}
       },
       name: {
         allowNull: false,

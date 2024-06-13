@@ -9,7 +9,7 @@ module.exports = {
         slug: 'book/',
         suplier_id: 2,
         title: 'this is nice book',
-        description: 'very important book',
+        description: 'very important book', 
         category_id: 2,
         createdAt: new Date(),
         updatedAt: new Date(),

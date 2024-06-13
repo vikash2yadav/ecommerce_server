@@ -91,6 +91,7 @@ exports.STATUS_MESSAGES = {
         ROLE: "Role is not available in our system!",
         ATTRIBUTE_VALUE: 'This value is not available in our system',
         EMAIL: "Email is not available in our system!",
+        ORDER_ITEM: 'Order item is not found in our system',
         IMAGE: "Image not available.",
         MODULE: "This module is not found in our system",
         PRODUCT_VARIANT: 'This variant is not found in our system', 
@@ -179,6 +180,11 @@ exports.STATUS_MESSAGES = {
         ADDED: "Attribute has been added successfully.",
         UPDATED: "Attribute been updated successfully.",
         DELETED: "Attribute been deleted successfully.",
+    },
+    ORDER_ITEM: {
+        ADDED: "Order item has been added successfully.",
+        UPDATED: "Order item been updated successfully.",
+        DELETED: "Order item been deleted successfully.",
     },
     ATTRIBUTE_VALUE: {
         ADDED: "Attribute value has been added successfully.",
@@ -338,6 +344,7 @@ exports.STATUS_MESSAGES = {
             COLOR: 'Please, enter color',
             QUESTION: 'Please, enter question',
             DISCOUNT: 'Please, enter discount',
+            TOTAL_DISCOUNT: 'Please, enter total discount',
             STOCK: 'Please, enter stock',
             WEIGHT: 'Please, enter weight',
             DIMENTION: 'Please, enter dimentions',
@@ -482,14 +489,6 @@ exports.NOTIFICATION_TYPE ={
     WARNING: 4
 }
 
-// User type
-exports.ROLE_TYPES = {
-
-}
-
-exports.ROLE_TYPES_ID = {
-
-}
 
 //Role Modules
 exports.MODULES = {

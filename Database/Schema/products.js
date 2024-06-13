@@ -11,7 +11,7 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: 'category_id',
         onDelete: 'cascade'
       });
-      products.belongsTo(models.users, {
+      products.belongsTo(models.partners, {
         foreignKey: 'suplier_id',
         onDelete: 'cascade'
       });
@@ -71,7 +71,7 @@ module.exports = (sequelize, DataTypes) => {
     suplier_id: {
       allowNull: false,
       type: DataTypes.BIGINT(20).UNSIGNED,
-      references: {model: 'users', key: 'id'}
+      references: {model: 'partners', key: 'id'}
     },
     name: {
       allowNull: false,
