@@ -149,6 +149,16 @@ class userController {
         }
     }
 
+    // get address 
+    async getAddress(req, res){
+        try {
+            let data = await userModel.getAddress(req?.userInfo);
+            return res.handler.success(data) ;
+        } catch (error) {
+            return res.handler.serverError(error);
+        }
+    }
+
     // user status change
     async userStatusChange(req, res) {
         try {

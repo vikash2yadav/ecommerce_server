@@ -58,6 +58,7 @@ router.route("/update/self/profile").put(validate([
     body("gender").notEmpty().withMessage(STATUS_MESSAGES.VALIDATION.REQUIRED.GENDER),
 ]), userAuth, userController.updateSelfProfile);
 
+router.route("/get/address").get(userAuth, userController.getAddress);
 
 
 /* ------------------ admin routes --------------- */

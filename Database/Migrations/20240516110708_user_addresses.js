@@ -23,15 +23,18 @@ module.exports = {
       },
       city_id: {
         allowNull: false,
-        type: Sequelize.BIGINT(20).UNSIGNED
-      },
+        type: Sequelize.BIGINT(20).UNSIGNED,
+        references: { model: 'cities', key: 'id' }
+      }, 
       state_id: {
         allowNull: false,
-        type: Sequelize.BIGINT(20).UNSIGNED
+        type: Sequelize.BIGINT(20).UNSIGNED,
+        references: { model: 'states', key: 'id' }
       },
       country_id: {
         allowNull: false,
-        type: Sequelize.BIGINT(20).UNSIGNED
+        type: Sequelize.BIGINT(20).UNSIGNED,
+        references: { model: 'countries', key: 'id' }
       },
       createdAt: {
         allowNull: false,

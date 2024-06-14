@@ -1,5 +1,5 @@
 const { STATUS_CODES, STATUS, STATUS_MESSAGES } = require('../Config/constant');
-const { users: userSchema, user_tokens: userTokenSchema, user_otp_verifications: userOtpSchema } = require("../Database/Schema");
+const { users: userSchema, cities: citySchema, states: stateSchema, user_addresses: userAddressSchema, user_tokens: userTokenSchema, user_otp_verifications: userOtpSchema } = require("../Database/Schema");
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const moment = require('moment');
@@ -20,7 +20,13 @@ class userModel {
                     model: userSchema,
                     where: {
                         status: STATUS?.ACTIVE,
+                        is_delete: STATUS.NOTDELETED
                     },
+                    include: [
+                        {
+                            model: userAddressSchema
+                        },
+                    ],
                 },
             ],
         })
@@ -60,8 +66,26 @@ class userModel {
             where: {
                 email: bodyData?.email,
                 is_delete: STATUS.NOTDELETED
-            }
-        })
+            },
+            include: [
+                {
+                    model: userAddressSchema,
+                    attributes: ["city_id", "state_id", "pin_code"],
+                    include: [
+                        {
+                            model: citySchema,
+                            attributes: ["name"]
+                        },
+                        {
+                            model: stateSchema,
+                            attributes: ["name"]
+                        }
+                    ]
+                },
+            ],
+
+        });
+
 
         if (!checkEmail) {
             return {
@@ -111,6 +135,9 @@ class userModel {
             profile_image: checkEmail?.profile_image,
             country_code: checkEmail?.country_code,
             contact_no: checkEmail?.contact_no,
+            state: checkEmail?.user_address?.state?.name,
+            pincode: checkEmail?.user_address?.pin_code,
+            city: checkEmail?.user_address?.city?.name,
             gender: checkEmail?.gender,
             birth_date: checkEmail?.birth_date,
             address: checkEmail?.address,
@@ -268,14 +295,29 @@ class userModel {
                 message: STATUS_MESSAGES.PASSWORD.NOT_SAME
             }
         }
-        
+
         let hashedPassword = await bcrypt.hash(new_password, 10);
 
-        return await userSchema.update({password: hashedPassword}, {
+        return await userSchema.update({ password: hashedPassword }, {
             where: {
                 id: userInfo?.id
             }
         })
+    }
+
+    // get address 
+    async getAddress(userInfo) {
+        let data = await userSchema.findOne({
+            where: {
+                id: userInfo?.id
+            },
+            include: [
+                {
+                    model: userAddressSchema
+                }
+            ]
+        })
+        return data;
     }
 
     // sign out

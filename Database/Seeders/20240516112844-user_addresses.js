@@ -9,8 +9,8 @@ module.exports = {
       area: 'area',
       pin_code: 231213,
       city_id: 1,
-      state_id: 3,
-      country_id: 9,
+      state_id: 2,
+      country_id: 1,
       createdAt: new Date(),
       updatedAt: new Date()
     },
