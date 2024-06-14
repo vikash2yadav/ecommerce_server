@@ -68,4 +68,7 @@ module.exports = (app) => {
 
     // product variants route
     app.use("/product_variant", require("./product_variants"));
+
+    // order cart route
+    app.use("/cart_item", require("./cart_items"));
 };

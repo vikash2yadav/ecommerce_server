@@ -18,6 +18,18 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: 'attribute_value_id',
         onDelete: 'cascade'
       });
+      product_variants.hasMany(models.product_reviews, {
+        foreignKey: 'product_variant_id',
+        onDelete: 'cascade'
+      })
+      product_variants.hasMany(models.cart_items, {
+        foreignKey: 'product_variant_id',
+        onDelete: 'cascade'
+      })
+      product_variants.hasMany(models.order_items, {
+        foreignKey: 'product_variant_id',
+        onDelete: 'cascade'
+      })
     }
   }
   product_variants.init({

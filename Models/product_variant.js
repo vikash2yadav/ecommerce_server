@@ -1,8 +1,10 @@
-const { product_variants: productVariantSchema } = require('../Database/Schema');
+const { product_variants: productVariantSchema, products: productSchema, partners: partnerSchema } = require('../Database/Schema');
 const { STATUS_CODES, STATUS, STATUS_MESSAGES } = require('../Config/constant');
 const { Op } = require('sequelize');
 
 class productVariantModel {
+
+    // --------------- admin route ----------------------
 
     // add productVariant
     async addProductVariant(bodyData) {
@@ -73,6 +75,24 @@ class productVariantModel {
         return await productVariantSchema.findAndCountAll();
 
     }
+
+
+    // ---------------- vendor product variant -------------------
+
+    // get productVariant list
+    async getVendorProductVariantList(bodyData) {
+
+        return await productVariantSchema.findAndCountAll({
+                include: [{
+                    model: productSchema,
+                    where: {
+                        vendor_id: 1,       
+                    }
+                }]
+        });
+
+    }
+
 }
 
 module.exports = productVariantModel

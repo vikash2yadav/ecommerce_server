@@ -5,30 +5,40 @@ const { STATUS } = require('../../Config/constant');
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('product_reviews', {
+    await queryInterface.createTable('cart_items', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.BIGINT(20).UNSIGNED
       },
-      user_id: {
+      cart_id: {
         allowNull: false,
         type: Sequelize.BIGINT(20).UNSIGNED,
-        references: {model: 'users', key: 'id'}
+        references: {model: 'carts', key: 'id'}
       },
       product_id: {
         allowNull: false,
         type: Sequelize.BIGINT(20).UNSIGNED,
         references: {model: 'products', key: 'id'}
       },
-      rating: {
+      product_variant_id: {
         allowNull: false,
-        type: Sequelize.TINYINT(1),
+        type: Sequelize.BIGINT(20).UNSIGNED,
+        references: {model: 'product_variants', key: 'id'}
       },
-      comment: {
+      vendor_id: {
         allowNull: false,
-        type: Sequelize.TEXT
+        type: Sequelize.BIGINT(20).UNSIGNED,
+        references: {model: 'partners', key: 'id'}
+      },
+      quantity: {
+        allowNull: false,
+        type: Sequelize.BIGINT(20)
+      },
+      total_price: {
+        allowNull: false,
+        type: Sequelize.BIGINT(20)
       },
       status: {
         allowNull: false,
@@ -53,6 +63,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('product_reviews');
+    await queryInterface.dropTable('cart_items');
   }
 };

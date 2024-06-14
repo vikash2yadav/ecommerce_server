@@ -55,7 +55,19 @@ module.exports = (sequelize, DataTypes) => {
         onDelete: 'cascade'
       });
       partners.hasMany(models.products, {
-        foreignKey: 'suplier_id',
+        foreignKey: 'vendor_id',
+        onDelete: 'cascade'
+      })
+      partners.hasMany(models.cart_items, {
+        foreignKey: 'vendor_id',
+        onDelete: 'cascade'
+      })
+      partners.hasMany(models.order_items, {
+        foreignKey: 'vendor_id',
+        onDelete: 'cascade'
+      })
+      partners.hasMany(models.orders, {
+        foreignKey: 'vendor_id',
         onDelete: 'cascade'
       })
     }

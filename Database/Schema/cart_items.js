@@ -4,51 +4,60 @@ const {
 } = require('sequelize');
 const { STATUS } = require('../../Config/constant');
 module.exports = (sequelize, DataTypes) => {
-  class product_reviews extends Model {
+  class cart_items extends Model {
     static associate(models) {
-      product_reviews.belongsTo(models.products, {
+      cart_items.belongsTo(models.carts, {
+        foreignKey: 'cart_id',
+        onDelete: 'cascade'
+      })
+      cart_items.belongsTo(models.products, {
         foreignKey: 'product_id',
         onDelete: 'cascade'
       })
-      product_reviews.belongsTo(models.users, {
-        foreignKey: 'user_id',
+      cart_items.belongsTo(models.product_variants, {
+        foreignKey: 'product_variant_id',
         onDelete: 'cascade'
       })
-      product_reviews.belongsTo(models.product_variants, {
-        foreignKey: 'product_variant_id',
+      cart_items.belongsTo(models.partners, {
+        foreignKey: 'vendor_id',
         onDelete: 'cascade'
       })
     }
   }
-  product_reviews.init({
+  cart_items.init({
     id: {
       allowNull: false,
       autoIncrement: true,
       primaryKey: true,
       type: DataTypes.BIGINT(20).UNSIGNED
     },
-    user_id: {
+    cart_id: {
       allowNull: false,
       type: DataTypes.BIGINT(20).UNSIGNED,
-      references: { model: 'users', key: 'id' }
+      references: {model: 'carts', key: 'id'}
     },
     product_id: {
       allowNull: false,
       type: DataTypes.BIGINT(20).UNSIGNED,
-      references: { model: 'products', key: 'id' }
+      references: {model: 'products', key: 'id'}
     },
     product_variant_id: {
       allowNull: false,
       type: DataTypes.BIGINT(20).UNSIGNED,
-      references: { model: 'product_variants', key: 'id' }
+      references: {model: 'product_variants', key: 'id'}
     },
-    rating: {
+    vendor_id: {
       allowNull: false,
-      type: DataTypes.TINYINT(1),
+      type: DataTypes.BIGINT(20).UNSIGNED,
+      references: {model: 'partners', key: 'id'}
     },
-    comment: {
+    quantity: {
       allowNull: false,
-      type: DataTypes.TEXT
+      type: DataTypes.BIGINT(20)
+    },
+    total_price: {
+      allowNull: false,
+      type: DataTypes.BIGINT(20)
     },
     status: {
       allowNull: false,
@@ -72,7 +81,7 @@ module.exports = (sequelize, DataTypes) => {
     }
   }, {
     sequelize,
-    modelName: 'product_reviews',
+    modelName: 'cart_items',
   });
-  return product_reviews;
+  return cart_items;
 };

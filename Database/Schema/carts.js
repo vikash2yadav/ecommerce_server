@@ -10,8 +10,8 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: 'user_id',
         onDelete: 'cascade'
       })
-      carts.belongsTo(models.products,{
-        foreignKey: 'product_id',
+      carts.hasMany(models.cart_items, {
+        foreignKey: 'cart_id',
         onDelete: 'cascade'
       })
     }
@@ -28,12 +28,7 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.BIGINT(20).UNSIGNED,
       references: {model: 'users', key: 'id'}
     },
-    product_id: {
-      allowNull: false,
-      type: DataTypes.BIGINT(20).UNSIGNED,
-      references: {model: 'products', key: 'id'}
-    },
-    quantity: {
+    total_items: {
       allowNull: false,
       type: DataTypes.BIGINT(20)
     },

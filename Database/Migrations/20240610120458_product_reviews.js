@@ -1,43 +1,51 @@
 'use strict';
+
+const { STATUS } = require('../../Config/constant');
+
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('order_items', {
+    await queryInterface.createTable('product_reviews', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.BIGINT(20).UNSIGNED
       },
-      order_id: {
+      user_id: {
         allowNull: false,
         type: Sequelize.BIGINT(20).UNSIGNED,
-        references: {model: 'orders', key: 'id'}
+        references: {model: 'users', key: 'id'}
       },
       product_id: {
         allowNull: false,
         type: Sequelize.BIGINT(20).UNSIGNED,
         references: {model: 'products', key: 'id'}
       },
-      quantity:{
+      product_variant_id: {
         allowNull: false,
-        type: Sequelize.BIGINT(20)
+        type: Sequelize.BIGINT(20).UNSIGNED,
+        references: {model: 'product_variants', key: 'id'}
       },
-      unit_price:{
+      rating: {
         allowNull: false,
-        type: Sequelize.BIGINT(20)
+        type: Sequelize.TINYINT(1),
       },
-      unit_discount:{
+      comment: {
         allowNull: false,
-        type: Sequelize.BIGINT(20)
+        type: Sequelize.TEXT
       },
-      total_discount:{
+      status: {
         allowNull: false,
-        type: Sequelize.BIGINT(20)
+        type: Sequelize.TINYINT(1),
+        defaultValue: STATUS?.ACTIVE,
+        comment: "0 => In Active 1 => Active"
       },
-      totoal_amount:{
+      is_delete: {
         allowNull: false,
-        type: Sequelize.BIGINT(20)
+        type: Sequelize.TINYINT(1),
+        defaultValue: STATUS?.NOTDELETED,
+        comment: "0 => Not Deleted 1 => Deleted"
       },
       createdAt: {
         allowNull: false,
@@ -50,6 +58,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('order_items');
+    await queryInterface.dropTable('product_reviews');
   }
 };

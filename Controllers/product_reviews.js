@@ -3,6 +3,8 @@ const productReviewModel = new (require("../Models/product_reviews"));
 
 class productReviewController {
 
+    // ----------------------- admin route --------------------
+
     // add product review
     async addProductReview(req, res) {
         try {
@@ -92,6 +94,22 @@ class productReviewController {
             res.handler.serverError(error);
         }
     }
+
+
+    // ------------------ vendor route ----------------------
+     // get product  review list
+     async getVendorProductReviewList(req, res) {
+        
+        try {
+            let data = await productReviewModel.getVendorProductReviewList(req?.body);
+
+            return res.handler.success(data);
+
+        } catch (error) {
+            res.handler.serverError(error);
+        }
+    }
+
 }
 
 module.exports = productReviewController

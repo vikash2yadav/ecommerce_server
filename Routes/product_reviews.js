@@ -4,6 +4,8 @@ const validate = require("../Middleware/validator").validate;
 const { body } = require("express-validator");
 const { STATUS_MESSAGES } = require('../Config/constant');
 
+//-------------------- admin route ----------------------------
+
 // add product review
 router.route('/add').post(validate([
     body("rating").notEmpty().withMessage(STATUS_MESSAGES.VALIDATION.REQUIRED.RATING),
@@ -38,5 +40,13 @@ router.route('/new/add').post(validate([
     body("product_id").notEmpty().withMessage(STATUS_MESSAGES.VALIDATION.REQUIRED.PRODUCT),
     body("comment").notEmpty().withMessage(STATUS_MESSAGES.VALIDATION.REQUIRED.COMMENT),
 ]), productReviewController.addNewProductReview);
+
+
+
+// -------------------- vendot route ------------------
+
+// get list of vendor faq 
+router.route('/vendor/get/list').post(productReviewController.getVendorProductReviewList);
+
 
 module.exports = router;

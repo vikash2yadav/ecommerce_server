@@ -1,62 +1,65 @@
 'use strict';
 /** @type {import('sequelize-cli').Migration} */
-const {ORDER_STATUS, STATUS} = require('../../Config/constant');
-
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('orders', {
+    await queryInterface.createTable('order_items', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.BIGINT(20).UNSIGNED
       },
-      user_id: {
+      order_id: {
         allowNull: false,
         type: Sequelize.BIGINT(20).UNSIGNED,
-        references: {model: 'users', key: 'id'}
+        references: {model: 'orders', key: 'id'}
+      },
+      product_id: {
+        allowNull: false,
+        type: Sequelize.BIGINT(20).UNSIGNED,
+        references: {model: 'products', key: 'id'}
+      },
+      product_variant_id: {
+        allowNull: false,
+        type: Sequelize.BIGINT(20).UNSIGNED,
+        references: {model: 'product_variants', key: 'id'}
       },
       vendor_id: {
         allowNull: false,
         type: Sequelize.BIGINT(20).UNSIGNED,
         references: {model: 'partners', key: 'id'}
       },
-      orderd_date: {
+      attribute:{
         allowNull: false,
-        type: Sequelize.DATE
+        type: Sequelize.STRING(255)
       },
-      shipped_date: {
-        allowNull: true,
-        type: Sequelize.DATE
-      },
-      shipped_addresses_id: {
+      attribute_value: {
         allowNull: false,
-        type: Sequelize.BIGINT(20).UNSIGNED,
-        references: {model: 'shipped_addresses', key: 'id'}
+        type: Sequelize.STRING(255)
       },
-      total_discount: {
+      image: {
         allowNull: false,
-        type: Sequelize.BIGINT(20)
+        type: Sequelize.TEXT
       },
-      total_items: {
+      quantity:{
         allowNull: false,
         type: Sequelize.BIGINT(20)
       },
-      total_amoumt: {
+      unit_price:{
         allowNull: false,
         type: Sequelize.BIGINT(20)
       },
-      status: {
+      unit_discount:{
         allowNull: false,
-        type: Sequelize.TINYINT(1),
-        defaultValue: ORDER_STATUS?.PENDING,
-        comment: "0 => Pending 1 => Shipped 2 => Delivered 3 => Cancelled"
+        type: Sequelize.BIGINT(20)
       },
-      is_delete: {
+      total_discount:{
         allowNull: false,
-        type: Sequelize.TINYINT(1),
-        defaultValue: STATUS?.NOTDELETED,
-        comment: "0 => Not Deleted 1 => Deleted"
+        type: Sequelize.BIGINT(20)
+      },
+      total_amount:{
+        allowNull: false,
+        type: Sequelize.BIGINT(20)
       },
       createdAt: {
         allowNull: false,
@@ -69,6 +72,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('orders');
+    await queryInterface.dropTable('order_items');
   }
 };

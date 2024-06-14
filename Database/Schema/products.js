@@ -12,7 +12,7 @@ module.exports = (sequelize, DataTypes) => {
         onDelete: 'cascade'
       });
       products.belongsTo(models.partners, {
-        foreignKey: 'suplier_id',
+        foreignKey: 'vendor_id',
         onDelete: 'cascade'
       });
       products.belongsTo(models.users, {
@@ -27,10 +27,6 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: 'product_id',
         onDelete: 'cascade'
        })
-       products.hasMany(models.carts,{
-        foreignKey: 'product_id',
-        onDelete: 'cascade'
-      })
       products.hasMany(models.product_faqs, {
         foreignKey: 'product_id',
         onDelete: 'cascade'
@@ -59,6 +55,10 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: 'product_id',
         onDelete: 'cascade'
       });
+      products.hasMany(models.cart_items, {
+        foreignKey: 'product_id',
+        onDelete: 'cascade'
+      })
     }
   }
   products.init({
@@ -68,7 +68,7 @@ module.exports = (sequelize, DataTypes) => {
       primaryKey: true,
       type: DataTypes.BIGINT(20).UNSIGNED
     },
-    suplier_id: {
+    vendor_id: {
       allowNull: false,
       type: DataTypes.BIGINT(20).UNSIGNED,
       references: {model: 'partners', key: 'id'}

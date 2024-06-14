@@ -101,10 +101,10 @@ class productModel {
     }
 
     // get product
-    async getProduct(id) { 
+    async getProduct(id) {
 
-         // check product exist or not
-         let checkProduct = await productSchema.findOne({
+        // check product exist or not
+        let checkProduct = await productSchema.findOne({
             where: {
                 id: id,
                 is_delete: STATUS.NOTDELETED
@@ -118,7 +118,7 @@ class productModel {
         }
 
         return await productSchema.findOne({
-            where:{
+            where: {
                 id: id
             }
         })
@@ -129,8 +129,24 @@ class productModel {
 
         let data = await productSchema.findAndCountAll();
         return data;
-        
-     }
+
+    }
+
+
+    // --------------------- vendor product ----------------------
+
+    // get vendor product list
+    async getVendorProductList(bodyData) {
+
+        let data = await productSchema.findAndCountAll({
+            where: {
+                vendor_id: 2
+            }
+        });
+        return data;
+
+    }
+
 }
 
 module.exports = productModel

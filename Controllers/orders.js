@@ -6,7 +6,7 @@ class orderController {
     // add order
     async addOrder(req, res) {
         try {
-            
+
             let data = await orderModel.addOrder(req?.body);
             return res.handler.success(data, STATUS_MESSAGES.ORDER.ADDED);
 
@@ -67,7 +67,7 @@ class orderController {
 
     // get order list
     async getOrderList(req, res) {
-        
+
         try {
             let data = await orderModel.getOrderList(req?.body);
 
@@ -84,7 +84,7 @@ class orderController {
 
     // get vendor order list
     async getVendorOrdersList(req, res) {
-        
+
         try {
             let data = await orderModel.getVendorOrdersList(req?.body);
 
@@ -94,6 +94,50 @@ class orderController {
             res.handler.serverError(error);
         }
     }
+
+
+
+    // ------------------ customer controllers ---------------------
+
+    // get customer order list
+    async getMyOrdersList(req, res) {
+
+        try {
+            let data = await orderModel.getMyOrdersList(req?.userInfo);
+
+            return res.handler.success(data);
+
+        } catch (error) {
+            res.handler.serverError(error);
+        }
+    }
+
+    // get update order 
+    async updateMyOrder(req, res) {
+
+        try {
+            let data = await orderModel.updateMyOrder(req?.userInfo, req?.body);
+
+            return res.handler.success(data);
+
+        } catch (error) {
+            res.handler.serverError(error);
+        }
+    }
+
+    // get delete order 
+    async deleteMyOrder(req, res) {
+
+        try {
+            let data = await orderModel.deleteMyOrder(req?.userInfo, req?.params?.id);
+
+            return res.handler.success(data);
+
+        } catch (error) {
+            res.handler.serverError(error);
+        }
+    }
+
 }
 
 module.exports = orderController

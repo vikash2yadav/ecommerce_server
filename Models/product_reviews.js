@@ -1,7 +1,9 @@
-const { product_reviews: productReviewSchema } = require('../Database/Schema');
+const { product_reviews: productReviewSchema, products: productSchema } = require('../Database/Schema');
 const { STATUS_CODES, STATUS } = require('../Config/constant');
 
 class productReviewModel {
+
+    // -------------------- admin route ---------------------
 
     // add product review
     async addProductReview(bodyData, userInfo) {
@@ -14,7 +16,7 @@ class productReviewModel {
             }
         })
 
-        if(checkProductReview){
+        if (checkProductReview) {
             return {
                 status: STATUS_CODES.ALREADY_REPORTED
             }
@@ -33,7 +35,7 @@ class productReviewModel {
             }
         })
 
-        if(!checkProductReview){
+        if (!checkProductReview) {
             return {
                 status: STATUS_CODES.NOT_FOUND
             }
@@ -72,10 +74,10 @@ class productReviewModel {
     }
 
     // get product review
-    async getProductReview(id) { 
+    async getProductReview(id) {
 
-         // check product review exist or not
-         let checkProductReview = await productReviewSchema.findOne({
+        // check product review exist or not
+        let checkProductReview = await productReviewSchema.findOne({
             where: {
                 id: id,
                 is_delete: STATUS.NOTDELETED
@@ -89,7 +91,7 @@ class productReviewModel {
         }
 
         return await productReviewSchema.findOne({
-            where:{
+            where: {
                 id: id
             }
         })
@@ -99,11 +101,11 @@ class productReviewModel {
     async getProductReviewList(bodyData) {
 
         return await productReviewSchema.findAndCountAll();
-        
-     }
 
-     // add new product review by admin
-     async addNewProductReview(bodyData){
+    }
+
+    // add new product review by admin
+    async addNewProductReview(bodyData) {
 
         let checkExist = await productReviewSchema.findOne({
             where: {
@@ -112,15 +114,37 @@ class productReviewModel {
             }
         });
 
-        if(checkExist){
-            return{
+        if (checkExist) {
+            return {
                 status: STATUS_CODES.ALREADY_REPORTED
             }
         }
 
         return await productReviewSchema.create(bodyData);
 
-     }
+    }
+
+
+    // ------------ vendor route --------------------
+
+    // get vendor product review list
+    async getVendorProductReviewList(bodyData) {
+
+        return await productReviewSchema.findAndCountAll({
+            where: {
+                is_delete: STATUS.NOTDELETED
+            }, include:
+                [
+                    {
+                        model: productSchema,
+                        where: {
+                            vendor_id: 1
+                        }
+                    }
+                ]
+        });
+
+    }
 }
 
 module.exports = productReviewModel

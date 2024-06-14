@@ -58,6 +58,7 @@ exports.STATUS_MESSAGES = {
         ATTRIBUTE: 'Attribute is already exist',
         USER: "User already exist!",
         PRODUCT_VARIANT: 'This variat is already exist in our system',
+        CART_ITEM: 'This cart item is already exist',
         EMAIL: "Email is already registered!",
         EMAIL_GUEST: "It looks like you've ordered with us before! Click 'Forgot Password' to reset your password.",
         COUPON: "This coupon code already exist!",
@@ -90,6 +91,7 @@ exports.STATUS_MESSAGES = {
         USER: "You are not available in our system!",
         ROLE: "Role is not available in our system!",
         ATTRIBUTE_VALUE: 'This value is not available in our system',
+        CART_ITEM: 'This item is not fount in our system',
         EMAIL: "Email is not available in our system!",
         ORDER_ITEM: 'Order item is not found in our system',
         IMAGE: "Image not available.",
@@ -180,6 +182,11 @@ exports.STATUS_MESSAGES = {
         ADDED: "Attribute has been added successfully.",
         UPDATED: "Attribute been updated successfully.",
         DELETED: "Attribute been deleted successfully.",
+    },
+    CART_ITEM: {
+        ADDED: "Cart item has been added successfully.",
+        UPDATED: "Cart item been updated successfully.",
+        DELETED: "Cart item been deleted successfully.",
     },
     ORDER_ITEM: {
         ADDED: "Order item has been added successfully.",
@@ -337,6 +344,10 @@ exports.STATUS_MESSAGES = {
             VALUE: 'Please, enter value',
             PRODUCT: 'Please, enter product.',
             COUPON: 'Please, enter coupon',
+            TOTAL_PRICE: 'Please, enter total amount',
+            PRODUCT_VARIANT: 'Please, enter product variant',
+            VENDOR: 'Please, enter Vendor',
+            CART: 'Please, enter cart',
             QUANTITY: 'Please, enter quantity',
             CODE: 'Please, enter code',
             DESCRIPTION: 'Please, enter description.',
@@ -458,6 +469,14 @@ exports.ROLE = {
     ADMIN: 2,
     VENDOR: 3,
     DELIVERY_PARTNER: 4
+}
+
+// Order status
+exports.ORDER_STATUS = {
+    PENDING: 0,
+    SHIPPED: 1,
+    DELIVERED: 2,
+    CANCELLED: 3
 }
 
 // Generic Status
