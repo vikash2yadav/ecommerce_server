@@ -3,6 +3,7 @@ const cartItemController = new (require('../Controllers/cart_items'));
 const validate = require("../Middleware/validator").validate;
 const { body } = require("express-validator");
 const { STATUS_MESSAGES } = require('../Config/constant');
+const {userAuth} = new(require('../Middleware/authentication'));
 
 // add cart item
 router.route('/add').post(validate([
@@ -34,5 +35,11 @@ router.route('/get/:id').get(cartItemController.getCartItem);
 
 // get item all list
 router.route('/get/list').post(cartItemController.getCartItemList);
+
+
+// -------------------- customer route -------------------
+
+// get all list
+router.route('/my/get/list').post(userAuth, cartItemController.getCustomerCartItemList);
 
 module.exports = router;

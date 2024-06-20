@@ -66,26 +66,8 @@ class userModel {
             where: {
                 email: bodyData?.email,
                 is_delete: STATUS.NOTDELETED
-            },
-            include: [
-                {
-                    model: userAddressSchema,
-                    attributes: ["city_id", "state_id", "pin_code"],
-                    include: [
-                        {
-                            model: citySchema,
-                            attributes: ["name"]
-                        },
-                        {
-                            model: stateSchema,
-                            attributes: ["name"]
-                        }
-                    ]
-                },
-            ],
-
+            },             
         });
-
 
         if (!checkEmail) {
             return {
@@ -135,9 +117,7 @@ class userModel {
             profile_image: checkEmail?.profile_image,
             country_code: checkEmail?.country_code,
             contact_no: checkEmail?.contact_no,
-            state: checkEmail?.user_address?.state?.name,
             pincode: checkEmail?.user_address?.pin_code,
-            city: checkEmail?.user_address?.city?.name,
             gender: checkEmail?.gender,
             birth_date: checkEmail?.birth_date,
             address: checkEmail?.address,
@@ -266,7 +246,8 @@ class userModel {
     }
 
     // change password 
-    async changePassword(bodyData, userInfo) {
+    async changePassword(userInfo, bodyData ) {
+        
         let { old_password, new_password, confirm_password } = bodyData;
 
         // check email
@@ -293,6 +274,13 @@ class userModel {
             return {
                 status: STATUS_CODES.NOT_VALID_DATA,
                 message: STATUS_MESSAGES.PASSWORD.NOT_SAME
+            }
+        }
+
+        if(new_password === old_password){
+            return {
+                status: STATUS_CODES.NOT_VALID_DATA,
+                message: STATUS_MESSAGES.PASSWORD.SAME_AS_OLD_PASSWORD
             }
         }
 

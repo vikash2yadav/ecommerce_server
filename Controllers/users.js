@@ -97,7 +97,7 @@ class userController {
     // change password
     async changePassword(req, res){
         try {
-            let data = await userModel.changePassword(req?.body, req?.userInfo);
+            let data = await userModel.changePassword(req?.userInfo, req?.body);
 
             if (data.status === STATUS_CODES.NOT_VALID_DATA) {
                 return res.handler.validationError(undefined, data?.message)

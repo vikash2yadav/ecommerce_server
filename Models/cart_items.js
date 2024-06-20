@@ -1,4 +1,4 @@
-const { cart_items: cartItemSchema } = require('../Database/Schema');
+const { cart_items: cartItemSchema, carts: cartSchema } = require('../Database/Schema');
 const { STATUS_CODES, STATUS } = require('../Config/constant');
 
 class cartItemModel {
@@ -9,7 +9,7 @@ class cartItemModel {
         let existItem = await cartItemSchema.findOne({
             where: {
                 product_variant_id: bodyData?.product_variant_id,
-                user_id: bodyData?.user_id   
+                user_id: bodyData?.user_id
             }
         });
 
@@ -29,7 +29,7 @@ class cartItemModel {
         // check cart item exist or not
         let checkItem = await cartItemSchema.findOne({
             where: {
-                id: bodyData?.id 
+                id: bodyData?.id
             }
         })
 
@@ -72,10 +72,10 @@ class cartItemModel {
     }
 
     // get cart item
-    async getCartItem(id, userInfo) { 
+    async getCartItem(id, userInfo) {
 
-         // check cart item exist or not
-         let checkItem = await cartItemSchema.findOne({
+        // check cart item exist or not
+        let checkItem = await cartItemSchema.findOne({
             where: {
                 id: id,
             }
@@ -88,7 +88,7 @@ class cartItemModel {
         }
 
         return await cartItemSchema.findOne({
-            where:{
+            where: {
                 id: id
             }
         })
@@ -98,8 +98,28 @@ class cartItemModel {
     async getCartItemList(bodyData) {
 
         return await cartItemSchema.findAndCountAll();
-        
-     }
+
+    }
+
+
+    // ----------------------- customer route --------------------
+
+    // get customer cart item list
+    async getCustomerCartItemList(userInfo) {
+
+        return await cartItemSchema.findAndCountAll({
+            include: [
+                {
+                    model: cartSchema,
+                    where: {
+                        user_id: userInfo?.id
+                    }
+                }
+            ]
+        });
+
+    }
+
 }
 
 module.exports = cartItemModel

@@ -92,6 +92,9 @@ exports.STATUS_MESSAGES = {
         ROLE: "Role is not available in our system!",
         ATTRIBUTE_VALUE: 'This value is not available in our system',
         CART_ITEM: 'This item is not fount in our system',
+        COUNTRY: 'This country is not found in our system',
+        CITY: 'This city is not found',
+        STATE: 'This state is not found in our system',
         EMAIL: "Email is not available in our system!",
         ORDER_ITEM: 'Order item is not found in our system',
         IMAGE: "Image not available.",
@@ -107,6 +110,7 @@ exports.STATUS_MESSAGES = {
         POST_COMMENT: 'Comment is not available in our system!',
         SAVED_POST: 'Saved post is not available in our system!',
         POST_SHARE: "This data is not found.",
+        ADDRESS: 'This address is not found in our system',
         NOTIFICATION: 'Notification is not available in our system.',
         EMOJI: 'Emoji is not available in our system.',
         OUR_CHOICE: 'This data in not found in our choice',
@@ -129,6 +133,7 @@ exports.STATUS_MESSAGES = {
     PASSWORD: {
         MISMATCH: "Provided password do not match",
         TOO_SIMPLE: "Please create more complicated password",
+        SAME_AS_OLD_PASSWORD: 'This password is as same as previous password',
         INCORRECT: "Password incorrect",
         NOT_SAME: "New Password and confirm password are not same",
         CHANGED: "Password has been changed successfully",
@@ -197,6 +202,12 @@ exports.STATUS_MESSAGES = {
         ADDED: "Attribute value has been added successfully.",
         UPDATED: "Attribute value been updated successfully.",
         DELETED: "Attribute value been deleted successfully.",
+    },
+    ADDRESS: {
+        ADDED: "Address has been added successfully.",
+        UPDATED: "Address been updated successfully.",
+        DEFAULT_CHANGED: 'Default Address has been changed.',
+        DELETED: "Address been deleted successfully.",
     },
     MODULE: {
         ADDED: "Module has been added successfully.",

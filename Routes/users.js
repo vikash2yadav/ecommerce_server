@@ -41,7 +41,7 @@ router.route('/reset_password/:id').post(validate([
 ]), userController.resetPassword);
 
 // change password
-router.route('/change_password').post(validate([
+router.route('/change_password').put(validate([
     body("old_password").notEmpty().withMessage(STATUS_MESSAGES.VALIDATION.REQUIRED.PASSWORD),
     body("new_password").notEmpty().withMessage(STATUS_MESSAGES.VALIDATION.REQUIRED.NEW_PASSWORD),
     body("confirm_password").notEmpty().withMessage(STATUS_MESSAGES.VALIDATION.REQUIRED.CONFIRM_PASSWORD),
@@ -96,5 +96,6 @@ router.route('/get/:id').get(adminAuth, userController.getUserById);
 
 // admin route get user list
 router.route('/get/list').post(userController.getUserList);
+
 
 module.exports = router

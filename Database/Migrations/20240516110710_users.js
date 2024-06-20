@@ -72,11 +72,6 @@ module.exports = {
         allowNull: true,
         type: Sequelize.STRING(255)
       },
-      user_address_id: {
-        allowNull: true,
-        type: Sequelize.BIGINT(20).UNSIGNED,
-        references: { model: 'user_addresses', key: 'id' }
-      },
       language_id: {
         allowNull: true,
         type: Sequelize.BIGINT(20).UNSIGNED,

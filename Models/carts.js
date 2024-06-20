@@ -103,6 +103,22 @@ class cartProductModel {
         return await cartSchema.findAndCountAll();
         
      }
+
+
+
+     // ----------------------- customer route --------------------
+
+       // get customer cart product list
+    async getCustomerCartProductList(userInfo) {
+
+        return await cartSchema.findAndCountAll({
+            where: {
+                user_id: userInfo?.id
+            }
+        });
+        
+     }
+
 }
 
 module.exports = cartProductModel

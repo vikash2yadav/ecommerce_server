@@ -84,6 +84,24 @@ class cartItemController {
             res.handler.serverError(error);
         }
     }
+
+
+    
+    // ----------------------- customer route -----------------------
+
+      // get customer cart item list
+      async getCustomerCartItemList(req, res) {        
+        try {
+            let data = await cartItemModel.getCustomerCartItemList(req?.userInfo);
+
+            return res.handler.success(data);
+
+        } catch (error) {
+            res.handler.serverError(error);
+        }
+    }
+
+
 }
 
 module.exports = cartItemController
