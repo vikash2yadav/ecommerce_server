@@ -93,6 +93,7 @@ exports.STATUS_MESSAGES = {
         ATTRIBUTE_VALUE: 'This value is not available in our system',
         CART_ITEM: 'This item is not fount in our system',
         COUNTRY: 'This country is not found in our system',
+        INQUIRY: 'This inquiry is not found in our system',
         CITY: 'This city is not found',
         STATE: 'This state is not found in our system',
         EMAIL: "Email is not available in our system!",
@@ -192,6 +193,12 @@ exports.STATUS_MESSAGES = {
         ADDED: "Cart item has been added successfully.",
         UPDATED: "Cart item been updated successfully.",
         DELETED: "Cart item been deleted successfully.",
+    },
+    INQUIRY: 
+    {
+        ADDED: "Inquiry has been added successfully.",
+        UPDATED: "Inquiry been updated successfully.",
+        DELETED: "Inquiry been deleted successfully.",
     },
     ORDER_ITEM: {
         ADDED: "Order item has been added successfully.",
@@ -353,6 +360,7 @@ exports.STATUS_MESSAGES = {
             ATTRIBUTE_VALUE: 'Please, enter attribute value',
             ATTRIBUTE: 'Please, enter attribute',
             VALUE: 'Please, enter value',
+            MESSAGE: 'Please, enter message',
             PRODUCT: 'Please, enter product.',
             COUPON: 'Please, enter coupon',
             TOTAL_PRICE: 'Please, enter total amount',
