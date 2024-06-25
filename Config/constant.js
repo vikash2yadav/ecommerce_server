@@ -47,7 +47,7 @@ exports.STATUS_MESSAGES = {
     IMAGE_SUCCESS: "Your image has been successfully saved.",
     IMAGE_REMOVED: 'Your image has been successfully removed.',
     RESET_PASSWORD_ALREADY: "You already have reset the password with this token.",
-
+    EMAIL_SENT: 'We have sent otp to your registered email',
     OLD_PASSWORD:{
         WRONG: 'You old password is not right'
     },
@@ -133,6 +133,7 @@ exports.STATUS_MESSAGES = {
     },
     PASSWORD: {
         MISMATCH: "Provided password do not match",
+        ALREADY_CHANGED: "You have already change password by this otp verification ",
         TOO_SIMPLE: "Please create more complicated password",
         SAME_AS_OLD_PASSWORD: 'This password is as same as previous password',
         INCORRECT: "Password incorrect",
@@ -204,6 +205,9 @@ exports.STATUS_MESSAGES = {
         ADDED: "Order item has been added successfully.",
         UPDATED: "Order item been updated successfully.",
         DELETED: "Order item been deleted successfully.",
+    },
+    ACCOUNT:{
+        DELETED: 'Your account has been deleted successfully' 
     },
     ATTRIBUTE_VALUE: {
         ADDED: "Attribute value has been added successfully.",

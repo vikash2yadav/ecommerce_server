@@ -77,4 +77,7 @@ module.exports = (app) => {
 
     // common route
     app.use("/common", require("./common"));
+
+    // inquiry route
+    app.use("/inquiry", require("./inquiries"));
 };

@@ -4,6 +4,8 @@ const validate = require("../Middleware/validator").validate;
 const { body } = require("express-validator");
 const { STATUS_MESSAGES } = require('../Config/constant');
 
+// ----------------- admin route ----------------------------
+
 // add coupon
 router.route('/add').post(validate([
     body("name").notEmpty().withMessage(STATUS_MESSAGES.VALIDATION.REQUIRED.NAME),
@@ -32,4 +34,6 @@ router.route('/get/:id').get(couponController.getCoupon);
 // get all list
 router.route('/get/list').post(couponController.getCouponList);
 
+
+// 
 module.exports = router;

@@ -171,8 +171,8 @@ class userAddressController {
 
     async getCityNameById(req, res) {
         try {
-            let data = userAddressModel.getCityNameById(req?.params?.id);
-
+            let data = await userAddressModel.getCityNameById(req?.params?.id);
+           
             if (data.status === STATUS_CODES.NOT_FOUND) {
                 return res.handler.notFound(undefined, STATUS_MESSAGES.NOT_FOUND.CITY);
             }
@@ -186,7 +186,7 @@ class userAddressController {
 
     async getCountryNameById(req, res) {
         try {
-            let data = userAddressModel.getCountryNameById(req?.params?.id);
+            let data = await userAddressModel.getCountryNameById(req?.params?.id);
 
             if (data.status === STATUS_CODES.NOT_FOUND) {
                 return res.handler.notFound(undefined, STATUS_MESSAGES.NOT_FOUND.COUNTRY);
@@ -201,7 +201,7 @@ class userAddressController {
 
     async getStateNameById(req, res) {
         try {
-            let data = userAddressModel.getStateNameById(req?.params?.id);
+            let data = await userAddressModel.getStateNameById(req?.params?.id);
 
             if (data.status === STATUS_CODES.NOT_FOUND) {
                 return res.handler.notFound(undefined, STATUS_MESSAGES.NOT_FOUND.STATE);

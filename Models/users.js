@@ -66,9 +66,24 @@ class userModel {
             where: {
                 email: bodyData?.email,
                 is_delete: STATUS.NOTDELETED
-            },             
+            },
         });
 
+        let defaultAddress = await userAddressSchema.findOne({
+            where: {
+                user_id: checkEmail?.id,
+                is_default: STATUS?.DEFAULT
+            },
+            include: [
+                {
+                    model: citySchema,
+                },
+                {
+                    model: stateSchema,
+                }
+            ]
+        })
+        
         if (!checkEmail) {
             return {
                 status: STATUS_CODES.NOT_FOUND,
@@ -114,10 +129,12 @@ class userModel {
             full_name: checkEmail?.full_name,
             username: checkEmail?.username,
             email: checkEmail?.email,
+            city: defaultAddress?.city?.name,
+            state: defaultAddress?.state?.name,
+            pin_code: defaultAddress?.pin_code,
             profile_image: checkEmail?.profile_image,
             country_code: checkEmail?.country_code,
             contact_no: checkEmail?.contact_no,
-            pincode: checkEmail?.user_address?.pin_code,
             gender: checkEmail?.gender,
             birth_date: checkEmail?.birth_date,
             address: checkEmail?.address,
@@ -224,8 +241,8 @@ class userModel {
     }
 
     // reset password
-    async resetPassword(bodyData, id) {
-
+    async resetPassword(bodyData) {
+        
         if (bodyData?.password !== bodyData?.confirm_password) {
             return {
                 status: STATUS_CODES.NOT_VALID_DATA
@@ -235,19 +252,24 @@ class userModel {
         // hashing new password
         let hashedPassword = await bcrypt.hash(bodyData?.password, 10);
 
+       
+       if(bodyData?.id){
         return await userSchema.update({ password: hashedPassword }, {
             where: {
-                id,
-                status: STATUS.ACTIVE,
-                is_delete: STATUS.NOTDELETED
+                id: bodyData?.id,
             }
         })
+       }else{
+        return{
+            status: STATUS_CODES?.NOT_FOUND
+        }
+       }
 
     }
 
     // change password 
-    async changePassword(userInfo, bodyData ) {
-        
+    async changePassword(userInfo, bodyData) {
+
         let { old_password, new_password, confirm_password } = bodyData;
 
         // check email
@@ -277,7 +299,7 @@ class userModel {
             }
         }
 
-        if(new_password === old_password){
+        if (new_password === old_password) {
             return {
                 status: STATUS_CODES.NOT_VALID_DATA,
                 message: STATUS_MESSAGES.PASSWORD.SAME_AS_OLD_PASSWORD
@@ -308,6 +330,37 @@ class userModel {
         return data;
     }
 
+    // delete my account
+    async deleteMyAccount(bodyData) {
+
+        let checkEmail = await userSchema.findOne({
+            where: {
+                email: bodyData?.email,
+                is_delete: STATUS?.NOTDELETED
+            }
+        });
+
+        if (!checkEmail) {
+            return {
+                status: STATUS_CODES?.NOT_FOUND
+            }
+        }
+
+        let match = await bcrypt.compare(bodyData?.password, checkEmail?.password);
+
+        if (!match) {
+            return {
+                status: STATUS_CODES?.NOT_VALID_DATA
+            }
+        }
+
+        return await userSchema.update({ is_delete: STATUS?.DELETED }, {
+            where: {
+                id: checkEmail?.id
+            }
+        })
+    }
+
     // sign out
     async signOut(userInfo, headers) {
 
@@ -332,6 +385,11 @@ class userModel {
         } else {
             return true;
         }
+    }
+
+    // get my profile 
+    async getMyProfile(userInfo) {
+        return userInfo
     }
 
     // update self profile 
