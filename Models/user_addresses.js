@@ -253,7 +253,8 @@ class userAddressModel {
         let data = await citySchema.findOne({
             where: {
                 id
-            }
+            },
+            attributes: ['name']
         });
 
         if (!data) {

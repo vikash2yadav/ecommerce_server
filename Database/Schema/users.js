@@ -149,7 +149,8 @@ module.exports = (sequelize, DataTypes) => {
     },
     gender: {
       allowNull: true,
-      type: DataTypes.STRING(255)
+      type: DataTypes.TINYINT(1),
+      comment: '1 => Male 2 => Female 3 => Others'
     },
     country_code: {
       allowNull: true,

@@ -486,6 +486,13 @@ exports.IMG_FOLDER_NAME = {
     COVER_PROFILE: '/User/Cover'
 };
 
+// gender
+exports.GENDER = {
+    Male: 1,
+    Female: 2,
+    Others: 3
+}
+
 // role id
 exports.ROLE = {
     SUPER_ADMIN: 1,

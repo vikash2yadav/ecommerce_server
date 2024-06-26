@@ -22,11 +22,6 @@ class userModel {
                         status: STATUS?.ACTIVE,
                         is_delete: STATUS.NOTDELETED
                     },
-                    include: [
-                        {
-                            model: userAddressSchema
-                        },
-                    ],
                 },
             ],
         })
@@ -69,6 +64,13 @@ class userModel {
             },
         });
 
+        if (!checkEmail) {
+            return {
+                status: STATUS_CODES.NOT_FOUND,
+                message: STATUS_MESSAGES.NOT_FOUND.EMAIL
+            }
+        }
+
         let defaultAddress = await userAddressSchema.findOne({
             where: {
                 user_id: checkEmail?.id,
@@ -84,13 +86,7 @@ class userModel {
             ]
         })
         
-        if (!checkEmail) {
-            return {
-                status: STATUS_CODES.NOT_FOUND,
-                message: STATUS_MESSAGES.NOT_FOUND.EMAIL
-            }
-        }
-
+     
         if (checkEmail.status == STATUS.INACTIVE) {
             return {
                 status: STATUS_CODES.NOT_FOUND,
@@ -123,23 +119,14 @@ class userModel {
         })
 
         return {
-            id: checkEmail?.id,
             first_name: checkEmail?.first_name,
-            last_name: checkEmail?.last_name,
+            last_name: checkEmail?.last_name,  
             full_name: checkEmail?.full_name,
             username: checkEmail?.username,
             email: checkEmail?.email,
             city: defaultAddress?.city?.name,
             state: defaultAddress?.state?.name,
             pin_code: defaultAddress?.pin_code,
-            profile_image: checkEmail?.profile_image,
-            country_code: checkEmail?.country_code,
-            contact_no: checkEmail?.contact_no,
-            gender: checkEmail?.gender,
-            birth_date: checkEmail?.birth_date,
-            address: checkEmail?.address,
-            status: checkEmail?.status,
-            is_delete: checkEmail?.is_delete,
             access_token,
         };
     }
@@ -422,11 +409,17 @@ class userModel {
             }
         }
 
-        return await userSchema.update(bodyData, {
+        let updatedUser = await userSchema.update(bodyData, {
             where: {
                 id: userInfo?.id
             }
-        })
+        });
+
+        return await userSchema.findOne({
+            where: {
+                id: userInfo?.id
+            }
+        });
     }
 
     // user status change 
