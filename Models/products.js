@@ -1,5 +1,5 @@
 const slugify = require('slugify');
-const { products: productSchema } = require('../Database/Schema');
+const { products: productSchema, product_variants: productVariantSchema, attributes: attributeSchema, attribute_values: attributeValueSchema } = require('../Database/Schema');
 const { STATUS_CODES, STATUS, STATUS_MESSAGES } = require('../Config/constant');
 const { Op } = require('sequelize');
 
@@ -120,7 +120,23 @@ class productModel {
         return await productSchema.findOne({
             where: {
                 id: id
-            }
+            },
+            include: 
+                {
+                    model: productVariantSchema,
+                    where:{
+                        attribute_id: 1
+                    },
+                    include: [
+                        {
+                            model: attributeSchema
+                        },
+                        {
+                            model: attributeValueSchema
+                        }
+                    ]
+                },
+            
         })
     }
 

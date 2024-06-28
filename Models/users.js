@@ -6,7 +6,7 @@ const moment = require('moment');
 const mailer = new (require('../Utils/mailer'));
 const { generateOtp } = require('../Utils/helpers');
 const { Op } = require('sequelize');
-
+const {getCustomerCartItemList} = new(require('./cart_items'));
 class userModel {
 
     // get token info
@@ -86,6 +86,7 @@ class userModel {
             ]
         })
         
+        let cartItemCount = await getCustomerCartItemList(checkEmail);
      
         if (checkEmail.status == STATUS.INACTIVE) {
             return {
@@ -124,6 +125,7 @@ class userModel {
             full_name: checkEmail?.full_name,
             username: checkEmail?.username,
             email: checkEmail?.email,
+            cartItem: cartItemCount?.count,
             city: defaultAddress?.city?.name,
             state: defaultAddress?.state?.name,
             pin_code: defaultAddress?.pin_code,
