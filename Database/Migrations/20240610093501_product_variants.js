@@ -57,6 +57,12 @@ module.exports = {
         allowNull: false,
         type: Sequelize.TEXT
       },
+      is_default: {
+        allowNull: false,
+        type: Sequelize.TINYINT(1),
+        defaultValue: STATUS?.NOT_DEFAULT,
+        commet: "0 => not default 1 => default"
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE

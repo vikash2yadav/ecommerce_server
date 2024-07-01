@@ -10,19 +10,54 @@ module.exports = {
         updatedAt: new Date()
       },
       {
-        name: "Us",
+        name: "Afghanistan",
         createdAt: new Date(),
         updatedAt: new Date()
-      }
+      },
+      {
+        name: "Pakistan",
+        createdAt: new Date(),
+        updatedAt: new Date()
+      },
+      {
+        name: "Nepal",
+        createdAt: new Date(),
+        updatedAt: new Date()
+      },
+      {
+        name: "China",
+        createdAt: new Date(),
+        updatedAt: new Date()
+      },
+      {
+        name: "Bangladesh",
+        createdAt: new Date(),
+        updatedAt: new Date()
+      },
+      {
+        name: "Austrelia",
+        createdAt: new Date(),
+        updatedAt: new Date()
+      },
+      {
+        name: "Argentina",
+        createdAt: new Date(),
+        updatedAt: new Date()
+      },
+      {
+        name: "Bermuda",
+        createdAt: new Date(),
+        updatedAt: new Date()
+      },
+      {
+        name: "Brazil",
+        createdAt: new Date(),
+        updatedAt: new Date()
+      },
     ])
   },
 
   async down (queryInterface, Sequelize) {
-    /**
-     * Add commands to revert seed here.
-     *
-     * Example:
-     * await queryInterface.bulkDelete('People', null, {});
-     */
+    return await queryInterface.bulkDelete("countries", null, {});
   }
 };

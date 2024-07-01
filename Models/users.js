@@ -125,7 +125,7 @@ class userModel {
             full_name: checkEmail?.full_name,
             username: checkEmail?.username,
             email: checkEmail?.email,
-            cartItem: cartItemCount?.count,
+            cartItems: cartItemCount?.count,
             city: defaultAddress?.city?.name,
             state: defaultAddress?.state?.name,
             pin_code: defaultAddress?.pin_code,
