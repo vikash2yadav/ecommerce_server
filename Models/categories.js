@@ -6,7 +6,7 @@ const { Op } = require('sequelize');
 class categoryModel {
 
     // add category
-    async addCategory(bodyData) {
+    async addCategory(bodyData, adminInfo) {
 
         // create slug for unique identification of category
         bodyData.slug = await slugify(bodyData?.name || '', {
@@ -27,12 +27,13 @@ class categoryModel {
             }
         }
 
+        bodyData.created_by = adminInfo?.id;
         // create category
         return await categorySchema.create(bodyData);
     }
 
     // update category
-    async updateCategory(bodyData) {
+    async updateCategory(bodyData, adminInfo) {
 
         // create slug for unique identification of category
         bodyData.slug = await slugify(bodyData?.name || '', {
@@ -68,6 +69,8 @@ class categoryModel {
             }
         }
 
+        bodyData.updated_by = adminInfo?.id;
+
         return await categorySchema.update(bodyData, {
             where: {
                 id: bodyData?.id
@@ -77,7 +80,7 @@ class categoryModel {
     }
 
     // delete category
-    async deleteCategory(id) {
+    async deleteCategory(id, adminInfo) {
 
         // check category exist or not
         let checkCategory = await categorySchema.findOne({
@@ -93,6 +96,8 @@ class categoryModel {
             }
         }
 
+        bodyData.updated_by = adminInfo?.id;
+
         return await categorySchema.update({ is_delete: STATUS.DELETED }, {
             where: {
                 id: id
@@ -101,7 +106,7 @@ class categoryModel {
     }
 
     // get category
-    async getCategory(id) { 
+    async getCategory(id, adminInfo) { 
 
          // check category exist or not
          let checkCategory = await categorySchema.findOne({
@@ -125,7 +130,7 @@ class categoryModel {
     }
 
     // get category list
-    async getCategoryList(bodyData) {
+    async getCategoryList(bodyData, adminInfo) {
 
         return await categorySchema.findAndCountAll();
         

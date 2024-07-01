@@ -6,7 +6,7 @@ class categoryController {
     // add category
     async addCategory(req, res) {
         try {
-            let data = await categoryModel.addCategory(req?.body);
+            let data = await categoryModel.addCategory(req?.body, req?.adminInfo);
 
             if (data.status === STATUS_CODES.ALREADY_REPORTED) {
                 return res.handler.conflict(undefined, STATUS_MESSAGES.EXISTS.CATEGORY);
@@ -22,7 +22,7 @@ class categoryController {
     // update category
     async updateCategory(req, res) {
         try {
-            let data = await categoryModel.updateCategory(req?.body);
+            let data = await categoryModel.updateCategory(req?.body, req?.adminInfo);
 
             if (data.status === STATUS_CODES.NOT_FOUND) {
                 return res.handler.notFound(undefined, STATUS_MESSAGES.NOT_FOUND.CATEGORY);
@@ -43,7 +43,7 @@ class categoryController {
     async deleteCategory(req, res) {
         try {
 
-            let data = await categoryModel.deleteCategory(req?.params?.id);
+            let data = await categoryModel.deleteCategory(req?.params?.id, req?.adminInfo);
 
             if (data.status === STATUS_CODES.NOT_FOUND) {
                 return res.handler.notFound(undefined, STATUS_MESSAGES.NOT_FOUND.CATEGORY);
@@ -60,7 +60,7 @@ class categoryController {
     async getCategory(req, res) {
         try {
 
-            let data = await categoryModel.getCategory(req?.params?.id);
+            let data = await categoryModel.getCategory(req?.params?.id, req?.adminInfo);
 
             if (data.status === STATUS_CODES.NOT_FOUND) {
                 return res.handler.notFound(undefined, STATUS_MESSAGES.NOT_FOUND.CATEGORY);
@@ -77,7 +77,7 @@ class categoryController {
     async getCategoryList(req, res) {
         
         try {
-            let data = await categoryModel.getCategoryList(req?.body);
+            let data = await categoryModel.getCategoryList(req?.body, req?.adminInfo);
 
             return res.handler.success(data);
 
