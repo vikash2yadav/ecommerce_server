@@ -78,6 +78,9 @@ router.route("/delete/:id").delete(adminAuth, adminController.deleteAdmin);
 router.route("/get/:id").get(adminAuth, adminController.getAdminById);
 
 // list
-router.route("/get/list").post( adminController.getAdminList);
+router.route("/get/list").post(adminAuth, adminController.getAdminList);
+
+// change password
+router.route("/change_password").put(adminAuth, adminController.changePassword);
 
 module.exports = router

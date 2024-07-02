@@ -419,6 +419,55 @@ class adminModel {
     }
 
 
+     // change password 
+     async changePassword(adminInfo, bodyData) {
+
+        let { old_password, new_password, confirm_password } = bodyData;
+
+        // check email
+        let checkEmail = await adminSchema.findOne({
+            where: {
+                id: adminInfo?.id,
+                is_delete: STATUS.NOTDELETED
+            }
+        })
+
+        let match_password = await bcrypt.compare(
+            old_password,
+            checkEmail?.password
+        );
+
+        if (!match_password) {
+            return {
+                status: STATUS_CODES.NOT_VALID_DATA,
+                message: STATUS_MESSAGES.OLD_PASSWORD.WRONG
+            }
+        }
+
+        if (new_password !== confirm_password) {
+            return {
+                status: STATUS_CODES.NOT_VALID_DATA,
+                message: STATUS_MESSAGES.PASSWORD.NOT_SAME
+            }
+        }
+
+        if (new_password === old_password) {
+            return {
+                status: STATUS_CODES.NOT_VALID_DATA,
+                message: STATUS_MESSAGES.PASSWORD.SAME_AS_OLD_PASSWORD
+            }
+        }
+
+        let hashedPassword = await bcrypt.hash(new_password, 10);
+
+        return await userSchema.update({ password: hashedPassword }, {
+            where: {
+                id: adminInfo?.id
+            }
+        })
+    }
+
+
 }
 
 module.exports = adminModel;

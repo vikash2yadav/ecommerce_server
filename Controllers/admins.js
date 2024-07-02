@@ -215,6 +215,21 @@ class adminController {
         }
     }
 
+    // change password 
+    async changePassword(req, res){
+        try {
+            let data = await adminModel.changePassword(req?.adminInfo, req?.body);
+
+            if (data.status === STATUS_CODES.NOT_VALID_DATA) {
+                return res.handler.validationError(undefined, data?.message);
+            }
+
+            return res.handler.success(data, STATUS_MESSAGES.PASSWORD.CHANGED);
+        
+        } catch (error) {
+            return res.handler.serverError(error);
+        }
+    }
 }
 
 module.exports = adminController;
