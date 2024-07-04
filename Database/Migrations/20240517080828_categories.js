@@ -28,10 +28,6 @@ module.exports = {
         allowNull: false,
         type: Sequelize.STRING(255)
       },
-      image: {
-        allowNull: true,
-        type: Sequelize.TEXT
-      },
       created_by: {
         allowNull: false,
         type: Sequelize.BIGINT(20).UNSIGNED,

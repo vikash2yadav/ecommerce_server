@@ -68,10 +68,6 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       type: DataTypes.STRING(255)
     },
-    image: {
-      allowNull: true,
-      type: DataTypes.TEXT
-    },
     created_by: {
       allowNull: false,
       type: DataTypes.BIGINT(20).UNSIGNED,

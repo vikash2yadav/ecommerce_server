@@ -132,7 +132,59 @@ class categoryModel {
     // get category list
     async getCategoryList(bodyData, adminInfo) {
 
-        return await categorySchema.findAndCountAll();
+        var currentPage;
+        var itemsPerPage;
+        var lastRecordIndex;
+        var firstRecordIndex;
+        if (bodyData?.currentPage && bodyData?.itemsPerPage) {
+            currentPage = bodyData?.currentPage;
+            itemsPerPage = bodyData?.itemsPerPage;
+            lastRecordIndex = currentPage * itemsPerPage;
+            firstRecordIndex = lastRecordIndex - itemsPerPage;
+        }
+        var sortBy = [];
+        if (bodyData?.sortBy && bodyData?.sortBy?.length > 0) {
+            bodyData?.sortBy?.map((sort) => {
+                if (sort?.id !== "" && sort?.desc !== "") {
+                    if (sort?.desc == true) {
+                        sortBy?.push([sort?.id, "desc"]);
+                    } else {
+                        sortBy?.push([sort?.id, "asc"]);
+                    }
+                }
+            });
+        }
+        if (sortBy?.length < 1) {
+            sortBy = [['id', 'asc']];
+        }
+        var filterQuery = {};
+        if (bodyData?.filters && bodyData?.filters?.length > 0) {
+            bodyData?.filters?.forEach((filter) => {
+                if (filter?.id != "" && filter?.value != "") {
+                    if (typeof (filter?.value) === 'string') {
+                        filterQuery[filter?.id] = {
+                            [SEQUELIZE.Op.like]: `%${filter?.value.trim()}%`,
+                        }
+                    }
+                    else {
+                        filterQuery[filter?.id] = {
+                            [SEQUELIZE.Op.eq]: `${filter?.value}`
+                        };
+                    }
+                }
+            });
+        }
+
+        return await categorySchema.findAndCountAll({
+            where: {
+                is_delete: STATUS.NOTDELETED,
+                ...filterQuery,
+            },
+            offset: firstRecordIndex,
+            limit: itemsPerPage,
+            order: [...sortBy],
+        });
+        
 
     }
 }
