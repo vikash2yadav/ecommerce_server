@@ -135,7 +135,7 @@ exports.STATUS_MESSAGES = {
         MISMATCH: "Provided password do not match",
         ALREADY_CHANGED: "You have already change password by this otp verification ",
         TOO_SIMPLE: "Please create more complicated password",
-        SAME_AS_OLD_PASSWORD: 'This password is as same as previous password',
+        SAME_AS_OLD_PASSWORD: 'This new password is as same as current password',
         INCORRECT: "Password incorrect",
         NOT_SAME: "New Password and confirm password are not same",
         CHANGED: "Password has been changed successfully",
@@ -180,6 +180,11 @@ exports.STATUS_MESSAGES = {
         DELETED: "Product been deleted successfully.",
         INACTIVE: 'Product status is in active.'
     },
+    DELIVERY_PARTNER:{
+        ADDED: "Delivery Partner has been added successfully.",
+        UPDATED: "Delivery Partner been updated successfully.",
+        DELETED: "Delivery Partner been deleted successfully.",
+    },
     OUR_CHOICE: {
         ADDED: "Our choice has been added successfully.",
         UPDATED: "Our choice been updated successfully.",
@@ -189,6 +194,11 @@ exports.STATUS_MESSAGES = {
         ADDED: "Attribute has been added successfully.",
         UPDATED: "Attribute been updated successfully.",
         DELETED: "Attribute been deleted successfully.",
+    },
+    VENDOR: {
+        ADDED: "Vendor has been added successfully.",
+        UPDATED: "Vendor been updated successfully.",
+        DELETED: "Vendor been deleted successfully.",
     },
     CART_ITEM: {
         ADDED: "Cart item has been added successfully.",

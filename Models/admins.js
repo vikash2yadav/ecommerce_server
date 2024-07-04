@@ -460,7 +460,7 @@ class adminModel {
 
         let hashedPassword = await bcrypt.hash(new_password, 10);
 
-        return await userSchema.update({ password: hashedPassword }, {
+        return await adminSchema.update({ password: hashedPassword }, {
             where: {
                 id: adminInfo?.id
             }

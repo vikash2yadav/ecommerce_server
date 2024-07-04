@@ -27,12 +27,13 @@ class partnerModel {
     }
 
     // add
-    async add(bodyData, adminInfo) {
+    async addVendor(bodyData, adminInfo) {
 
         // check email
         let checkEmail = await partnerSchema.findOne({
             where: {
-                email: bodyData?.email
+                email: bodyData?.email,
+                role_id : ROLE?.VENDOR
             }
         })
 
@@ -45,7 +46,37 @@ class partnerModel {
 
         let hashedPassword = await bcrypt.hash(bodyData?.password, 10);
         bodyData.created_by = adminInfo?.id;
+        bodyData.role_id = ROLE?.VENDOR;
+        
+        return await partnerSchema.create({
+            ...bodyData,
+            password: hashedPassword
+        });
 
+    }
+
+     // add
+     async addDeliveryPartner(bodyData, adminInfo) {
+
+        // check email
+        let checkEmail = await partnerSchema.findOne({
+            where: {
+                email: bodyData?.email,
+                role_id : ROLE?.DELIVERY_PARTNER
+            }
+        })
+
+        if (checkEmail) {
+            return {
+                status: STATUS_CODES.ALREADY_REPORTED,
+                message: STATUS_MESSAGES.EXISTS.EMAIL
+            }
+        }
+
+        let hashedPassword = await bcrypt.hash(bodyData?.password, 10);
+        bodyData.created_by = adminInfo?.id;
+        bodyData.role_id = ROLE?.DELIVERY_PARTNER;
+        
         return await partnerSchema.create({
             ...bodyData,
             password: hashedPassword
