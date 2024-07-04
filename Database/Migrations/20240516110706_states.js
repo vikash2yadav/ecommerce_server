@@ -2,36 +2,21 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('user_addresses', {
+    await queryInterface.createTable('states', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.BIGINT(20).UNSIGNED
       },
-      street: {
-        allowNull: false,
-        type: Sequelize.STRING(255)
-      },
-      area: {
-        allowNull: false,
-        type: Sequelize.STRING(255)
-      },
-      pin_code: {
-        allowNull: false,
-        type: Sequelize.BIGINT(6)
-      },
-      city_id: {
-        allowNull: false,
-        type: Sequelize.BIGINT(20).UNSIGNED
-      },
-      state_id: {
-        allowNull: false,
-        type: Sequelize.BIGINT(20).UNSIGNED
-      },
       country_id: {
         allowNull: false,
-        type: Sequelize.BIGINT(20).UNSIGNED
+        type: Sequelize.BIGINT(20).UNSIGNED,
+        references: {model: 'countries', key: 'id'}
+      },
+      name: {
+        allowNull: false,
+        type: Sequelize.STRING(255)
       },
       createdAt: {
         allowNull: false,
@@ -44,6 +29,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('user_addresses');
+    await queryInterface.dropTable('states');
   }
 };

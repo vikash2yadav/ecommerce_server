@@ -50,15 +50,23 @@ router.route("/update/self/profile").put(validate([
 
 /* -------------------- admin routes ------------- */
 
-// add partner
-router.route('/add').post(validate([
+// add vendor
+router.route('/vendor/add').post(validate([
     body("first_name").notEmpty().withMessage(STATUS_MESSAGES.VALIDATION.REQUIRED.FIRST_NAME),
     body("last_name").notEmpty().withMessage(STATUS_MESSAGES.VALIDATION.REQUIRED.LAST_NAME),
     body("email").notEmpty().withMessage(STATUS_MESSAGES.VALIDATION.REQUIRED.INVALID_EMAIL),
     body("email").isEmail().withMessage(STATUS_MESSAGES.VALIDATION.REQUIRED.EMAIL),
     body("password").notEmpty().withMessage(STATUS_MESSAGES.VALIDATION.REQUIRED.PASSWORD),
-]), adminAuth, partnerController.add);
+]), adminAuth, partnerController.addVendor);
 
+// add partner
+router.route('/delivery_partner/add').post(validate([
+    body("first_name").notEmpty().withMessage(STATUS_MESSAGES.VALIDATION.REQUIRED.FIRST_NAME),
+    body("last_name").notEmpty().withMessage(STATUS_MESSAGES.VALIDATION.REQUIRED.LAST_NAME),
+    body("email").notEmpty().withMessage(STATUS_MESSAGES.VALIDATION.REQUIRED.INVALID_EMAIL),
+    body("email").isEmail().withMessage(STATUS_MESSAGES.VALIDATION.REQUIRED.EMAIL),
+    body("password").notEmpty().withMessage(STATUS_MESSAGES.VALIDATION.REQUIRED.PASSWORD),
+]), adminAuth, partnerController.addDeliveryPartner);
 
 // status change
 router.route("/status_change").put(validate([

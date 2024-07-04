@@ -1,6 +1,6 @@
 'use strict';
 /** @type {import('sequelize-cli').Migration} */
-const {STATUS} = require('../../Config/constant');
+const {ORDER_STATUS, STATUS} = require('../../Config/constant');
 
 module.exports = {
   async up(queryInterface, Sequelize) {
@@ -16,6 +16,11 @@ module.exports = {
         type: Sequelize.BIGINT(20).UNSIGNED,
         references: {model: 'users', key: 'id'}
       },
+      vendor_id: {
+        allowNull: false,
+        type: Sequelize.BIGINT(20).UNSIGNED,
+        references: {model: 'partners', key: 'id'}
+      },
       orderd_date: {
         allowNull: false,
         type: Sequelize.DATE
@@ -29,6 +34,14 @@ module.exports = {
         type: Sequelize.BIGINT(20).UNSIGNED,
         references: {model: 'shipped_addresses', key: 'id'}
       },
+      total_discount: {
+        allowNull: false,
+        type: Sequelize.BIGINT(20)
+      },
+      total_items: {
+        allowNull: false,
+        type: Sequelize.BIGINT(20)
+      },
       total_amoumt: {
         allowNull: false,
         type: Sequelize.BIGINT(20)
@@ -36,8 +49,8 @@ module.exports = {
       status: {
         allowNull: false,
         type: Sequelize.TINYINT(1),
-        defaultValue: STATUS?.ACTIVE,
-        comment: "0 => In Active 1 => Active"
+        defaultValue: ORDER_STATUS?.PENDING,
+        comment: "0 => Pending 1 => Shipped 2 => Delivered 3 => Cancelled"
       },
       is_delete: {
         allowNull: false,

@@ -1,12 +1,12 @@
 const { STATUS_CODES, STATUS, STATUS_MESSAGES } = require('../Config/constant');
-const { users: userSchema, user_tokens: userTokenSchema, user_otp_verifications: userOtpSchema } = require("../Database/Schema");
+const { users: userSchema, cities: citySchema, states: stateSchema, user_addresses: userAddressSchema, user_tokens: userTokenSchema, user_otp_verifications: userOtpSchema } = require("../Database/Schema");
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const moment = require('moment');
 const mailer = new (require('../Utils/mailer'));
 const { generateOtp } = require('../Utils/helpers');
 const { Op } = require('sequelize');
-
+const {getCustomerCartItemList} = new(require('./cart_items'));
 class userModel {
 
     // get token info
@@ -20,6 +20,7 @@ class userModel {
                     model: userSchema,
                     where: {
                         status: STATUS?.ACTIVE,
+                        is_delete: STATUS.NOTDELETED
                     },
                 },
             ],
@@ -60,8 +61,8 @@ class userModel {
             where: {
                 email: bodyData?.email,
                 is_delete: STATUS.NOTDELETED
-            }
-        })
+            },
+        });
 
         if (!checkEmail) {
             return {
@@ -70,6 +71,23 @@ class userModel {
             }
         }
 
+        let defaultAddress = await userAddressSchema.findOne({
+            where: {
+                user_id: checkEmail?.id,
+                is_default: STATUS?.DEFAULT
+            },
+            include: [
+                {
+                    model: citySchema,
+                },
+                {
+                    model: stateSchema,
+                }
+            ]
+        })
+        
+        let cartItemCount = await getCustomerCartItemList(checkEmail);
+     
         if (checkEmail.status == STATUS.INACTIVE) {
             return {
                 status: STATUS_CODES.NOT_FOUND,
@@ -102,20 +120,15 @@ class userModel {
         })
 
         return {
-            id: checkEmail?.id,
             first_name: checkEmail?.first_name,
-            last_name: checkEmail?.last_name,
+            last_name: checkEmail?.last_name,  
             full_name: checkEmail?.full_name,
             username: checkEmail?.username,
             email: checkEmail?.email,
-            profile_image: checkEmail?.profile_image,
-            country_code: checkEmail?.country_code,
-            contact_no: checkEmail?.contact_no,
-            gender: checkEmail?.gender,
-            birth_date: checkEmail?.birth_date,
-            address: checkEmail?.address,
-            status: checkEmail?.status,
-            is_delete: checkEmail?.is_delete,
+            cartItems: cartItemCount?.count,
+            city: defaultAddress?.city?.name,
+            state: defaultAddress?.state?.name,
+            pin_code: defaultAddress?.pin_code,
             access_token,
         };
     }
@@ -217,8 +230,8 @@ class userModel {
     }
 
     // reset password
-    async resetPassword(bodyData, id) {
-
+    async resetPassword(bodyData) {
+        
         if (bodyData?.password !== bodyData?.confirm_password) {
             return {
                 status: STATUS_CODES.NOT_VALID_DATA
@@ -228,18 +241,24 @@ class userModel {
         // hashing new password
         let hashedPassword = await bcrypt.hash(bodyData?.password, 10);
 
+       
+       if(bodyData?.id){
         return await userSchema.update({ password: hashedPassword }, {
             where: {
-                id,
-                status: STATUS.ACTIVE,
-                is_delete: STATUS.NOTDELETED
+                id: bodyData?.id,
             }
         })
+       }else{
+        return{
+            status: STATUS_CODES?.NOT_FOUND
+        }
+       }
 
     }
 
     // change password 
-    async changePassword(bodyData, userInfo) {
+    async changePassword(userInfo, bodyData) {
+
         let { old_password, new_password, confirm_password } = bodyData;
 
         // check email
@@ -268,12 +287,65 @@ class userModel {
                 message: STATUS_MESSAGES.PASSWORD.NOT_SAME
             }
         }
-        
+
+        if (new_password === old_password) {
+            return {
+                status: STATUS_CODES.NOT_VALID_DATA,
+                message: STATUS_MESSAGES.PASSWORD.SAME_AS_OLD_PASSWORD
+            }
+        }
+
         let hashedPassword = await bcrypt.hash(new_password, 10);
 
-        return await userSchema.update({password: hashedPassword}, {
+        return await userSchema.update({ password: hashedPassword }, {
             where: {
                 id: userInfo?.id
+            }
+        })
+    }
+
+    // get address 
+    async getAddress(userInfo) {
+        let data = await userSchema.findOne({
+            where: {
+                id: userInfo?.id
+            },
+            include: [
+                {
+                    model: userAddressSchema
+                }
+            ]
+        })
+        return data;
+    }
+
+    // delete my account
+    async deleteMyAccount(bodyData) {
+
+        let checkEmail = await userSchema.findOne({
+            where: {
+                email: bodyData?.email,
+                is_delete: STATUS?.NOTDELETED
+            }
+        });
+
+        if (!checkEmail) {
+            return {
+                status: STATUS_CODES?.NOT_FOUND
+            }
+        }
+
+        let match = await bcrypt.compare(bodyData?.password, checkEmail?.password);
+
+        if (!match) {
+            return {
+                status: STATUS_CODES?.NOT_VALID_DATA
+            }
+        }
+
+        return await userSchema.update({ is_delete: STATUS?.DELETED }, {
+            where: {
+                id: checkEmail?.id
             }
         })
     }
@@ -302,6 +374,11 @@ class userModel {
         } else {
             return true;
         }
+    }
+
+    // get my profile 
+    async getMyProfile(userInfo) {
+        return userInfo
     }
 
     // update self profile 
@@ -334,11 +411,17 @@ class userModel {
             }
         }
 
-        return await userSchema.update(bodyData, {
+        let updatedUser = await userSchema.update(bodyData, {
             where: {
                 id: userInfo?.id
             }
-        })
+        });
+
+        return await userSchema.findOne({
+            where: {
+                id: userInfo?.id
+            }
+        });
     }
 
     // user status change 

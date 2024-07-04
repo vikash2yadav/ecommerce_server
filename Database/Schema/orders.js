@@ -2,7 +2,7 @@
 const {
   Model
 } = require('sequelize');
-const { STATUS } = require('../../Config/constant');
+const { STATUS, ORDER_STATUS } = require('../../Config/constant');
 module.exports = (sequelize, DataTypes) => {
   class orders extends Model {
     static associate(models) {
@@ -22,6 +22,10 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: 'order_id',
         onDelete: 'cascade'
       })
+      orders.belongsTo(models.partners, {
+        foreignKey: 'vendor_id',
+        onDelete: 'cascade'
+      })
     }
   }
   orders.init({
@@ -36,6 +40,11 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.BIGINT(20).UNSIGNED,
       references: { model: 'users', key: 'id' }
     },
+    vendor_id: {
+      allowNull: false,
+      type: DataTypes.BIGINT(20).UNSIGNED,
+      references: {model: 'partners', key: 'id'}
+    },
     orderd_date: {
       allowNull: false,
       type: DataTypes.DATE
@@ -49,6 +58,14 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.BIGINT(20).UNSIGNED,
       references: { model: 'shipped_addresses', key: 'id' }
     },
+    total_discount: {
+      allowNull: false,
+      type: DataTypes.BIGINT(20)
+    },
+    total_items: {
+      allowNull: false,
+      type: DataTypes.BIGINT(20)
+    },
     total_amoumt: {
       allowNull: false,
       type: DataTypes.BIGINT(20)
@@ -56,8 +73,8 @@ module.exports = (sequelize, DataTypes) => {
     status: {
       allowNull: false,
       type: DataTypes.TINYINT(1),
-      defaultValue: STATUS?.ACTIVE,
-      comment: "0 => In Active 1 => Active"
+       defaultValue: ORDER_STATUS?.PENDING,
+        comment: "0 => Pending 1 => Shipped 2 => Delivered 3 => Cancelled"
     },
     is_delete: {
       allowNull: false,

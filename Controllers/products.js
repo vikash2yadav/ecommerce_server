@@ -85,6 +85,22 @@ class productController {
             res.handler.serverError(error);
         }
     }
+
+
+    // ----------------- vendor route -------------------
+
+    // get vendor product list
+    async getVendorProductList(req, res) {
+        
+        try {
+            let data = await productModel.getVendorProductList(req?.body);
+
+            return res.handler.success(data);
+
+        } catch (error) {
+            res.handler.serverError(error);
+        }
+    }
 }
 
 module.exports = productController

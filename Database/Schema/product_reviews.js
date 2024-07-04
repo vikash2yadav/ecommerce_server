@@ -6,14 +6,18 @@ const { STATUS } = require('../../Config/constant');
 module.exports = (sequelize, DataTypes) => {
   class product_reviews extends Model {
     static associate(models) {
-     product_reviews.belongsTo(models.products,{
-      foreignKey: 'product_id',
-      onDelete: 'cascade'
-     })
-     product_reviews.belongsTo(models.users,{
-      foreignKey: 'user_id',
-      onDelete: 'cascade'
-     })
+      product_reviews.belongsTo(models.products, {
+        foreignKey: 'product_id',
+        onDelete: 'cascade'
+      })
+      product_reviews.belongsTo(models.users, {
+        foreignKey: 'user_id',
+        onDelete: 'cascade'
+      })
+      product_reviews.belongsTo(models.product_variants, {
+        foreignKey: 'product_variant_id',
+        onDelete: 'cascade'
+      })
     }
   }
   product_reviews.init({
@@ -26,12 +30,17 @@ module.exports = (sequelize, DataTypes) => {
     user_id: {
       allowNull: false,
       type: DataTypes.BIGINT(20).UNSIGNED,
-      references: {model: 'users', key: 'id'}
+      references: { model: 'users', key: 'id' }
     },
     product_id: {
       allowNull: false,
       type: DataTypes.BIGINT(20).UNSIGNED,
-      references: {model: 'products', key: 'id'}
+      references: { model: 'products', key: 'id' }
+    },
+    product_variant_id: {
+      allowNull: false,
+      type: DataTypes.BIGINT(20).UNSIGNED,
+      references: { model: 'product_variants', key: 'id' }
     },
     rating: {
       allowNull: false,

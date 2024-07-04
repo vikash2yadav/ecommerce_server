@@ -13,6 +13,14 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: 'product_id',
         onDelete: 'cascade'
       })
+      order_items.belongsTo(models.partners, {
+        foreignKey: 'vendor_id',
+        onDelete: 'cascade'
+      })
+      order_items.belongsTo(models.product_variants, {
+        foreignKey: 'product_variant_id',
+        onDelete: 'cascade'
+      })
     }
   }
   order_items.init({
@@ -32,6 +40,28 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.BIGINT(20).UNSIGNED,
       references: {model: 'products', key: 'id'}
     },
+    product_variant_id: {
+      allowNull: false,
+      type: DataTypes.BIGINT(20).UNSIGNED,
+      references: {model: 'product_variants', key: 'id'}
+    },
+    vendor_id: {
+      allowNull: false,
+      type: DataTypes.BIGINT(20).UNSIGNED,
+      references: {model: 'partners', key: 'id'}
+    },
+    attribute:{
+      allowNull: false,
+      type: DataTypes.STRING(255)
+    },
+    attribute_value: {
+      allowNull: false,
+      type: DataTypes.STRING(255)
+    },
+    image: {
+      allowNull: false,
+      type: DataTypes.TEXT
+    },
     quantity:{
       allowNull: false,
       type: DataTypes.BIGINT(20)
@@ -48,7 +78,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       type: DataTypes.BIGINT(20)
     },
-    totoal_amount:{
+    total_amount:{
       allowNull: false,
       type: DataTypes.BIGINT(20)
     },

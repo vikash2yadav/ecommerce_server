@@ -3,6 +3,8 @@ const productVariantModel = new (require("../Models/product_variant"));
 
 class productVariantController {
 
+    // -------------- admin route ---------------
+
     // add productVariant
     async addProductVariant(req, res) {
         try {
@@ -85,6 +87,24 @@ class productVariantController {
             res.handler.serverError(error);
         }
     }
+
+
+    
+    // ---------------- vendor product variant --------------------
+
+    // get product Variant list
+    async getVendorProductVariantList(req, res) {
+        
+        try {
+            let data = await productVariantModel.getVendorProductVariantList(req?.body);
+
+            return res.handler.success(data);
+
+        } catch (error) {
+            res.handler.serverError(error);
+        }
+    }
+
 }
 
 module.exports = productVariantController

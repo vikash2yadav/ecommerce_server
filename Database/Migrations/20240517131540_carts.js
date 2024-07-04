@@ -17,12 +17,7 @@ module.exports = {
         type: Sequelize.BIGINT(20).UNSIGNED,
         references: {model: 'users', key: 'id'}
       },
-      product_id: {
-        allowNull: false,
-        type: Sequelize.BIGINT(20).UNSIGNED,
-        references: {model: 'products', key: 'id'}
-      },
-      quantity: {
+      total_items: {
         allowNull: false,
         type: Sequelize.BIGINT(20)
       },

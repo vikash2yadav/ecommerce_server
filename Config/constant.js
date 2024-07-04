@@ -47,7 +47,7 @@ exports.STATUS_MESSAGES = {
     IMAGE_SUCCESS: "Your image has been successfully saved.",
     IMAGE_REMOVED: 'Your image has been successfully removed.',
     RESET_PASSWORD_ALREADY: "You already have reset the password with this token.",
-
+    EMAIL_SENT: 'We have sent otp to your registered email',
     OLD_PASSWORD:{
         WRONG: 'You old password is not right'
     },
@@ -58,6 +58,7 @@ exports.STATUS_MESSAGES = {
         ATTRIBUTE: 'Attribute is already exist',
         USER: "User already exist!",
         PRODUCT_VARIANT: 'This variat is already exist in our system',
+        CART_ITEM: 'This cart item is already exist',
         EMAIL: "Email is already registered!",
         EMAIL_GUEST: "It looks like you've ordered with us before! Click 'Forgot Password' to reset your password.",
         COUPON: "This coupon code already exist!",
@@ -90,6 +91,11 @@ exports.STATUS_MESSAGES = {
         USER: "You are not available in our system!",
         ROLE: "Role is not available in our system!",
         ATTRIBUTE_VALUE: 'This value is not available in our system',
+        CART_ITEM: 'This item is not fount in our system',
+        COUNTRY: 'This country is not found in our system',
+        INQUIRY: 'This inquiry is not found in our system',
+        CITY: 'This city is not found',
+        STATE: 'This state is not found in our system',
         EMAIL: "Email is not available in our system!",
         ORDER_ITEM: 'Order item is not found in our system',
         IMAGE: "Image not available.",
@@ -105,6 +111,7 @@ exports.STATUS_MESSAGES = {
         POST_COMMENT: 'Comment is not available in our system!',
         SAVED_POST: 'Saved post is not available in our system!',
         POST_SHARE: "This data is not found.",
+        ADDRESS: 'This address is not found in our system',
         NOTIFICATION: 'Notification is not available in our system.',
         EMOJI: 'Emoji is not available in our system.',
         OUR_CHOICE: 'This data in not found in our choice',
@@ -126,7 +133,9 @@ exports.STATUS_MESSAGES = {
     },
     PASSWORD: {
         MISMATCH: "Provided password do not match",
+        ALREADY_CHANGED: "You have already change password by this otp verification ",
         TOO_SIMPLE: "Please create more complicated password",
+        SAME_AS_OLD_PASSWORD: 'This new password is as same as current password',
         INCORRECT: "Password incorrect",
         NOT_SAME: "New Password and confirm password are not same",
         CHANGED: "Password has been changed successfully",
@@ -171,6 +180,11 @@ exports.STATUS_MESSAGES = {
         DELETED: "Product been deleted successfully.",
         INACTIVE: 'Product status is in active.'
     },
+    DELIVERY_PARTNER:{
+        ADDED: "Delivery Partner has been added successfully.",
+        UPDATED: "Delivery Partner been updated successfully.",
+        DELETED: "Delivery Partner been deleted successfully.",
+    },
     OUR_CHOICE: {
         ADDED: "Our choice has been added successfully.",
         UPDATED: "Our choice been updated successfully.",
@@ -181,15 +195,40 @@ exports.STATUS_MESSAGES = {
         UPDATED: "Attribute been updated successfully.",
         DELETED: "Attribute been deleted successfully.",
     },
+    VENDOR: {
+        ADDED: "Vendor has been added successfully.",
+        UPDATED: "Vendor been updated successfully.",
+        DELETED: "Vendor been deleted successfully.",
+    },
+    CART_ITEM: {
+        ADDED: "Cart item has been added successfully.",
+        UPDATED: "Cart item been updated successfully.",
+        DELETED: "Cart item been deleted successfully.",
+    },
+    INQUIRY: 
+    {
+        ADDED: "Inquiry has been added successfully.",
+        UPDATED: "Inquiry been updated successfully.",
+        DELETED: "Inquiry been deleted successfully.",
+    },
     ORDER_ITEM: {
         ADDED: "Order item has been added successfully.",
         UPDATED: "Order item been updated successfully.",
         DELETED: "Order item been deleted successfully.",
     },
+    ACCOUNT:{
+        DELETED: 'Your account has been deleted successfully' 
+    },
     ATTRIBUTE_VALUE: {
         ADDED: "Attribute value has been added successfully.",
         UPDATED: "Attribute value been updated successfully.",
         DELETED: "Attribute value been deleted successfully.",
+    },
+    ADDRESS: {
+        ADDED: "Address has been added successfully.",
+        UPDATED: "Address been updated successfully.",
+        DEFAULT_CHANGED: 'Default Address has been changed.',
+        DELETED: "Address been deleted successfully.",
     },
     MODULE: {
         ADDED: "Module has been added successfully.",
@@ -335,8 +374,13 @@ exports.STATUS_MESSAGES = {
             ATTRIBUTE_VALUE: 'Please, enter attribute value',
             ATTRIBUTE: 'Please, enter attribute',
             VALUE: 'Please, enter value',
+            MESSAGE: 'Please, enter message',
             PRODUCT: 'Please, enter product.',
             COUPON: 'Please, enter coupon',
+            TOTAL_PRICE: 'Please, enter total amount',
+            PRODUCT_VARIANT: 'Please, enter product variant',
+            VENDOR: 'Please, enter Vendor',
+            CART: 'Please, enter cart',
             QUANTITY: 'Please, enter quantity',
             CODE: 'Please, enter code',
             DESCRIPTION: 'Please, enter description.',
@@ -452,12 +496,27 @@ exports.IMG_FOLDER_NAME = {
     COVER_PROFILE: '/User/Cover'
 };
 
+// gender
+exports.GENDER = {
+    Male: 1,
+    Female: 2,
+    Others: 3
+}
+
 // role id
 exports.ROLE = {
     SUPER_ADMIN: 1,
     ADMIN: 2,
     VENDOR: 3,
     DELIVERY_PARTNER: 4
+}
+
+// Order status
+exports.ORDER_STATUS = {
+    PENDING: 0,
+    SHIPPED: 1,
+    DELIVERED: 2,
+    CANCELLED: 3
 }
 
 // Generic Status

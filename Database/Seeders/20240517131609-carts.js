@@ -6,15 +6,13 @@ module.exports = {
     return await queryInterface.bulkInsert("carts", [
       {
         user_id: 1,
-        product_id: 2,
-        quantity: 2,
+        total_items: 2,
         createdAt: new Date(),
         updatedAt: new Date()
       },
       {
         user_id: 1,
-        product_id: 1,
-        quantity: 1,
+        total_items: 1,
         createdAt: new Date(),
         updatedAt: new Date()
       }

@@ -15,7 +15,7 @@ class userController {
                 return res.handler.notFound(undefined, STATUS_MESSAGES.PASSWORD.NOT_SAME);
             }
 
-            return res.handler.success(data);
+            return res.handler.success(data, STATUS_MESSAGES?.USER.REGISTERED);
         } catch (error) {
             res.handler.serverError(error);
         }
@@ -34,7 +34,7 @@ class userController {
                 return res.handler.validationError(undefined, STATUS_MESSAGES.PASSWORD.INCORRECT)
             }
 
-            return res.handler.success(data);
+            return res.handler.success(data, STATUS_MESSAGES?.USER?.REGISTERED);
         } catch (error) {
             res.handler.serverError(error);
         }
@@ -49,7 +49,7 @@ class userController {
                 return res.handler.notFound(undefined, STATUS_MESSAGES.NOT_FOUND.EMAIL)
             }
 
-            return res.handler.success(data);
+            return res.handler.success(data, STATUS_MESSAGES?.EMAIL_SENT);
         } catch (error) {
             res.handler.serverError(error);
         }
@@ -81,7 +81,11 @@ class userController {
     // reset password
     async resetPassword(req, res) {
         try {
-            let data = await userModel.resetPassword(req?.body, req?.params?.id);
+            let data = await userModel.resetPassword(req?.body);
+            
+            if (data.status === STATUS_CODES.NOT_FOUND) {
+                return res.handler.notFound(undefined, STATUS_MESSAGES.PASSWORD.ALREADY_CHANGED)
+            }
 
             if (data.status === STATUS_CODES.NOT_VALID_DATA) {
                 return res.handler.validationError(undefined, STATUS_MESSAGES.PASSWORD.NOT_SAME)
@@ -97,7 +101,7 @@ class userController {
     // change password
     async changePassword(req, res){
         try {
-            let data = await userModel.changePassword(req?.body, req?.userInfo);
+            let data = await userModel.changePassword(req?.userInfo, req?.body);
 
             if (data.status === STATUS_CODES.NOT_VALID_DATA) {
                 return res.handler.validationError(undefined, data?.message)
@@ -128,6 +132,18 @@ class userController {
         }
     }
 
+    // get my profile
+    async getMyProfile(req, res) {
+        try {
+            let data = await userModel.getMyProfile(req?.userInfo);
+
+            return res.handler.success(data);
+
+        } catch (error) {
+            res.handler.serverError(error);
+        }
+    }
+
     // update profile
     async updateSelfProfile(req, res) {
         try {
@@ -143,6 +159,36 @@ class userController {
             }
 
             return res.handler.success(data, STATUS_MESSAGES.USER.UPDATED)
+
+        } catch (error) {
+            res.handler.serverError(error);
+        }
+    }
+
+    // get address 
+    async getAddress(req, res){
+        try {
+            let data = await userModel.getAddress(req?.userInfo);
+            return res.handler.success(data) ;
+        } catch (error) {
+            return res.handler.serverError(error);
+        }
+    }
+
+    // delete my account
+    async deleteMyAccount(req, res){
+        try {
+            let data = await userModel.deleteMyAccount(req?.body);
+
+            if (data.status === STATUS_CODES.NOT_FOUND) {
+                return res.handler.validationError(undefined, STATUS_MESSAGES.NOT_FOUND.ACCOUNT);
+            }
+
+            if (data.status === STATUS_CODES.NOT_VALID_DATA) {
+                return res.handler.validationError(undefined, STATUS_MESSAGES.PASSWORD.INCORRECT);
+            }
+
+            return res.handler.success(data, STATUS_MESSAGES.ACCOUNT.DELETED);
 
         } catch (error) {
             res.handler.serverError(error);

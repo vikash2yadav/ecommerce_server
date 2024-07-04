@@ -6,14 +6,7 @@ const { STATUS } = require('../../Config/constant');
 module.exports = (sequelize, DataTypes) => {
   class users extends Model {
     static associate(models) {
-      users.belongsTo(models.languages, {
-        foreignKey: 'language_id',
-        onDelete: 'cascade'
-      });
-      users.belongsTo(models.user_addresses, {
-        foreignKey: 'user_address_id',
-        onDelete: 'cascade'
-      });
+
       users.hasMany(models.user_tokens, {
         foreignKey: 'user_id',
         onDelete: 'cascade'
@@ -102,6 +95,10 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: 'status_changed_by',
         onDelete: 'cascade'
       });
+      users.hasMany(models.user_addresses, {
+        foreignKey: 'user_id',
+        onDelete: 'cascade'
+      })
     }
   }
   users.init({
@@ -152,7 +149,8 @@ module.exports = (sequelize, DataTypes) => {
     },
     gender: {
       allowNull: true,
-      type: DataTypes.STRING(255)
+      type: DataTypes.TINYINT(1),
+      comment: '1 => Male 2 => Female 3 => Others'
     },
     country_code: {
       allowNull: true,
@@ -170,11 +168,6 @@ module.exports = (sequelize, DataTypes) => {
     alternative_contact_no: {
       allowNull: true,
       type: DataTypes.STRING(255)
-    },
-    user_address_id: {
-      allowNull: true,
-      type: DataTypes.BIGINT(20).UNSIGNED,
-      references: { model: 'user_addresses', key: 'id' }
     },
     language_id: {
       allowNull: true,

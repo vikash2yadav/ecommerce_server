@@ -6,6 +6,9 @@ module.exports = (app) => {
     // user route
     app.use("/user", require("./users"));
 
+    // user address route
+    app.use("/user_address", require("./user_addresses"));
+
     // admin route
     app.use("/admin", require("./admins"));
 
@@ -68,4 +71,13 @@ module.exports = (app) => {
 
     // product variants route
     app.use("/product_variant", require("./product_variants"));
+
+    // order cart route
+    app.use("/cart_item", require("./cart_items"));
+
+    // common route
+    app.use("/common", require("./common"));
+
+    // inquiry route
+    app.use("/inquiry", require("./inquiries"));
 };

@@ -3,6 +3,7 @@ const orderController = new (require('../Controllers/orders'));
 const validate = require("../Middleware/validator").validate;
 const { body } = require("express-validator");
 const { STATUS_MESSAGES } = require('../Config/constant');
+const { userAuth} = new(require('../Middleware/authentication'));
 
 // add order
 router.route('/add').post(validate([
@@ -36,5 +37,19 @@ router.route('/get/list').post(orderController.getOrderList);
 
 // get all vendors orders
 router.route('/vendor/get/list').post(orderController.getVendorOrdersList);
+
+
+
+// -------------------------- customer routes ----------------------------
+
+// get all customer orders
+router.route('/my/get/list').post(userAuth ,orderController.getMyOrdersList);
+
+// update my order
+router.route('/my/update').put(userAuth ,orderController.updateMyOrder);
+
+// delete my order
+router.route('/my/delete/:id').delete(userAuth ,orderController.deleteMyOrder);
+
 
 module.exports = router;

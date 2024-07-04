@@ -4,6 +4,8 @@ const validate = require("../Middleware/validator").validate;
 const { body } = require("express-validator");
 const { STATUS_MESSAGES } = require('../Config/constant');
 
+// ------------------- admin route --------------------
+
 // add product faq
 router.route('/add').post(validate([
     body("product_id").notEmpty().withMessage(STATUS_MESSAGES.VALIDATION.REQUIRED.PRODUCT),
@@ -27,5 +29,12 @@ router.route('/get/:id').get(productFaqController.getProductFaq);
 
 // get all list
 router.route('/get/list').post(productFaqController.getProductFaqList);
+
+
+
+// ---------------- vendor route ----------------------
+
+// get Vendor product faq list
+router.route('/vendor/get/list').post(productFaqController.getVendorProductFaqList);
 
 module.exports = router;

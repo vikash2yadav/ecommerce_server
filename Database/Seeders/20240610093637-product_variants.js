@@ -12,6 +12,7 @@ module.exports = {
         discount: 10,
         stock: 2,
         weight: '2',
+        is_default: 1,
         dimensions: '2 * 3* 6',
         material: 'wood',
         image: 'red_image'
@@ -24,6 +25,7 @@ module.exports = {
         discount: 30,
         stock: 20,
         weight: '20',
+        is_default: 0,
         dimensions: '2 * 3* 6',
         material: 'wood',
         image: 'red_image'

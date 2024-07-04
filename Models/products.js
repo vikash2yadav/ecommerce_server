@@ -1,5 +1,5 @@
 const slugify = require('slugify');
-const { products: productSchema } = require('../Database/Schema');
+const { products: productSchema, product_variants: productVariantSchema, attributes: attributeSchema, attribute_values: attributeValueSchema } = require('../Database/Schema');
 const { STATUS_CODES, STATUS, STATUS_MESSAGES } = require('../Config/constant');
 const { Op } = require('sequelize');
 
@@ -101,10 +101,10 @@ class productModel {
     }
 
     // get product
-    async getProduct(id) { 
+    async getProduct(id) {
 
-         // check product exist or not
-         let checkProduct = await productSchema.findOne({
+        // check product exist or not
+        let checkProduct = await productSchema.findOne({
             where: {
                 id: id,
                 is_delete: STATUS.NOTDELETED
@@ -118,9 +118,25 @@ class productModel {
         }
 
         return await productSchema.findOne({
-            where:{
+            where: {
                 id: id
-            }
+            },
+            include: 
+                {
+                    model: productVariantSchema,
+                    where:{
+                        attribute_id: 1
+                    },
+                    include: [
+                        {
+                            model: attributeSchema
+                        },
+                        {
+                            model: attributeValueSchema
+                        }
+                    ]
+                },
+            
         })
     }
 
@@ -129,8 +145,24 @@ class productModel {
 
         let data = await productSchema.findAndCountAll();
         return data;
-        
-     }
+
+    }
+
+
+    // --------------------- vendor product ----------------------
+
+    // get vendor product list
+    async getVendorProductList(bodyData) {
+
+        let data = await productSchema.findAndCountAll({
+            where: {
+                vendor_id: 2
+            }
+        });
+        return data;
+
+    }
+
 }
 
 module.exports = productModel

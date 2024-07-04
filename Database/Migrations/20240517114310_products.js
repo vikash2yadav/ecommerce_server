@@ -11,7 +11,7 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.BIGINT(20).UNSIGNED
       },
-      suplier_id: {
+      vendor_id: {
         allowNull: false,
         type: Sequelize.BIGINT(20).UNSIGNED,
         references: {model: 'partners', key: 'id'}

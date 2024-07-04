@@ -53,7 +53,8 @@ module.exports = {
       },
       gender: {
         allowNull: true,
-        type: Sequelize.STRING(255)
+        type: Sequelize.TINYINT(1),
+        comment: '1 => Male 2 => Female 3 => Others'
       },
       country_code: {
         allowNull: true,
@@ -71,11 +72,6 @@ module.exports = {
       alternative_contact_no: {
         allowNull: true,
         type: Sequelize.STRING(255)
-      },
-      user_address_id: {
-        allowNull: true,
-        type: Sequelize.BIGINT(20).UNSIGNED,
-        references: { model: 'user_addresses', key: 'id' }
       },
       language_id: {
         allowNull: true,

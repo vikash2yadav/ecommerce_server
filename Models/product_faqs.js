@@ -1,11 +1,13 @@
-const { product_faqs: productFaqSchema } = require('../Database/Schema');
+const { product_faqs: productFaqSchema, products: productSchema } = require('../Database/Schema');
 const { STATUS_CODES, STATUS } = require('../Config/constant');
 
 class productFaqModel {
 
+    // ---------------- admin route -----------------
+
     // add product faq
     async addProductFaq(bodyData) {
-        
+
         // create product faq
         return await productFaqSchema.create(bodyData);
     }
@@ -60,10 +62,10 @@ class productFaqModel {
     }
 
     // get product faq
-    async getProductFaq(id) { 
+    async getProductFaq(id) {
 
-         // check product faq exist or not
-         let checkProductFaq = await productFaqSchema.findOne({
+        // check product faq exist or not
+        let checkProductFaq = await productFaqSchema.findOne({
             where: {
                 id: id,
                 is_delete: STATUS.NOTDELETED
@@ -77,7 +79,7 @@ class productFaqModel {
         }
 
         return await productFaqSchema.findOne({
-            where:{
+            where: {
                 id: id
             }
         })
@@ -87,8 +89,27 @@ class productFaqModel {
     async getProductFaqList(bodyData) {
 
         return await productFaqSchema.findAndCountAll();
-        
-     }
+
+    }
+
+
+    // ------------------------ vendor faqs -------------------
+    // get product faq list
+    async getVendorProductFaqList(bodyData) {
+
+        return await productFaqSchema.findAndCountAll({
+            where: {
+                is_delete: STATUS.NOTDELETED,
+            }, include: {
+                model: productSchema,
+                where: {
+                    vendor_id: 1,
+                }
+            }
+        });
+
+    }
+
 }
 
 module.exports = productFaqModel

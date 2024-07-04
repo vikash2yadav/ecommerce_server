@@ -9,7 +9,7 @@ module.exports = {
           last_name: "Adam",
           full_name: "Ralph Adam",
           birth_date: "1984-10-26",
-          gender: "male",
+          gender: 1,
           email: "ralph@mailinator.com",
           password: "$2b$10$Ku1kgHoY63PoR5LyFsZCvOXvCqHZxPjSsXjXSbtb2janNb46J2KQ2", //123123123
           contact_no: 6352416987,
@@ -23,7 +23,7 @@ module.exports = {
           last_name: "Adam",
           full_name: "John Adam",
           birth_date: "1974-10-20",
-          gender: "male",
+          gender: 2,
           email: "john@mailinator.com",
           password: "$2b$10$fbezhkTs/AZxk73JqJchyesTFiBR.xs8OQeF8FQDYTGkIt7smpJ32", //123123123
           profile_image: "/users/Noise_Mettle_Smart_Watch_493838766_i_1_1200Wx1200H_300Wx300H_1709892928314_44099.jpg",
@@ -37,7 +37,7 @@ module.exports = {
           last_name: "Deol",
           full_name: "Sunny Deol",
           birth_date: "1974-10-20",
-          gender: "male",
+          gender: 1,
           email: "sunny@mailinator.com",
           password: "$2b$10$BMGwHY/yy3PslnCClujfYuV62kAtzLA237.kIZvX7UATB3iRbMREO", //123123123
           profile_image: "/users/Noise_Mettle_Smart_Watch_493838766_i_1_1200Wx1200H_300Wx300H_1709892928314_44099.jpg",

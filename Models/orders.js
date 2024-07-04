@@ -1,5 +1,5 @@
 const { orders: orderSchema, order_items: orderItemSchema, products: productSchema, partners: partnerSchema } = require('../Database/Schema');
-const { STATUS_CODES, STATUS } = require('../Config/constant');
+const { STATUS_CODES, STATUS, ROLE } = require('../Config/constant');
 
 class orderModel {
 
@@ -94,29 +94,57 @@ class orderModel {
     }
 
 
-    // --------------------------- vendor routes ---------------------------
+    // --------------------------- vendor routes ---------------------------             
 
     // get vendor Order list
     async getVendorOrdersList(bodyData) {
 
         return await orderSchema.findAndCountAll({
             where: {
-                is_delete: STATUS.NOTDELETED
-            },
-            include:
-            {
-                model: orderItemSchema,
-                include: {
-                    model: productSchema,
-                    include: {
-                        model: partnerSchema
-                    }
-                }
+                vendor_id: 1,
+                is_delete: STATUS.NOTDELETED,
             }
-
         });
 
     }
+
+
+
+        // --------------------------- customers routes ---------------------------             
+
+    // get customer Order list
+    async getMyOrdersList(userInfo) {
+
+        return await orderSchema.findAndCountAll({
+            where: {
+                user_id: userInfo?.id,
+                is_delete: STATUS.NOTDELETED,
+            }
+        });
+
+    }
+
+    // get update customer 
+    async updateMyOrder(userInfo, bodyData) {
+
+        return await orderSchema.update(bodyData , {
+            where: {
+                id: userInfo?.id
+            }
+        });
+
+    }
+
+    // get delete customer 
+    async deleteMyOrder(userInfo, id) {
+        return await orderSchema.update({is_delete: STATUS.DELETED} , {
+            where: {
+                id: id
+            }
+        });
+
+    }
+
 }
 
 module.exports = orderModel

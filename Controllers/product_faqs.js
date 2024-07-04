@@ -3,6 +3,8 @@ const productFaqModel = new (require("../Models/product_faqs"));
 
 class productFaqController {
 
+    // ---------------------- admin route ------------------------
+    
     // add product faqs
     async addProductFaq(req, res) {
         try {
@@ -74,6 +76,23 @@ class productFaqController {
         
         try {
             let data = await productFaqModel.getProductFaqList(req?.body);
+
+            return res.handler.success(data);
+
+        } catch (error) {
+            res.handler.serverError(error);
+        }
+    }
+
+
+
+    // ------------------ vendor product faq ------------------
+
+       // get  vendor product faqs list
+       async getVendorProductFaqList(req, res) {
+        
+        try {
+            let data = await productFaqModel.getVendorProductFaqList(req?.body);
 
             return res.handler.success(data);
 

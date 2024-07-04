@@ -7,7 +7,7 @@ module.exports = {
       {
         name: 'book',
         slug: 'book/',
-        suplier_id: 2,
+        vendor_id: 2,
         title: 'this is nice book',
         description: 'very important book', 
         category_id: 2,
@@ -16,7 +16,7 @@ module.exports = {
       },
       {
         name: 'bat',
-        suplier_id: 1,
+        vendor_id: 1,
         slug: '/bat-',
         title: 'english willow bat',
         description: 'this is light weight bat',

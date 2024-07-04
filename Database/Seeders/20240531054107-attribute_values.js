@@ -8,7 +8,7 @@ module.exports = {
       { attribute_id: 2, value: 'smalll' },
     ])
   },
-
+  
 
   async down (queryInterface, Sequelize) {
     return await queryInterface.bulkDelete("attribute_values", null, {});

@@ -3,10 +3,10 @@ const { STATUS_CODES, STATUS_MESSAGES } = require("../Config/constant");
 
 class partnerController {
 
-    // add partner
-    async add(req, res) {
+    // add vendor
+    async addVendor(req, res) {
         try {
-            let data = await partnerModel.add(req?.body, req?.adminInfo);
+            let data = await partnerModel.addVendor(req?.body, req?.adminInfo);
 
             if (data.status == STATUS_CODES.ALREADY_REPORTED) {
                 return res.handler.validationError(undefined, data?.message);
@@ -16,7 +16,26 @@ class partnerController {
                 return res.handler.notFound(undefined, STATUS_MESSAGES.PASSWORD.NOT_SAME);
             }
 
-            return res.handler.success(data);
+            return res.handler.success(data, STATUS_MESSAGES?.VENDOR?.ADDED);
+        } catch (error) {
+            res.handler.serverError(error);
+        }
+    }
+
+     // add delivery partner
+     async addDeliveryPartner(req, res) {
+        try {
+            let data = await partnerModel.addDeliveryPartner(req?.body, req?.adminInfo);
+
+            if (data.status == STATUS_CODES.ALREADY_REPORTED) {
+                return res.handler.validationError(undefined, data?.message);
+            }
+
+            if (data.status == STATUS_CODES.NOT_VALID_DATA) {
+                return res.handler.notFound(undefined, STATUS_MESSAGES.PASSWORD.NOT_SAME);
+            }
+
+            return res.handler.success(data, STATUS_MESSAGES?.DELIVERY_PARTNER?.ADDED);
         } catch (error) {
             res.handler.serverError(error);
         }

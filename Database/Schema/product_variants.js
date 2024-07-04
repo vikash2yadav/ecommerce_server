@@ -2,7 +2,7 @@
 const {
   Model
 } = require('sequelize');
-const {STATUS} = require("../../Config/constant");
+const { STATUS } = require("../../Config/constant");
 module.exports = (sequelize, DataTypes) => {
   class product_variants extends Model {
     static associate(models) {
@@ -18,6 +18,18 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: 'attribute_value_id',
         onDelete: 'cascade'
       });
+      product_variants.hasMany(models.product_reviews, {
+        foreignKey: 'product_variant_id',
+        onDelete: 'cascade'
+      })
+      product_variants.hasMany(models.cart_items, {
+        foreignKey: 'product_variant_id',
+        onDelete: 'cascade'
+      })
+      product_variants.hasMany(models.order_items, {
+        foreignKey: 'product_variant_id',
+        onDelete: 'cascade'
+      })
     }
   }
   product_variants.init({
@@ -73,6 +85,12 @@ module.exports = (sequelize, DataTypes) => {
     image: {
       allowNull: false,
       type: DataTypes.TEXT
+    },
+    is_default: {
+      allowNull: false,
+      type: DataTypes.TINYINT(1),
+      defaultValue: STATUS?.NOT_DEFAULT,
+      commet: "0 => not default 1 => default"
     },
     createdAt: {
       allowNull: false,
