@@ -21,7 +21,7 @@ class categoryModel {
             }
         });
 
-        if (existSlug) {
+        if (existSlug?.name === bodyData?.name || existSlug) {
             return {
                 status: STATUS_CODES?.ALREADY_REPORTED
             }
@@ -106,10 +106,10 @@ class categoryModel {
     }
 
     // get category
-    async getCategory(id, adminInfo) { 
+    async getCategory(id, adminInfo) {
 
-         // check category exist or not
-         let checkCategory = await categorySchema.findOne({
+        // check category exist or not
+        let checkCategory = await categorySchema.findOne({
             where: {
                 id: id,
                 is_delete: STATUS.NOTDELETED
@@ -123,7 +123,7 @@ class categoryModel {
         }
 
         return await categorySchema.findOne({
-            where:{
+            where: {
                 id: id
             }
         })
@@ -133,8 +133,8 @@ class categoryModel {
     async getCategoryList(bodyData, adminInfo) {
 
         return await categorySchema.findAndCountAll();
-        
-     }
+
+    }
 }
 
 module.exports = categoryModel

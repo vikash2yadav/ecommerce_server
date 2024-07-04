@@ -11,6 +11,11 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.BIGINT(20).UNSIGNED
       },
+      parent_id: {
+        allowNull: true,
+        type: Sequelize.BIGINT(20).UNSIGNED,
+        references: {model: 'categories', key: 'id'}
+      },
       name: {
         allowNull: false,
         type: Sequelize.STRING(255)
@@ -30,12 +35,12 @@ module.exports = {
       created_by: {
         allowNull: false,
         type: Sequelize.BIGINT(20).UNSIGNED,
-        references: {model: 'users', key: 'id'}
+        references: {model: 'admins', key: 'id'}
       },
       updated_by: {
         allowNull: true,
         type: Sequelize.BIGINT(20).UNSIGNED,
-        references: {model: 'users', key: 'id'}
+        references: {model: 'admins', key: 'id'}
       },
       status: {
         allowNull: false,

@@ -371,6 +371,7 @@ exports.STATUS_MESSAGES = {
             NAME: 'Please, enter name',
             MODULE: 'Please, enter module',
             SLUG: 'Please, enter slug',
+            PARENT_ID: 'enter parent id',
             ATTRIBUTE_VALUE: 'Please, enter attribute value',
             ATTRIBUTE: 'Please, enter attribute',
             VALUE: 'Please, enter value',

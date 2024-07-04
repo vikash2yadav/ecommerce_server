@@ -10,11 +10,11 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: 'category_id',
         onDelete: 'cascade'
       });
-      categories.belongsTo(models.users,{
+      categories.belongsTo(models.admins,{
           foreignKey: 'created_by',
           onDelete: 'cascade'
       });
-      categories.belongsTo(models.users,{
+      categories.belongsTo(models.admins,{
         foreignKey: 'updated_by',
         onDelete: 'cascade'
       });
@@ -34,6 +34,14 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: 'category_id',
         onDelete: 'cascade'
       })
+      categories.belongsTo(models.categories,{
+        foreignKey: 'parent_id',
+        onDelete: 'cascade'
+      })
+      categories.hasMany(models.categories,{
+        foreignKey: 'parent_id',
+        onDelete: 'cascade'
+      })
     }
   }
   categories.init({
@@ -42,6 +50,11 @@ module.exports = (sequelize, DataTypes) => {
       autoIncrement: true,
       primaryKey: true,
       type: DataTypes.BIGINT(20).UNSIGNED
+    },
+    parent_id: {
+      allowNull: true,
+      type: DataTypes.BIGINT(20).UNSIGNED,
+      references: {model: 'categories', key: 'id'}
     },
     name: {
       allowNull: false,
@@ -62,12 +75,12 @@ module.exports = (sequelize, DataTypes) => {
     created_by: {
       allowNull: false,
       type: DataTypes.BIGINT(20).UNSIGNED,
-      references: {model: 'users', key: 'id'}
+      references: {model: 'admins', key: 'id'}
     },
     updated_by: {
       allowNull: true,
       type: DataTypes.BIGINT(20).UNSIGNED,
-      references: {model: 'users', key: 'id'}
+      references: {model: 'admins', key: 'id'}
     },
     status: {
       allowNull: false,

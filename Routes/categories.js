@@ -7,6 +7,7 @@ const { adminAuth } = new (require("../Middleware/authentication"));
 
 // add category
 router.route('/add').post(validate([
+    body("parent_id").notEmpty().withMessage(STATUS_MESSAGES.VALIDATION.REQUIRED.PARENT_ID),
     body("name").notEmpty().withMessage(STATUS_MESSAGES.VALIDATION.REQUIRED.NAME),
     body("description").notEmpty().withMessage(STATUS_MESSAGES.VALIDATION.REQUIRED.DESCRIPTION)
 ]), adminAuth, categoryController.addCategory);

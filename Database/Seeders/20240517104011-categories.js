@@ -11,9 +11,10 @@ module.exports = {
       createdAt: new Date(),
       updatedAt: new Date()
     }, {
-      name: "hardware",
-      slug: "hardware_gadgets",
-      description: 'this is hardware category',
+      name: "ac",
+      slug: "ac",
+      parent_id: 1,
+      description: 'this is electronic category',
       created_by:2,
       createdAt: new Date(),
       updatedAt: new Date()
