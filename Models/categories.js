@@ -1,5 +1,5 @@
 const slugify = require('slugify');
-const { categories: categorySchema } = require('../Database/Schema');
+const { categories: categorySchema, admins: adminSchema } = require('../Database/Schema');
 const { STATUS_CODES, STATUS } = require('../Config/constant');
 const { Op } = require('sequelize');
 
@@ -108,7 +108,6 @@ class categoryModel {
     // get category
     async getCategory(id, adminInfo) {
 
-        // check category exist or not
         let checkCategory = await categorySchema.findOne({
             where: {
                 id: id,
@@ -180,6 +179,16 @@ class categoryModel {
                 is_delete: STATUS.NOTDELETED,
                 ...filterQuery,
             },
+            include: [
+                {
+                    model: categorySchema,
+                    attributes: ["name"]
+                },
+                {
+                    model: adminSchema,
+                    attributes: ["full_name"]
+                }
+            ],
             offset: firstRecordIndex,
             limit: itemsPerPage,
             order: [...sortBy],
