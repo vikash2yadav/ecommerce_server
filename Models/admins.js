@@ -356,7 +356,7 @@ class adminModel {
             }
         }
 
-        bodyData.status_changed_by = adminInfo?.id;
+        bodyData.updated_by = adminInfo?.id;
 
         return await adminSchema.update(bodyData, {
             where: {
@@ -382,7 +382,7 @@ class adminModel {
             }
         }
 
-        return await adminSchema.update({ is_delete: STATUS.DELETED, deleted_by: adminInfo?.id }, {
+        return await adminSchema.update({ is_delete: STATUS.DELETED, updated_by: adminInfo?.id }, {
             where: {
                 id: id
             }
@@ -442,16 +442,15 @@ class adminModel {
                             roleQuery["name"] = {
                                 [SEQUELIZE.Op.like]: `%${filter.value.trim()}%`,
                             };
-                        } 
-                        if (filter.id === 'language.name') {
+                        }else if (filter.id === 'language.name') {
                             languageQuery["name"] = {
                                 [SEQUELIZE.Op.like]: `%${filter.value.trim()}%`,
                             };
-                        }else if (filter.id === 'createdBy.full_name') {
+                        }else if (filter.id === 'adminCreatedBy.full_name') {
                             createdByQuery["full_name"] = {
                                 [SEQUELIZE.Op.like]: `%${filter.value.trim()}%`,
                             };
-                        } else if (filter.id === 'updatedBy.full_name') {
+                        } else if (filter.id === 'adminUpdatedBy.full_name') {
                             updatedByQuery["full_name"] = {
                                 [SEQUELIZE.Op.like]: `%${filter.value.trim()}%`,
                             };
@@ -483,7 +482,7 @@ class adminModel {
             });
         } else {
             includeConditions.push({
-                model: roleQuery,
+                model: roleSchema,
                 attributes: ["name"],
             });
         }
@@ -491,13 +490,13 @@ class adminModel {
         if (Object.keys(createdByQuery).length > 0) {
             includeConditions.push({
                 model: adminSchema,
-                as: 'createdBy',
+                as: 'adminCreatedBy',
                 where: createdByQuery,
             });
         } else {
             includeConditions.push({
                 model: adminSchema,
-                as: 'createdBy',
+                as: 'adminCreatedBy',
             });
         }
 
@@ -505,26 +504,29 @@ class adminModel {
             includeConditions.push({
                 model: languageSchema,
                 where: languageQuery,
+                 attributes: ["name"],
             });
         } else {
             includeConditions.push({
                 model: languageSchema,
+                 attributes: ["name"],
             });
         }
 
         if (Object.keys(updatedByQuery).length > 0) {
             includeConditions.push({
                 model: adminSchema,
-                as: 'updatedBy',
+                as: 'adminUpdatedBy',
                 where: updatedByQuery,
             });
         } else {
             includeConditions.push({
                 model: adminSchema,
-                as: 'updatedBy',
+                as: 'adminUpdatedBy',
             });
         }
 
+        console.log("roleQuery",roleQuery)
         return await adminSchema.findAndCountAll({
             where:{
                 is_delete: STATUS.NOTDELETED,
@@ -535,7 +537,6 @@ class adminModel {
             limit: itemsPerPage,
             order: sortBy,
         })
-       
     }
 
 

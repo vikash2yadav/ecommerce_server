@@ -32,34 +32,22 @@ module.exports = (sequelize, DataTypes) => {
       });
       admins.belongsTo(models.admins, {
         foreignKey: 'created_by',
+        as: 'adminCreatedBy',
         onDelete: 'cascade'
       });
       admins.belongsTo(models.admins, {
         foreignKey: 'updated_by',
+        as: 'adminUpdatedBy',
         onDelete: 'cascade'
       });
       admins.hasMany(models.admins, {
         foreignKey: 'created_by',
+        // as: 'adminCreatedBy',
         onDelete: 'cascade'
       });
       admins.hasMany(models.admins, {
         foreignKey: 'updated_by',
-        onDelete: 'cascade'
-      });
-      admins.belongsTo(models.admins,{
-        foreignKey: 'deleted_by',
-        onDelete: 'cascade'
-      });
-      admins.hasMany(models.admins,{
-        foreignKey: 'deleted_by',
-        onDelete: 'cascade'
-      });
-      admins.belongsTo(models.admins,{
-        foreignKey: 'status_changed_by',
-        onDelete: 'cascade'
-      });
-      admins.hasMany(models.admins,{
-        foreignKey: 'status_changed_by',
+        // as: 'adminUpdatedBy',
         onDelete: 'cascade'
       });
       admins.hasMany(models.categories, {
@@ -146,12 +134,12 @@ module.exports = (sequelize, DataTypes) => {
     created_by: {
       allowNull: true,
       type: DataTypes.BIGINT(20).UNSIGNED,
-      references: { model: 'admins', key: 'id' }
+      references: { model: 'admins', key: 'id', as: 'createdBy' }
     },
     updated_by: {
       allowNull: true,
       type: DataTypes.BIGINT(20).UNSIGNED,
-      references: { model: 'admins', key: 'id' }
+      references: { model: 'admins', key: 'id', as: 'updatedBy' }
     },
     status: {
       allowNull: false,

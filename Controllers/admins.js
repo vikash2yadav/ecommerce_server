@@ -206,7 +206,7 @@ class adminController {
      // list
      async getAdminList(req,res) {
         try {
-            let data = await adminModel.getAdminList();
+            let data = await adminModel.getAdminList(req?.body);
             
             return res.handler.success(data);
             
