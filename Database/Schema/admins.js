@@ -64,10 +64,12 @@ module.exports = (sequelize, DataTypes) => {
       });
       admins.hasMany(models.categories, {
         foreignKey: 'created_by',
+        as: 'createdBy',
         onDelete: 'cascade'
       })
       admins.hasMany(models.categories, {
         foreignKey: 'updated_by',
+        as: 'updatedBy',
         onDelete: 'cascade'
       })
     }
@@ -122,18 +124,9 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: true,
       type: DataTypes.STRING(255)
     },
-    country_code: {
-      allowNull: true,
-      type: DataTypes.STRING(5),
-      defaultValue: '91'
-    },
     contact_no: {
       allowNull: true,
       type: DataTypes.STRING(255)
-    },
-    alternative_country_code: {
-      allowNull: true,
-      type: DataTypes.STRING(5)
     },
     alternative_contact_no: {
       allowNull: true,
@@ -156,16 +149,6 @@ module.exports = (sequelize, DataTypes) => {
       references: { model: 'admins', key: 'id' }
     },
     updated_by: {
-      allowNull: true,
-      type: DataTypes.BIGINT(20).UNSIGNED,
-      references: { model: 'admins', key: 'id' }
-    },
-    status_changed_by:{
-      allowNull: true,
-      type: DataTypes.BIGINT(20).UNSIGNED,
-      references: { model: 'admins', key: 'id' }
-    },
-    deleted_by: {
       allowNull: true,
       type: DataTypes.BIGINT(20).UNSIGNED,
       references: { model: 'admins', key: 'id' }

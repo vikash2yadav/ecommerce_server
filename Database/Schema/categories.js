@@ -12,10 +12,12 @@ module.exports = (sequelize, DataTypes) => {
       });
       categories.belongsTo(models.admins,{
           foreignKey: 'created_by',
+          as: 'createdBy',
           onDelete: 'cascade'
       });
       categories.belongsTo(models.admins,{
         foreignKey: 'updated_by',
+        as: 'updatedBy',
         onDelete: 'cascade'
       });
       categories.hasMany(models.product_category_relations,{

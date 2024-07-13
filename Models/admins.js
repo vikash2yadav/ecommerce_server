@@ -1,5 +1,5 @@
 const { STATUS_CODES, STATUS, STATUS_MESSAGES } = require('../Config/constant');
-const { admins: adminSchema, admin_tokens: adminTokenSchema, admin_otp_verifications: adminOtpSchema } = require("../Database/Schema");
+const { admins: adminSchema, admin_tokens: adminTokenSchema, languages: languageSchema, admin_otp_verifications: adminOtpSchema, roles: roleSchema } = require("../Database/Schema");
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const moment = require('moment');
@@ -409,11 +409,131 @@ class adminModel {
 
       // list
       async getAdminList(bodyData){
+        var currentPage,itemsPerPage,lastRecordIndex,firstRecordIndex;
+        if (bodyData?.currentPage && bodyData?.itemsPerPage) {
+            currentPage = bodyData.currentPage;
+            itemsPerPage = bodyData.itemsPerPage;
+            lastRecordIndex = currentPage * itemsPerPage;
+            firstRecordIndex = lastRecordIndex - itemsPerPage;
+        }
+
+        var sortBy = [];
+        if (bodyData?.sortBy && bodyData.sortBy.length > 0) {
+            bodyData.sortBy.forEach((sort) => {
+                if (sort.id !== "" && sort.desc !== "") {
+                    if (sort?.desc === true) {
+                        sortBy.push([sort.id, 'desc'])
+                    }else{
+                        sortBy.push([sort.id, 'asc'])
+                    }
+                }
+            });
+        }
+        if (sortBy.length < 1) {
+            sortBy = [['id', 'desc']];
+        }
+
+        var filterQuery = {}, roleQuery = {}, createdByQuery = {}, updatedByQuery = {}, languageQuery={};
+        if (bodyData?.filters && bodyData.filters.length > 0) {
+            bodyData.filters.forEach((filter) => {
+                if (filter.id != "" && filter.value != "") {
+                    if (typeof (filter.value) === 'string') {
+                        if (filter.id === 'role.name') {
+                            roleQuery["name"] = {
+                                [SEQUELIZE.Op.like]: `%${filter.value.trim()}%`,
+                            };
+                        } 
+                        if (filter.id === 'language.name') {
+                            languageQuery["name"] = {
+                                [SEQUELIZE.Op.like]: `%${filter.value.trim()}%`,
+                            };
+                        }else if (filter.id === 'createdBy.full_name') {
+                            createdByQuery["full_name"] = {
+                                [SEQUELIZE.Op.like]: `%${filter.value.trim()}%`,
+                            };
+                        } else if (filter.id === 'updatedBy.full_name') {
+                            updatedByQuery["full_name"] = {
+                                [SEQUELIZE.Op.like]: `%${filter.value.trim()}%`,
+                            };
+                        } else if (filter.id === 'status') {
+                            if (filter?.value === '2') {
+                                filterQuery;
+                            } else {
+                                filterQuery[filter.id] = {
+                                    [SEQUELIZE.Op.like]: `%${filter.value.trim()}%`,
+                                };
+                            }
+                        }
+                        else {
+                            filterQuery[filter.id] = {
+                                [SEQUELIZE.Op.like]: `%${filter.value.trim()}%`,
+                            };
+                        }
+                    }
+                }
+            });
+        }
+
+        const includeConditions = [];
+        if (Object.keys(roleQuery).length > 0) {
+            includeConditions.push({
+                model: roleSchema,
+                where: roleQuery,
+                attributes: ["name"],
+            });
+        } else {
+            includeConditions.push({
+                model: roleQuery,
+                attributes: ["name"],
+            });
+        }
+
+        if (Object.keys(createdByQuery).length > 0) {
+            includeConditions.push({
+                model: adminSchema,
+                as: 'createdBy',
+                where: createdByQuery,
+            });
+        } else {
+            includeConditions.push({
+                model: adminSchema,
+                as: 'createdBy',
+            });
+        }
+
+        if (Object.keys(languageQuery).length > 0) {
+            includeConditions.push({
+                model: languageSchema,
+                where: languageQuery,
+            });
+        } else {
+            includeConditions.push({
+                model: languageSchema,
+            });
+        }
+
+        if (Object.keys(updatedByQuery).length > 0) {
+            includeConditions.push({
+                model: adminSchema,
+                as: 'updatedBy',
+                where: updatedByQuery,
+            });
+        } else {
+            includeConditions.push({
+                model: adminSchema,
+                as: 'updatedBy',
+            });
+        }
 
         return await adminSchema.findAndCountAll({
             where:{
-                is_delete: STATUS.NOTDELETED
-            }
+                is_delete: STATUS.NOTDELETED,
+                ...filterQuery
+            },
+            include: includeConditions,
+            offset: firstRecordIndex,
+            limit: itemsPerPage,
+            order: sortBy,
         })
        
     }

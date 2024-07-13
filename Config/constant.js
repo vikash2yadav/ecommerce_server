@@ -244,7 +244,8 @@ exports.STATUS_MESSAGES = {
         ADDED: "Category has been added successfully.",
         UPDATED: "Category been updated successfully.",
         DELETED: "Category been deleted successfully.",
-        INACTIVE: 'Category status is in active.'
+        INACTIVE: 'Category status is in active.',
+        STATUS_CHANGED: 'Category status changed.'
     },
     ORDER: {
         ADDED: "Order has been placed successfully.",
