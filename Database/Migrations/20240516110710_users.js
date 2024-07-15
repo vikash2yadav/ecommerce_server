@@ -53,21 +53,11 @@ module.exports = {
       },
       gender: {
         allowNull: true,
-        type: Sequelize.TINYINT(1),
-        comment: '1 => Male 2 => Female 3 => Others'
-      },
-      country_code: {
-        allowNull: true,
-        type: Sequelize.STRING(5),
-        defaultValue: '91'
+        type: Sequelize.STRING(255)
       },
       contact_no: {
         allowNull: true,
         type: Sequelize.STRING(255)
-      },
-      alternative_country_code: {
-        allowNull: true,
-        type: Sequelize.STRING(5)
       },
       alternative_contact_no: {
         allowNull: true,
