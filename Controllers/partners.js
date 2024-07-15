@@ -3,44 +3,6 @@ const { STATUS_CODES, STATUS_MESSAGES } = require("../Config/constant");
 
 class partnerController {
 
-    // add vendor
-    async addVendor(req, res) {
-        try {
-            let data = await partnerModel.addVendor(req?.body, req?.adminInfo);
-
-            if (data.status == STATUS_CODES.ALREADY_REPORTED) {
-                return res.handler.validationError(undefined, data?.message);
-            }
-
-            if (data.status == STATUS_CODES.NOT_VALID_DATA) {
-                return res.handler.notFound(undefined, STATUS_MESSAGES.PASSWORD.NOT_SAME);
-            }
-
-            return res.handler.success(data, STATUS_MESSAGES?.VENDOR?.ADDED);
-        } catch (error) {
-            res.handler.serverError(error);
-        }
-    }
-
-     // add delivery partner
-     async addDeliveryPartner(req, res) {
-        try {
-            let data = await partnerModel.addDeliveryPartner(req?.body, req?.adminInfo);
-
-            if (data.status == STATUS_CODES.ALREADY_REPORTED) {
-                return res.handler.validationError(undefined, data?.message);
-            }
-
-            if (data.status == STATUS_CODES.NOT_VALID_DATA) {
-                return res.handler.notFound(undefined, STATUS_MESSAGES.PASSWORD.NOT_SAME);
-            }
-
-            return res.handler.success(data, STATUS_MESSAGES?.DELIVERY_PARTNER?.ADDED);
-        } catch (error) {
-            res.handler.serverError(error);
-        }
-    }
-
     // sign in
     async signIn(req, res) {
         try {
@@ -118,45 +80,6 @@ class partnerController {
         }
     }
 
-    // sign out
-    async signOut(req, res) {
-        try{
-
-            let data = await partnerModel.signOut(req?.partnerInfo, req?.headers);
-
-            if (data?.status === STATUS_CODES?.NOT_FOUND) {
-                res.handler.notFound(undefined, STATUS_MESSAGES?.NOT_FOUND?.USER);
-                return;
-            }
-
-            return res.handler.success(data, STATUS_MESSAGES.TOKEN.LOGOUT);
-
-        }catch(error){
-            res.handler.serverError(error);
-        }
-    }
-
-    // update profile
-    async updateProfile(req, res) {
-        try {
-
-            let data = await partnerModel.updateProfile(req?.body, req?.adminInfo);
-
-            if(data.status === STATUS_CODES?.NOT_FOUND){
-                return res.handler.notFound(undefined, STATUS_MESSAGES.NOT_FOUND.USER);
-            }
-
-            if(data.status === STATUS_CODES?.ALREADY_REPORTED){
-                return res.handler.notFound(undefined, data?.message);
-            }
-
-            return res.handler.success(data, STATUS_MESSAGES.USER.UPDATED)
-
-        } catch (error) {
-            res.handler.serverError(error);
-        }
-    }
-
     // self profile update 
     async updateSelfProfile(req, res) {
         try {
@@ -178,7 +101,126 @@ class partnerController {
         }
     }
 
-    // admin status change
+    // sign out
+    async signOut(req, res) {
+        try{
+
+            let data = await partnerModel.signOut(req?.partnerInfo, req?.headers);
+
+            if (data?.status === STATUS_CODES?.NOT_FOUND) {
+                res.handler.notFound(undefined, STATUS_MESSAGES?.NOT_FOUND?.USER);
+                return;
+            }
+
+            return res.handler.success(data, STATUS_MESSAGES.TOKEN.LOGOUT);
+
+        }catch(error){
+            res.handler.serverError(error);
+        }
+    }
+
+
+
+    //  ---------------------- admin controller -----------------------
+
+    // add vendor
+    async addVendor(req, res) {
+        try {
+            let data = await partnerModel.addVendor(req?.body, req?.adminInfo);
+
+            if (data.status == STATUS_CODES.ALREADY_REPORTED) {
+                return res.handler.validationError(undefined, data?.message);
+            }
+
+            if (data.status == STATUS_CODES.NOT_VALID_DATA) {
+                return res.handler.notFound(undefined, STATUS_MESSAGES.PASSWORD.NOT_SAME);
+            }
+
+            return res.handler.success(data, STATUS_MESSAGES?.VENDOR?.ADDED);
+        } catch (error) {
+            res.handler.serverError(error);
+        }
+    }
+
+    // add delivery partner
+     async addDeliveryPartner(req, res) {
+        try {
+            let data = await partnerModel.addDeliveryPartner(req?.body, req?.adminInfo);
+
+            if (data.status == STATUS_CODES.ALREADY_REPORTED) {
+                return res.handler.validationError(undefined, data?.message);
+            }
+
+            if (data.status == STATUS_CODES.NOT_VALID_DATA) {
+                return res.handler.notFound(undefined, STATUS_MESSAGES.PASSWORD.NOT_SAME);
+            }
+
+            return res.handler.success(data, STATUS_MESSAGES?.DELIVERY_PARTNER?.ADDED);
+        } catch (error) {
+            res.handler.serverError(error);
+        }
+    }
+
+    // update vendor
+    async vendorUpdate(req, res) {
+        try {
+
+            let data = await partnerModel.vendorUpdate(req?.body, req?.adminInfo);
+
+            if(data.status === STATUS_CODES?.NOT_FOUND){
+                return res.handler.notFound(undefined, STATUS_MESSAGES.NOT_FOUND.USER);
+            }
+
+            if(data.status === STATUS_CODES?.ALREADY_REPORTED){
+                return res.handler.notFound(undefined, data?.message);
+            }
+
+            return res.handler.success(data, STATUS_MESSAGES.USER.UPDATED)
+
+        } catch (error) {
+            res.handler.serverError(error);
+        }
+    }
+
+    // update partner
+    async deliveryPartnerUpdate(req, res) {
+        try {
+
+            let data = await partnerModel.deliveryPartnerUpdate(req?.body, req?.adminInfo);
+
+            if(data.status === STATUS_CODES?.NOT_FOUND){
+                return res.handler.notFound(undefined, STATUS_MESSAGES.NOT_FOUND.USER);
+            }
+
+            if(data.status === STATUS_CODES?.ALREADY_REPORTED){
+                return res.handler.notFound(undefined, data?.message);
+            }
+
+            return res.handler.success(data, STATUS_MESSAGES.USER.UPDATED)
+
+        } catch (error) {
+            res.handler.serverError(error);
+        }
+    }
+    
+    // vendor status change
+    async vendorStatusChange(req, res) {
+        try {
+
+            let data = await partnerModel.vendorStatusChange(req?.body, req?.adminInfo,);
+
+            if(data.status === STATUS_CODES.NOT_FOUND){
+                return res.handler.notFound(undefined, STATUS_MESSAGES.NOT_FOUND.USER);
+            }
+
+            return res.handler.success(data, STATUS_MESSAGES.VENDOR.STATUS_CHANGED);
+
+        } catch (error) {
+            return res.handler.serverError(error);
+        }
+    }
+
+    // partner status change
     async partnerStatusChange(req, res) {
         try {
 
@@ -189,6 +231,22 @@ class partnerController {
             }
 
             return res.handler.success(data, STATUS_MESSAGES.ADMIN.STATUS_CHANGED);
+
+        } catch (error) {
+            return res.handler.serverError(error);
+        }
+    }
+
+    // delete vendor
+    async deleteVendor(req,res){
+        try {
+            let data = await partnerModel.deleteVendor(req?.params?.id, req?.adminInfo);
+
+            if(data.status === STATUS_CODES.NOT_FOUND){
+                return res.handler.notFound(undefined, STATUS_MESSAGES.NOT_FOUND.USER);
+            }
+
+            return res.handler.success(data, STATUS_MESSAGES.USER.DELETED);
 
         } catch (error) {
             return res.handler.serverError(error);
@@ -211,10 +269,10 @@ class partnerController {
         }
     }
 
-    // get by id partner
-    async getPartnerById(req,res){
+    // get by id vendor
+    async getVendorById(req,res){
         try {
-            let data = await partnerModel.getPartnerById(req?.params?.id);
+            let data = await partnerModel.getVendorById(req?.params?.id);
 
             if(data.status === STATUS_CODES.NOT_FOUND){
                 return res.handler.notFound(undefined, STATUS_MESSAGES.NOT_FOUND.USER);
@@ -227,11 +285,14 @@ class partnerController {
         }
     }
 
-
-     // get partner list
-     async getPartnerList(req,res){
+    // get by id partner
+    async getPartnerById(req,res){
         try {
-            let data = await partnerModel.getPartnerList(req?.body);
+            let data = await partnerModel.getPartnerById(req?.params?.id);
+
+            if(data.status === STATUS_CODES.NOT_FOUND){
+                return res.handler.notFound(undefined, STATUS_MESSAGES.NOT_FOUND.USER);
+            }
 
             return res.handler.success(data);
 
@@ -251,7 +312,6 @@ class partnerController {
             return res.handler.serverError(error);
         }
     }
-
 
      // get delivery partner list
      async getDeliveryPartnerList(req,res){

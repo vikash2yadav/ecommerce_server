@@ -526,7 +526,6 @@ class adminModel {
             });
         }
 
-        console.log("roleQuery",roleQuery)
         return await adminSchema.findAndCountAll({
             where:{
                 is_delete: STATUS.NOTDELETED,

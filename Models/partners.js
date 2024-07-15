@@ -26,64 +26,6 @@ class partnerModel {
         })
     }
 
-    // add
-    async addVendor(bodyData, adminInfo) {
-
-        // check email
-        let checkEmail = await partnerSchema.findOne({
-            where: {
-                email: bodyData?.email,
-                role_id : ROLE?.VENDOR
-            }
-        })
-
-        if (checkEmail) {
-            return {
-                status: STATUS_CODES.ALREADY_REPORTED,
-                message: STATUS_MESSAGES.EXISTS.EMAIL
-            }
-        }
-
-        let hashedPassword = await bcrypt.hash(bodyData?.password, 10);
-        bodyData.created_by = adminInfo?.id;
-        bodyData.role_id = ROLE?.VENDOR;
-        
-        return await partnerSchema.create({
-            ...bodyData,
-            password: hashedPassword
-        });
-
-    }
-
-     // add
-     async addDeliveryPartner(bodyData, adminInfo) {
-
-        // check email
-        let checkEmail = await partnerSchema.findOne({
-            where: {
-                email: bodyData?.email,
-                role_id : ROLE?.DELIVERY_PARTNER
-            }
-        })
-
-        if (checkEmail) {
-            return {
-                status: STATUS_CODES.ALREADY_REPORTED,
-                message: STATUS_MESSAGES.EXISTS.EMAIL
-            }
-        }
-
-        let hashedPassword = await bcrypt.hash(bodyData?.password, 10);
-        bodyData.created_by = adminInfo?.id;
-        bodyData.role_id = ROLE?.DELIVERY_PARTNER;
-        
-        return await partnerSchema.create({
-            ...bodyData,
-            password: hashedPassword
-        });
-
-    }
-
     // sign in
     async signIn(bodyData) {
 
@@ -344,17 +286,79 @@ class partnerModel {
         })
     }
 
-    // update profile 
-    async updateProfile(bodyData, adminInfo) {
 
-        let checkPartner = await partnerSchema.findOne({
+    // ----------------- admin -------------------
+
+     // add
+     async addVendor(bodyData, adminInfo) {
+
+        // check email
+        let checkEmail = await partnerSchema.findOne({
+            where: {
+                email: bodyData?.email,
+                role_id: ROLE?.VENDOR
+            }
+        })
+
+        if (checkEmail) {
+            return {
+                status: STATUS_CODES.ALREADY_REPORTED,
+                message: STATUS_MESSAGES.EXISTS.EMAIL
+            }
+        }
+
+        let hashedPassword = await bcrypt.hash(bodyData?.password, 10);
+        bodyData.created_by = adminInfo?.id;
+        bodyData.role_id = ROLE?.VENDOR;
+
+        return await partnerSchema.create({
+            ...bodyData,
+            password: hashedPassword
+        });
+
+    }
+
+    // add
+    async addDeliveryPartner(bodyData, adminInfo) {
+
+        // check email
+        let checkEmail = await partnerSchema.findOne({
+            where: {
+                email: bodyData?.email,
+                role_id: ROLE?.DELIVERY_PARTNER
+            }
+        })
+
+        if (checkEmail) {
+            return {
+                status: STATUS_CODES.ALREADY_REPORTED,
+                message: STATUS_MESSAGES.EXISTS.EMAIL
+            }
+        }
+
+        let hashedPassword = await bcrypt.hash(bodyData?.password, 10);
+        bodyData.created_by = adminInfo?.id;
+        bodyData.role_id = ROLE?.DELIVERY_PARTNER;
+
+        return await partnerSchema.create({
+            ...bodyData,
+            password: hashedPassword
+        });
+
+    }
+
+    // update vendor 
+    async vendorUpdate(bodyData, adminInfo) {
+
+        let checkVendor = await partnerSchema.findOne({
             where: {
                 id: bodyData?.id,
+                role_id: ROLE.VENDOR,
                 is_delete: STATUS.NOTDELETED
             }
         })
 
-        if (!checkPartner) {
+        if (!checkVendor) {
             return {
                 status: STATUS_CODES.NOT_FOUND
             }
@@ -384,12 +388,81 @@ class partnerModel {
         })
     }
 
+    // update delivery partner 
+    async deliveryPartnerUpdate(bodyData, adminInfo) {
+
+        let checkDeliveryPartner = await partnerSchema.findOne({
+            where: {
+                id: bodyData?.id,
+                role_id: ROLE.DELIVERY_PARTNER,
+                is_delete: STATUS.NOTDELETED
+            }
+        })
+
+        if (!checkDeliveryPartner) {
+            return {
+                status: STATUS_CODES.NOT_FOUND
+            }
+        }
+
+        // check already email
+        let checkEmail = await partnerSchema.findOne({
+            where: {
+                email: bodyData?.email,
+                id: { [Op.ne]: bodyData?.id }
+            }
+        })
+
+        if (checkEmail) {
+            return {
+                status: STATUS_CODES.ALREADY_REPORTED,
+                message: STATUS_MESSAGES.EXISTS.EMAIL
+            }
+        }
+
+        bodyData.updated_by = adminInfo?.id;
+
+        return await partnerSchema.update(bodyData, {
+            where: {
+                id: bodyData?.id
+            }
+        })
+    }
+
+    // vendor status change
+    async vendorStatusChange(bodyData, adminInfo) {
+
+        let vendor = await partnerSchema.findOne({
+            where: {
+                id: bodyData?.id,
+                role_id: ROLE.VENDOR,
+                is_delete: STATUS.NOTDELETED
+            }
+        })
+
+        if (!vendor) {
+            return {
+                status: STATUS_CODES.NOT_FOUND
+            }
+        }
+
+        bodyData.updated_by = adminInfo?.id;
+
+        return await partnerSchema.update(bodyData, {
+            where: {
+                id: bodyData?.id
+            }
+        })
+
+    }
+
     // partner status change
     async partnerStatusChange(bodyData, adminInfo) {
 
         let partner = await partnerSchema.findOne({
             where: {
                 id: bodyData?.id,
+                role_id: ROLE.DELIVERY_PARTNER,
                 is_delete: STATUS.NOTDELETED
             }
         })
@@ -400,7 +473,7 @@ class partnerModel {
             }
         }
 
-        bodyData.status_changed_by = adminInfo?.id;
+        bodyData.updated_by = adminInfo?.id;
 
         return await partnerSchema.update(bodyData, {
             where: {
@@ -410,21 +483,23 @@ class partnerModel {
 
     }
 
-    // delete partner
-    async deletePartner(id, adminInfo){
-        let data = await partnerSchema.findOne({
+    // delete vendor
+    async deleteVendor(id, adminInfo) {
+
+        let vendor = await partnerSchema.findOne({
             where: {
                 id: id,
+                role_id: ROLE.VENDOR,
                 is_delete: STATUS.NOTDELETED
             }
         })
-        if(!data){
-            return{
+        if (!vendor) {
+            return {
                 status: STATUS_CODES.NOT_FOUND
             }
         }
 
-        return await partnerSchema.update({ is_delete: STATUS.DELETED, deleted_by: adminInfo?.id } , {
+        return await partnerSchema.update({ is_delete: STATUS.DELETED, updated_by: adminInfo?.id }, {
             where: {
                 id: id
             }
@@ -432,16 +507,59 @@ class partnerModel {
 
     }
 
-    // get by id partner
-    async getPartnerById(id){
-        let data = await partnerSchema.findOne({
+    // delete partner
+    async deletePartner(id, adminInfo) {
+
+        let partner = await partnerSchema.findOne({
             where: {
                 id: id,
+                role_id: ROLE.DELIVERY_PARTNER,
                 is_delete: STATUS.NOTDELETED
             }
         })
-        if(!data){
-            return{
+        if (!partner) {
+            return {
+                status: STATUS_CODES.NOT_FOUND
+            }
+        }
+
+        return await partnerSchema.update({ is_delete: STATUS.DELETED, updated_by: adminInfo?.id }, {
+            where: {
+                id: id
+            }
+        })
+
+    }
+
+     // get by id vendor
+     async getVendorById(id) {
+        let data = await partnerSchema.findOne({
+            where: {
+                id: id,
+                role_id: ROLE.VENDOR,
+                is_delete: STATUS.NOTDELETED
+            }
+        })
+        if (!data) {
+            return {
+                status: STATUS_CODES.NOT_FOUND
+            }
+        }
+
+        return data;
+    }
+
+    // get by id partner
+    async getPartnerById(id) {
+        let data = await partnerSchema.findOne({
+            where: {
+                id: id,
+                role_id: ROLE.DELIVERY_PARTNER,
+                is_delete: STATUS.NOTDELETED
+            }
+        })
+        if (!data) {
+            return {
                 status: STATUS_CODES.NOT_FOUND
             }
         }
@@ -450,33 +568,26 @@ class partnerModel {
     }
 
     // get list
-    async getPartnerList(bodyData){
+    async getVendorList(bodyData) {
         return await partnerSchema.findAndCountAll({
             where: {
-               is_delete: STATUS.NOTDELETED
+                is_delete: STATUS.NOTDELETED,
+                role_id: ROLE.VENDOR
             }
         });
     }
 
     // get list
-    async getVendorList(bodyData){
+    async getDeliveryPartnerList(bodyData) {
         return await partnerSchema.findAndCountAll({
             where: {
-               is_delete: STATUS.NOTDELETED,
-               role_id: ROLE.VENDOR
+                is_delete: STATUS.NOTDELETED,
+                role_id: ROLE.DELIVERY_PARTNER
             }
         });
     }
+   
 
-    // get list
-    async getDeliveryPartnerList(bodyData){
-        return await partnerSchema.findAndCountAll({
-            where: {
-               is_delete: STATUS.NOTDELETED,
-               role_id: ROLE.DELIVERY_PARTNER
-            }
-        });
-    }
 }
 
 module.exports = partnerModel;

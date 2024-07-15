@@ -1,7 +1,7 @@
 'use strict';
 
 /** @type {import('sequelize-cli').Migration} */
-const {STATUS} = require("../../Config/constant");
+const {STATUS, ROLE} = require("../../Config/constant");
 
 module.exports = {
   async up(queryInterface, Sequelize) {
@@ -63,30 +63,26 @@ module.exports = {
         allowNull: true,
         type: Sequelize.STRING(255)
       },
+      role_id: {
+        allowNull: false,
+        type: Sequelize.BIGINT(20).UNSIGNED,
+        references: { model: 'roles', key: 'id' },
+        defaultValue: ROLE?.CUSTOMER
+      },
       language_id: {
-        allowNull: true,
+        allowNull: false,
         type: Sequelize.BIGINT(20).UNSIGNED,
         references: { model: 'languages', key: 'id' }
       },
       created_by: {
         allowNull: true,
         type: Sequelize.BIGINT(20).UNSIGNED,
-        references: { model: 'users', key: 'id' }
+        references: { model: 'admins', key: 'id' }
       },
       updated_by: {
         allowNull: true,
         type: Sequelize.BIGINT(20).UNSIGNED,
-        references: { model: 'users', key: 'id' }
-      },
-      status_changed_by:{
-        allowNull: true,
-        type: Sequelize.BIGINT(20).UNSIGNED,
-        references: { model: 'users', key: 'id' }
-      },
-      deleted_by: {
-        allowNull: true,
-        type: Sequelize.BIGINT(20).UNSIGNED,
-        references: { model: 'users', key: 'id' }
+        references: { model: 'admins', key: 'id' }
       },
       status: {
         allowNull: false,

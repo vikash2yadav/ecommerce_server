@@ -2,7 +2,7 @@
 const {
   Model
 } = require('sequelize');
-const { STATUS } = require('../../Config/constant');
+const { STATUS, ROLE } = require('../../Config/constant');
 module.exports = (sequelize, DataTypes) => {
   class users extends Model {
     static associate(models) {
@@ -55,40 +55,26 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: 'user_id',
         onDelete: 'cascade'
       })
-      users.belongsTo(models.users, {
+      users.belongsTo(models.admins, {
         foreignKey: 'created_by',
+        as: 'customerCreatedBy',
         onDelete: 'cascade'
       });
-      users.belongsTo(models.users, {
+      users.belongsTo(models.admins, {
         foreignKey: 'updated_by',
-        onDelete: 'cascade'
-      });
-      users.hasMany(models.users, {
-        foreignKey: 'created_by',
-        onDelete: 'cascade'
-      });
-      users.hasMany(models.users, {
-        foreignKey: 'updated_by',
-        onDelete: 'cascade'
-      });
-      users.belongsTo(models.users,{
-        foreignKey: 'deleted_by',
-        onDelete: 'cascade'
-      });
-      users.hasMany(models.users,{
-        foreignKey: 'deleted_by',
-        onDelete: 'cascade'
-      });
-      users.belongsTo(models.users,{
-        foreignKey: 'status_changed_by',
-        onDelete: 'cascade'
-      });
-      users.hasMany(models.users,{
-        foreignKey: 'status_changed_by',
+        as: 'customerUpdatedBy',
         onDelete: 'cascade'
       });
       users.hasMany(models.user_addresses, {
         foreignKey: 'user_id',
+        onDelete: 'cascade'
+      })
+      users.belongsTo(models.roles, {
+        foreignKey: 'role_id',
+        onDelete: 'cascade'
+      });
+      users.belongsTo(models.languages, {
+        foreignKey: 'language_id',
         onDelete: 'cascade'
       })
     }
@@ -151,30 +137,26 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: true,
       type: DataTypes.STRING(255)
     },
+    role_id: {
+      allowNull: false,
+      type: DataTypes.BIGINT(20).UNSIGNED,
+      references: { model: 'roles', key: 'id' },
+      defaultValue: ROLE?.CUSTOMER
+    },
     language_id: {
-      allowNull: true,
+      allowNull: false,
       type: DataTypes.BIGINT(20).UNSIGNED,
       references: { model: 'languages', key: 'id' }
     },
     created_by: {
       allowNull: true,
       type: DataTypes.BIGINT(20).UNSIGNED,
-      references: { model: 'users', key: 'id' }
+      references: { model: 'admins', key: 'id', as: 'customerCreatedBy' }
     },
     updated_by: {
       allowNull: true,
       type: DataTypes.BIGINT(20).UNSIGNED,
-      references: { model: 'users', key: 'id' }
-    },
-    status_changed_by:{
-      allowNull: true,
-      type: DataTypes.BIGINT(20).UNSIGNED,
-      references: { model: 'users', key: 'id' }
-    },
-    deleted_by: {
-      allowNull: true,
-      type: DataTypes.BIGINT(20).UNSIGNED,
-      references: { model: 'users', key: 'id' }
+      references: { model: 'admins', key: 'id', as: 'customerUpdatedBy' }
     },
     status: {
       allowNull: false,

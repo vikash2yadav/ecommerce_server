@@ -11,6 +11,7 @@ module.exports = {
           birth_date: "1984-10-26",
           gender: 'male',
           email: "ralph@mailinator.com",
+          language_id: 1,
           password: "$2b$10$Ku1kgHoY63PoR5LyFsZCvOXvCqHZxPjSsXjXSbtb2janNb46J2KQ2", //123123123
           contact_no: 6352416987,
           profile_image: "/users/download__1__1709894033875_25399.jpg",
@@ -24,6 +25,7 @@ module.exports = {
           birth_date: "1974-10-20",
           gender: 'female',
           email: "john@mailinator.com",
+          language_id: 2,
           password: "$2b$10$fbezhkTs/AZxk73JqJchyesTFiBR.xs8OQeF8FQDYTGkIt7smpJ32", //123123123
           profile_image: "/users/Noise_Mettle_Smart_Watch_493838766_i_1_1200Wx1200H_300Wx300H_1709892928314_44099.jpg",
           contact_no: 6352417654,
@@ -37,6 +39,7 @@ module.exports = {
           birth_date: "1974-10-20",
           gender: 'others',
           email: "sunny@mailinator.com",
+          language_id: 3,
           password: "$2b$10$BMGwHY/yy3PslnCClujfYuV62kAtzLA237.kIZvX7UATB3iRbMREO", //123123123
           profile_image: "/users/Noise_Mettle_Smart_Watch_493838766_i_1_1200Wx1200H_300Wx300H_1709892928314_44099.jpg",
           contact_no: 63524169874,

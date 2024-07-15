@@ -199,6 +199,7 @@ exports.STATUS_MESSAGES = {
         ADDED: "Vendor has been added successfully.",
         UPDATED: "Vendor been updated successfully.",
         DELETED: "Vendor been deleted successfully.",
+        STATUS_CHANGED: "Vendor status changed successfully"
     },
     CART_ITEM: {
         ADDED: "Cart item has been added successfully.",
@@ -510,7 +511,8 @@ exports.ROLE = {
     SUPER_ADMIN: 1,
     ADMIN: 2,
     VENDOR: 3,
-    DELIVERY_PARTNER: 4
+    DELIVERY_PARTNER: 4,
+    CUSTOMER: 5
 }
 
 // Order status
