@@ -1,5 +1,5 @@
 const { STATUS_CODES, STATUS, STATUS_MESSAGES, ROLE } = require('../Config/constant');
-const { partners: partnerSchema, partner_tokens: partnerTokenSchema, partner_otp_verifications: partnerOtpSchema } = require("../Database/Schema");
+const { partners: partnerSchema, partner_tokens: partnerTokenSchema,languages: languageSchema, admins: adminSchema, partner_otp_verifications: partnerOtpSchema } = require("../Database/Schema");
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const moment = require('moment');
@@ -569,22 +569,232 @@ class partnerModel {
 
     // get list
     async getVendorList(bodyData) {
+        var currentPage,itemsPerPage,lastRecordIndex,firstRecordIndex;
+        if (bodyData?.currentPage && bodyData?.itemsPerPage) {
+            currentPage = bodyData.currentPage;
+            itemsPerPage = bodyData.itemsPerPage;
+            lastRecordIndex = currentPage * itemsPerPage;
+            firstRecordIndex = lastRecordIndex - itemsPerPage;
+        }
+
+        var sortBy = [];
+        if (bodyData?.sortBy && bodyData.sortBy.length > 0) {
+            bodyData.sortBy.forEach((sort) => {
+                if (sort.id !== "" && sort.desc !== "") {
+                    if (sort?.desc === true) {
+                        sortBy.push([sort.id, 'desc'])
+                    }else{
+                        sortBy.push([sort.id, 'asc'])
+                    }
+                }
+            });
+        }
+        if (sortBy.length < 1) {
+            sortBy = [['id', 'desc']];
+        }
+
+        var filterQuery = {}, createdByQuery = {}, updatedByQuery = {}, languageQuery={};
+        if (bodyData?.filters && bodyData.filters.length > 0) {
+            bodyData.filters.forEach((filter) => {
+                if (filter.id != "" && filter.value != "") {
+                    if (typeof (filter.value) === 'string') {
+                         if (filter.id === 'language.name') {
+                            languageQuery["name"] = {
+                                [SEQUELIZE.Op.like]: `%${filter.value.trim()}%`,
+                            };
+                        }else if (filter.id === 'partnerCreatedBy.full_name') {
+                            createdByQuery["full_name"] = {
+                                [SEQUELIZE.Op.like]: `%${filter.value.trim()}%`,
+                            };
+                        } else if (filter.id === 'partnerUpdatedBy.full_name') {
+                            updatedByQuery["full_name"] = {
+                                [SEQUELIZE.Op.like]: `%${filter.value.trim()}%`,
+                            };
+                        } else if (filter.id === 'status') {
+                            if (filter?.value === '2') {
+                                filterQuery;
+                            } else {
+                                filterQuery[filter.id] = {
+                                    [SEQUELIZE.Op.like]: `%${filter.value.trim()}%`,
+                                };
+                            }
+                        }
+                        else {
+                            filterQuery[filter.id] = {
+                                [SEQUELIZE.Op.like]: `%${filter.value.trim()}%`,
+                            };
+                        }
+                    }
+                }
+            });
+        }
+
+        const includeConditions = [];
+        if (Object.keys(createdByQuery).length > 0) {
+            includeConditions.push({
+                model: adminSchema,
+                as: 'partnerCreatedBy',
+                where: createdByQuery,
+            });
+        } else {
+            includeConditions.push({
+                model: adminSchema,
+                as: 'partnerCreatedBy',
+            });
+        }
+
+        if (Object.keys(languageQuery).length > 0) {
+            includeConditions.push({
+                model: languageSchema,
+                where: languageQuery,
+                 attributes: ["name"],
+            });
+        } else {
+            includeConditions.push({
+                model: languageSchema,
+                 attributes: ["name"],
+            });
+        }
+
+        if (Object.keys(updatedByQuery).length > 0) {
+            includeConditions.push({
+                model: adminSchema,
+                as: 'partnerUpdatedBy',
+                where: updatedByQuery,
+            });
+        } else {
+            includeConditions.push({
+                model: adminSchema,
+                as: 'partnerUpdatedBy',
+            });
+        }
+
         return await partnerSchema.findAndCountAll({
-            where: {
+            where:{
                 is_delete: STATUS.NOTDELETED,
-                role_id: ROLE.VENDOR
-            }
-        });
+                ...filterQuery
+            },
+            include: includeConditions,
+            offset: firstRecordIndex,
+            limit: itemsPerPage,
+            order: sortBy,
+        })
     }
 
     // get list
     async getDeliveryPartnerList(bodyData) {
+
+       var currentPage,itemsPerPage,lastRecordIndex,firstRecordIndex;
+        if (bodyData?.currentPage && bodyData?.itemsPerPage) {
+            currentPage = bodyData.currentPage;
+            itemsPerPage = bodyData.itemsPerPage;
+            lastRecordIndex = currentPage * itemsPerPage;
+            firstRecordIndex = lastRecordIndex - itemsPerPage;
+        }
+
+        var sortBy = [];
+        if (bodyData?.sortBy && bodyData.sortBy.length > 0) {
+            bodyData.sortBy.forEach((sort) => {
+                if (sort.id !== "" && sort.desc !== "") {
+                    if (sort?.desc === true) {
+                        sortBy.push([sort.id, 'desc'])
+                    }else{
+                        sortBy.push([sort.id, 'asc'])
+                    }
+                }
+            });
+        }
+        if (sortBy.length < 1) {
+            sortBy = [['id', 'desc']];
+        }
+
+        var filterQuery = {}, createdByQuery = {}, updatedByQuery = {}, languageQuery={};
+        if (bodyData?.filters && bodyData.filters.length > 0) {
+            bodyData.filters.forEach((filter) => {
+                if (filter.id != "" && filter.value != "") {
+                    if (typeof (filter.value) === 'string') {
+                         if (filter.id === 'language.name') {
+                            languageQuery["name"] = {
+                                [SEQUELIZE.Op.like]: `%${filter.value.trim()}%`,
+                            };
+                        }else if (filter.id === 'partnerCreatedBy.full_name') {
+                            createdByQuery["full_name"] = {
+                                [SEQUELIZE.Op.like]: `%${filter.value.trim()}%`,
+                            };
+                        } else if (filter.id === 'partnerUpdatedBy.full_name') {
+                            updatedByQuery["full_name"] = {
+                                [SEQUELIZE.Op.like]: `%${filter.value.trim()}%`,
+                            };
+                        } else if (filter.id === 'status') {
+                            if (filter?.value === '2') {
+                                filterQuery;
+                            } else {
+                                filterQuery[filter.id] = {
+                                    [SEQUELIZE.Op.like]: `%${filter.value.trim()}%`,
+                                };
+                            }
+                        }
+                        else {
+                            filterQuery[filter.id] = {
+                                [SEQUELIZE.Op.like]: `%${filter.value.trim()}%`,
+                            };
+                        }
+                    }
+                }
+            });
+        }
+
+        const includeConditions = [];
+        if (Object.keys(createdByQuery).length > 0) {
+            includeConditions.push({
+                model: adminSchema,
+                as: 'partnerCreatedBy',
+                where: createdByQuery,
+            });
+        } else {
+            includeConditions.push({
+                model: adminSchema,
+                as: 'partnerCreatedBy',
+            });
+        }
+
+        if (Object.keys(languageQuery).length > 0) {
+            includeConditions.push({
+                model: languageSchema,
+                where: languageQuery,
+                 attributes: ["name"],
+            });
+        } else {
+            includeConditions.push({
+                model: languageSchema,
+                 attributes: ["name"],
+            });
+        }
+
+        if (Object.keys(updatedByQuery).length > 0) {
+            includeConditions.push({
+                model: adminSchema,
+                as: 'partnerUpdatedBy',
+                where: updatedByQuery,
+            });
+        } else {
+            includeConditions.push({
+                model: adminSchema,
+                as: 'partnerUpdatedBy',
+            });
+        }
+
         return await partnerSchema.findAndCountAll({
-            where: {
+            where:{
                 is_delete: STATUS.NOTDELETED,
-                role_id: ROLE.DELIVERY_PARTNER
-            }
-        });
+                role_id: ROLE.DELIVERY_PARTNER,
+                ...filterQuery
+            },
+            include: includeConditions,
+            offset: firstRecordIndex,
+            limit: itemsPerPage,
+            order: sortBy,
+        })
     }
    
 

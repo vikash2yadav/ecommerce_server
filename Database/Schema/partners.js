@@ -22,36 +22,14 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: 'partner_id',
         onDelete: ' cascade'
       })
-      partners.belongsTo(models.partners, {
+      partners.belongsTo(models.admins, {
         foreignKey: 'created_by',
+        as: 'partnerCreatedBy',
         onDelete: 'cascade'
       });
-      partners.belongsTo(models.partners, {
+      partners.belongsTo(models.admins, {
         foreignKey: 'updated_by',
-        onDelete: 'cascade'
-      });
-      partners.hasMany(models.partners, {
-        foreignKey: 'created_by',
-        onDelete: 'cascade'
-      });
-      partners.hasMany(models.partners, {
-        foreignKey: 'updated_by',
-        onDelete: 'cascade'
-      });
-      partners.belongsTo(models.partners,{
-        foreignKey: 'deleted_by',
-        onDelete: 'cascade'
-      });
-      partners.hasMany(models.partners,{
-        foreignKey: 'deleted_by',
-        onDelete: 'cascade'
-      });
-      partners.belongsTo(models.partners,{
-        foreignKey: 'status_changed_by',
-        onDelete: 'cascade'
-      });
-      partners.hasMany(models.partners,{
-        foreignKey: 'status_changed_by',
+        as: 'partnerUpdatedBy',
         onDelete: 'cascade'
       });
       partners.hasMany(models.products, {
@@ -122,18 +100,9 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: true,
       type: DataTypes.STRING(255)
     },
-    country_code: {
-      allowNull: true,
-      type: DataTypes.STRING(5),
-      defaultValue: '91'
-    },
     contact_no: {
       allowNull: true,
       type: DataTypes.STRING(255)
-    },
-    alternative_country_code: {
-      allowNull: true,
-      type: DataTypes.STRING(5)
     },
     alternative_contact_no: {
       allowNull: true,
@@ -152,22 +121,12 @@ module.exports = (sequelize, DataTypes) => {
     created_by: {
       allowNull: true,
       type: DataTypes.BIGINT(20).UNSIGNED,
-      references: { model: 'partners', key: 'id' }
+      references: { model: 'admins', key: 'id', as: "partnerCreatedBy" }
     },
     updated_by: {
       allowNull: true,
       type: DataTypes.BIGINT(20).UNSIGNED,
-      references: { model: 'partners', key: 'id' }
-    },
-    status_changed_by:{
-      allowNull: true,
-      type: DataTypes.BIGINT(20).UNSIGNED,
-      references: { model: 'partners', key: 'id' }
-    },
-    deleted_by: {
-      allowNull: true,
-      type: DataTypes.BIGINT(20).UNSIGNED,
-      references: { model: 'partners', key: 'id' }
+      references: { model: 'admins', key: 'id', as: "partnerUpdatedBy" }
     },
     status: {
       allowNull: false,

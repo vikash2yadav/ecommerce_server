@@ -70,6 +70,14 @@ module.exports = (sequelize, DataTypes) => {
         as: 'customerUpdatedBy',
         onDelete: 'cascade'
       });
+      admins.hasMany(models.partners, {
+        foreignKey: 'created_by',
+        onDelete: 'cascade'
+      });
+      admins.hasMany(models.partners, {
+        foreignKey: 'updated_by',
+        onDelete: 'cascade'
+      });
     }
   }
   admins.init({
