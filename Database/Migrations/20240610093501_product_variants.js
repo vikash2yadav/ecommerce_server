@@ -20,10 +20,9 @@ module.exports = {
         type: Sequelize.BIGINT(20).UNSIGNED,
         references: { model: 'attributes', key: 'id' }
       },
-      attribute_value_id: {
+      attribute_value: {
         allowNull: false,
-        type: Sequelize.BIGINT(20).UNSIGNED,
-        references: { model: 'attribute_values', key: 'id' }
+        type: Sequelize.STRING(255)
       },
       price: {
         allowNull: false,

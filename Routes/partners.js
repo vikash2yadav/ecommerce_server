@@ -45,10 +45,7 @@ router.route("/update/self/profile").put(validate([
 
 
 
-
-
-
-/* -------------------- admin routes ------------- */
+//  ------------------- admin route ---------------------
 
 // add vendor
 router.route('/vendor/add').post(validate([
@@ -68,32 +65,49 @@ router.route('/delivery_partner/add').post(validate([
     body("password").notEmpty().withMessage(STATUS_MESSAGES.VALIDATION.REQUIRED.PASSWORD),
 ]), adminAuth, partnerController.addDeliveryPartner);
 
-// status change
-router.route("/status_change").put(validate([
-    body("id").notEmpty().withMessage(STATUS_MESSAGES.VALIDATION.REQUIRED.ID),
-    body("status").notEmpty().withMessage(STATUS_MESSAGES.VALIDATION.REQUIRED.STATUS)
-]), adminAuth, partnerController.partnerStatusChange);
-
-
-// update partner profile
-router.route("/update").put(validate([
+// update vendor 
+router.route("/vendor/update").put(validate([
     body("id").notEmpty().withMessage(STATUS_MESSAGES.VALIDATION.REQUIRED.ID),
     body("first_name").notEmpty().withMessage(STATUS_MESSAGES.VALIDATION.REQUIRED.FIRST_NAME),
     body("last_name").notEmpty().withMessage(STATUS_MESSAGES.VALIDATION.REQUIRED.LAST_NAME),
     body("email").notEmpty().withMessage(STATUS_MESSAGES.VALIDATION.REQUIRED.INVALID_EMAIL),
     body("email").isEmail().withMessage(STATUS_MESSAGES.VALIDATION.REQUIRED.EMAIL),
-]), adminAuth, partnerController.updateProfile);
+]), adminAuth, partnerController.vendorUpdate);
+
+// update partner 
+router.route("/delivery_partner/update").put(validate([
+    body("id").notEmpty().withMessage(STATUS_MESSAGES.VALIDATION.REQUIRED.ID),
+    body("first_name").notEmpty().withMessage(STATUS_MESSAGES.VALIDATION.REQUIRED.FIRST_NAME),
+    body("last_name").notEmpty().withMessage(STATUS_MESSAGES.VALIDATION.REQUIRED.LAST_NAME),
+    body("email").notEmpty().withMessage(STATUS_MESSAGES.VALIDATION.REQUIRED.INVALID_EMAIL),
+    body("email").isEmail().withMessage(STATUS_MESSAGES.VALIDATION.REQUIRED.EMAIL),
+]), adminAuth, partnerController.deliveryPartnerUpdate);
+
+// vendor status change
+router.route("/vendor/status_change").put(validate([
+    body("id").notEmpty().withMessage(STATUS_MESSAGES.VALIDATION.REQUIRED.ID),
+    body("status").notEmpty().withMessage(STATUS_MESSAGES.VALIDATION.REQUIRED.STATUS)
+]), adminAuth, partnerController.vendorStatusChange);
+
+// partner status change
+router.route("/delivery_partner/status_change").put(validate([
+    body("id").notEmpty().withMessage(STATUS_MESSAGES.VALIDATION.REQUIRED.ID),
+    body("status").notEmpty().withMessage(STATUS_MESSAGES.VALIDATION.REQUIRED.STATUS)
+]), adminAuth, partnerController.partnerStatusChange);
+
+// delete vendor
+router.route("/vendor/delete/:id").delete(adminAuth, partnerController.deleteVendor);
 
 // delete partner
-router.route("/delete/:id").delete(adminAuth, partnerController.deletePartner);
+router.route("/delivery_partner/delete/:id").delete(adminAuth, partnerController.deletePartner);
+
+// get by id vendor
+router.route("/vendor/get/:id").get(adminAuth, partnerController.getVendorById);
 
 // get by id partner
-router.route("/get/:id").get(adminAuth, partnerController.getPartnerById);
+router.route("/delivery_partner/get/:id").get(adminAuth, partnerController.getPartnerById);
 
-// get all list partner
-router.route("/get/list").post(partnerController.getPartnerList);
-
-// get all list partner
+// get all list vendor
 router.route("/vendor/get/list").post(partnerController.getVendorList);
 
 // get all list partner

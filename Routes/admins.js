@@ -51,13 +51,12 @@ router.route("/update/self/profile").put(validate([
 
 
 // update admin profile
-router.route("/update/profile").put(validate([
+router.route("/update").put(validate([
     body("id").notEmpty().withMessage(STATUS_MESSAGES.VALIDATION.REQUIRED.ID),
     body("first_name").notEmpty().withMessage(STATUS_MESSAGES.VALIDATION.REQUIRED.FIRST_NAME),
     body("last_name").notEmpty().withMessage(STATUS_MESSAGES.VALIDATION.REQUIRED.LAST_NAME),
     body("email").notEmpty().withMessage(STATUS_MESSAGES.VALIDATION.REQUIRED.INVALID_EMAIL),
     body("email").isEmail().withMessage(STATUS_MESSAGES.VALIDATION.REQUIRED.EMAIL),
-    body("country_code").notEmpty().withMessage(STATUS_MESSAGES.VALIDATION.REQUIRED.COUNTRY_CODE),
     body("contact_no").notEmpty().withMessage(STATUS_MESSAGES.VALIDATION.REQUIRED.CONTACT),
     body("birth_date").notEmpty().withMessage(STATUS_MESSAGES.VALIDATION.REQUIRED.BIRTH_DATE)
 ]), adminAuth, adminController.updateProfile);

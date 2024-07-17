@@ -14,14 +14,6 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: 'attribute_id',
         onDelete: 'cascade'
       });
-      product_variants.belongsTo(models.attribute_values, {
-        foreignKey: 'attribute_value_id',
-        onDelete: 'cascade'
-      });
-      product_variants.hasMany(models.product_reviews, {
-        foreignKey: 'product_variant_id',
-        onDelete: 'cascade'
-      })
       product_variants.hasMany(models.cart_items, {
         foreignKey: 'product_variant_id',
         onDelete: 'cascade'
@@ -49,10 +41,9 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.BIGINT(20).UNSIGNED,
       references: { model: 'attributes', key: 'id' }
     },
-    attribute_value_id: {
+    attribute_value: {
       allowNull: false,
-      type: DataTypes.BIGINT(20).UNSIGNED,
-      references: { model: 'attribute_values', key: 'id' }
+      type: DataTypes.STRING(255),
     },
     price: {
       allowNull: false,

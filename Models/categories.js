@@ -1,5 +1,5 @@
 const slugify = require('slugify');
-const { categories: categorySchema } = require('../Database/Schema');
+const { categories: categorySchema, admins: adminSchema } = require('../Database/Schema');
 const { STATUS_CODES, STATUS } = require('../Config/constant');
 const { Op } = require('sequelize');
 
@@ -17,11 +17,13 @@ class categoryModel {
         // check available slug exist or not
         let existSlug = await categorySchema.findOne({
             where: {
-                slug: bodyData?.slug
+                slug: bodyData?.slug,
+
+                is_delete: STATUS?.NOTDELETED
             }
         });
 
-        if (existSlug) {
+        if (existSlug?.name === bodyData?.name || existSlug) {
             return {
                 status: STATUS_CODES?.ALREADY_REPORTED
             }
@@ -96,9 +98,7 @@ class categoryModel {
             }
         }
 
-        bodyData.updated_by = adminInfo?.id;
-
-        return await categorySchema.update({ is_delete: STATUS.DELETED }, {
+        return await categorySchema.update({ is_delete: STATUS.DELETED, updated_by: adminInfo?.id }, {
             where: {
                 id: id
             }
@@ -106,10 +106,9 @@ class categoryModel {
     }
 
     // get category
-    async getCategory(id, adminInfo) { 
+    async getCategory(id, adminInfo) {
 
-         // check category exist or not
-         let checkCategory = await categorySchema.findOne({
+        let checkCategory = await categorySchema.findOne({
             where: {
                 id: id,
                 is_delete: STATUS.NOTDELETED
@@ -123,7 +122,7 @@ class categoryModel {
         }
 
         return await categorySchema.findOne({
-            where:{
+            where: {
                 id: id
             }
         })
@@ -131,10 +130,202 @@ class categoryModel {
 
     // get category list
     async getCategoryList(bodyData, adminInfo) {
+        var currentPage;
+        var itemsPerPage;
+        var lastRecordIndex;
+        var firstRecordIndex;
+        if (bodyData?.currentPage && bodyData?.itemsPerPage) {
+            currentPage = bodyData.currentPage;
+            itemsPerPage = bodyData.itemsPerPage;
+            lastRecordIndex = currentPage * itemsPerPage;
+            firstRecordIndex = lastRecordIndex - itemsPerPage;
+        }
 
-        return await categorySchema.findAndCountAll();
-        
-     }
+        var sortBy = [];
+        if (bodyData?.sortBy && bodyData.sortBy.length > 0) {
+            bodyData.sortBy.forEach((sort) => {
+                if (sort.id !== "" && sort.desc !== "") {
+                    if (sort?.desc === true) {
+                        sortBy.push([sort.id, 'desc'])
+                    }else{
+                        sortBy.push([sort.id, 'asc'])
+                    }
+                }
+            });
+        }
+        if (sortBy.length < 1) {
+            sortBy = [['id', 'desc']];
+        }
+
+        var filterQuery = {}, parentCategoryQuery = {}, createdByQuery = {}, updatedByQuery = {};
+        if (bodyData?.filters && bodyData.filters.length > 0) {
+            bodyData.filters.forEach((filter) => {
+                if (filter.id != "" && filter.value != "") {
+                    if (typeof (filter.value) === 'string') {
+                        if (filter.id === 'parent_category.name') {
+                            parentCategoryQuery["name"] = {
+                                [SEQUELIZE.Op.like]: `%${filter.value.trim()}%`,
+                            };
+                        } else if (filter.id === 'createdBy.full_name') {
+                            createdByQuery["full_name"] = {
+                                [SEQUELIZE.Op.like]: `%${filter.value.trim()}%`,
+                            };
+                        } else if (filter.id === 'updatedBy.full_name') {
+                            updatedByQuery["full_name"] = {
+                                [SEQUELIZE.Op.like]: `%${filter.value.trim()}%`,
+                            };
+                        } else if (filter.id === 'status') {
+                            if (filter?.value === '2') {
+                                filterQuery;
+                            } else {
+                                filterQuery[filter.id] = {
+                                    [SEQUELIZE.Op.like]: `%${filter.value.trim()}%`,
+                                };
+                            }
+                        }
+                        else {
+                            filterQuery[filter.id] = {
+                                [SEQUELIZE.Op.like]: `%${filter.value.trim()}%`,
+                            };
+                        }
+                    }
+                }
+            });
+        }
+
+        const includeConditions = [];
+        if (Object.keys(parentCategoryQuery).length > 0) {
+            includeConditions.push({
+                model: categorySchema,
+                where: parentCategoryQuery,
+                attributes: ["name"],
+            });
+        } else {
+            includeConditions.push({
+                model: categorySchema,
+                attributes: ["name"],
+            });
+        }
+
+        if (Object.keys(createdByQuery).length > 0) {
+            includeConditions.push({
+                model: adminSchema,
+                as: 'createdBy',
+                where: createdByQuery,
+            });
+        } else {
+            includeConditions.push({
+                model: adminSchema,
+                as: 'createdBy',
+            });
+        }
+
+        if (Object.keys(updatedByQuery).length > 0) {
+            includeConditions.push({
+                model: adminSchema,
+                as: 'updatedBy',
+                where: updatedByQuery,
+            });
+        } else {
+            includeConditions.push({
+                model: adminSchema,
+                as: 'updatedBy',
+            });
+        }
+
+        return await categorySchema.findAndCountAll({
+            where: {
+                is_delete: STATUS.NOTDELETED,
+                ...filterQuery,
+            },
+            include: includeConditions,
+            offset: firstRecordIndex,
+            limit: itemsPerPage,
+            order: sortBy,
+        });
+    }
+
+
+    // category status change
+    async categoryStatusChange(adminInfo, bodyData) {
+
+        let category = await categorySchema.findOne({
+            where: {
+                id: bodyData?.id,
+                is_delete: STATUS.NOTDELETED
+            }
+        })
+
+        if (!category) {
+            return {
+                status: STATUS_CODES.NOT_FOUND
+            }
+        }
+
+        bodyData.updated_by = adminInfo?.id;
+
+        return await categorySchema.update(bodyData, {
+            where: {
+                id: bodyData?.id
+            }
+        })
+
+    }
+
 }
 
 module.exports = categoryModel
+
+
+
+// async getCategoryList(bodyData, adminInfo) {
+//     let currentPage = bodyData?.currentPage || 1;
+//     let itemsPerPage = bodyData?.itemsPerPage || 5;
+//     let lastRecordIndex = currentPage * itemsPerPage;
+//     let firstRecordIndex = lastRecordIndex - itemsPerPage;
+
+//     // Handle sorting
+//     let sortBy = [];
+//     if (bodyData?.sortBy && bodyData.sortBy.length > 0) {
+//         bodyData.sortBy.forEach(sort => {
+//             if (sort?.id) {
+//                 sortBy.push([sort.id, sort.desc ? "desc" : "asc"]);
+//             }
+//         });
+//     }
+//     if (sortBy.length < 1) {
+//         sortBy = [['id', 'desc']];
+//     }
+
+//     // Handle filtering
+//     let filterQuery = {};
+//     if (bodyData?.filters && bodyData.filters.length > 0) {
+//         bodyData.filters.forEach(filter => {
+//             if (filter.id && filter.value) {
+//                 filterQuery[filter.id] = {
+//                     [SEQUELIZE.Op.like]: `%${filter.value.trim()}%`,
+//                 };
+//             }
+//         });
+//     }
+
+//     return await categorySchema.findAndCountAll({
+//         where: {
+//             is_delete: STATUS.NOTDELETED,
+//             ...filterQuery,
+//         },
+//         include: [
+//             {
+//                 model: categorySchema,
+//                 attributes: ["name"]
+//             },
+//             {
+//                 model: adminSchema,
+//                 attributes: ["full_name"]
+//             }
+//         ],
+//         offset: firstRecordIndex,
+//         limit: itemsPerPage,
+//         order: sortBy,
+//     });
+// }

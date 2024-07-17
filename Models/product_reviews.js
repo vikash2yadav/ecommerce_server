@@ -1,4 +1,4 @@
-const { product_reviews: productReviewSchema, products: productSchema } = require('../Database/Schema');
+const { product_reviews: productReviewSchema, attributes: attributeSchema, products: productSchema, users: userSchema } = require('../Database/Schema');
 const { STATUS_CODES, STATUS } = require('../Config/constant');
 
 class productReviewModel {
@@ -6,7 +6,7 @@ class productReviewModel {
     // -------------------- admin route ---------------------
 
     // add product review
-    async addProductReview(bodyData, userInfo) {
+    async addProductReview(bodyData, adminInfo) {
 
         let checkProductReview = await productReviewSchema.findOne({
             where: {
@@ -22,11 +22,13 @@ class productReviewModel {
             }
         }
 
+        bodyData.created_by = adminInfo?.id;
+
         return await productReviewSchema.create(bodyData);
     }
 
     // update product review
-    async updateProductReview(bodyData) {
+    async updateProductReview(bodyData, adminInfo) {
 
         let checkProductReview = await productReviewSchema.findOne({
             where: {
@@ -41,6 +43,34 @@ class productReviewModel {
             }
         }
 
+        bodyData.updated_by = adminInfo?.id;
+
+        return await productReviewSchema.update(bodyData, {
+            where: {
+                id: bodyData?.id
+            }
+        })
+
+    }
+
+    // product review status change
+    async productReviewStatusChange(bodyData, adminInfo) {
+
+        let review = await productReviewSchema.findOne({
+            where: {
+                id: bodyData?.id,
+                is_delete: STATUS.NOTDELETED
+            }
+        })
+
+        if (!review) {
+            return {
+                status: STATUS_CODES.NOT_FOUND
+            }
+        }
+
+        bodyData.updated_by = adminInfo?.id;
+
         return await productReviewSchema.update(bodyData, {
             where: {
                 id: bodyData?.id
@@ -50,7 +80,7 @@ class productReviewModel {
     }
 
     // delete product review
-    async deleteProductReview(id) {
+    async deleteProductReview(id, adminInfo) {
 
         // check product review exist or not
         let checkProductReview = await productReviewSchema.findOne({
@@ -66,7 +96,7 @@ class productReviewModel {
             }
         }
 
-        return await productReviewSchema.update({ is_delete: STATUS.DELETED }, {
+        return await productReviewSchema.update({ is_delete: STATUS.DELETED, updated_by : adminInfo?.id }, {
             where: {
                 id: id
             }
@@ -90,20 +120,110 @@ class productReviewModel {
             }
         }
 
-        return await productReviewSchema.findOne({
-            where: {
-                id: id
-            }
-        })
+        return checkProductReview;
     }
+
 
     // get product review list
     async getProductReviewList(bodyData) {
 
-        return await productReviewSchema.findAndCountAll();
+        var currentPage, itemsPerPage, lastRecordIndex, firstRecordIndex;
+        if (bodyData?.currentPage && bodyData?.itemsPerPage) {
+            currentPage = bodyData.currentPage;
+            itemsPerPage = bodyData.itemsPerPage;
+            lastRecordIndex = currentPage * itemsPerPage;
+            firstRecordIndex = lastRecordIndex - itemsPerPage;
+        }
+
+        var sortBy = [];
+        if (bodyData?.sortBy && bodyData.sortBy.length > 0) {
+            bodyData.sortBy.forEach((sort) => {
+                if (sort.id !== "" && sort.desc !== "") {
+                    if (sort?.desc === true) {
+                        sortBy.push([sort.id, 'desc'])
+                    } else {
+                        sortBy.push([sort.id, 'asc'])
+                    }
+                }
+            });
+        }
+        if (sortBy.length < 1) {
+            sortBy = [['id', 'desc']];
+        }
+
+        var filterQuery = {}, customerQuery = {}, productQuery = {}, productVariantQuery = {};
+        if (bodyData?.filters && bodyData.filters.length > 0) {
+            bodyData.filters.forEach((filter) => {
+                if (filter.id != "" && filter.value != "") {
+                    if (typeof (filter.value) === 'string') {
+                        if (filter.id === 'user.full_name') {
+                            customerQuery["full_name"] = {
+                                [SEQUELIZE.Op.like]: `%${filter.value.trim()}%`,
+                            };
+                        } 
+                        else if (filter.id === 'product.name') {
+                            productQuery["name"] = {
+                                [SEQUELIZE.Op.like]: `%${filter.value.trim()}%`,
+                            };
+                        } else if (filter.id === 'status') {
+                            if (filter?.value === '2') {
+                                filterQuery;
+                            } else {
+                                filterQuery[filter.id] = {
+                                    [SEQUELIZE.Op.like]: `%${filter.value.trim()}%`,
+                                };
+                            }
+                        }
+                        else {
+                            filterQuery[filter.id] = {
+                                [SEQUELIZE.Op.like]: `%${filter.value.trim()}%`,
+                            };
+                        }
+                    }
+                }
+            });
+        }
+
+        const includeConditions = [];
+        if (Object.keys(customerQuery).length > 0) {
+            includeConditions.push({
+                model: userSchema,
+                where: customerQuery,
+            });
+        } else {
+            includeConditions.push({
+                model: userSchema,
+            });
+        }
+
+        if (Object.keys(productQuery).length > 0) {
+            includeConditions.push({
+                model: productSchema,
+                where: productQuery,
+                attributes: ["name"],
+            });
+        } else {
+            includeConditions.push({
+                model: productSchema,
+                attributes: ["name"],
+            });
+        }
+
+        return await productReviewSchema.findAndCountAll({
+            where: {
+                is_delete: STATUS.NOTDELETED,
+                ...filterQuery
+            },
+            include: includeConditions,
+            offset: firstRecordIndex,
+            limit: itemsPerPage,
+            order: sortBy,
+        })
 
     }
 
+
+    
     // add new product review by admin
     async addNewProductReview(bodyData) {
 

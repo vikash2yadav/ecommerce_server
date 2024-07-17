@@ -14,7 +14,6 @@ module.exports = {
         password: "$2b$10$Ku1kgHoY63PoR5LyFsZCvOXvCqHZxPjSsXjXSbtb2janNb46J2KQ2", //123123123
         contact_no: 6352416987,
         profile_image: "/users/download__1__1709894033875_25399.jpg",
-        country_code: "+91",
         role_id: 3,
         createdAt: new Date(),
         updatedAt: new Date(),
@@ -29,7 +28,6 @@ module.exports = {
         password: "$2b$10$fbezhkTs/AZxk73JqJchyesTFiBR.xs8OQeF8FQDYTGkIt7smpJ32", //123123123
         profile_image: "/users/Noise_Mettle_Smart_Watch_493838766_i_1_1200Wx1200H_300Wx300H_1709892928314_44099.jpg",
         contact_no: 6352417654,
-        country_code: "+91",
         role_id: 4,
         createdAt: new Date(),
         updatedAt: new Date(),

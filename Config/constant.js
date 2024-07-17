@@ -199,6 +199,7 @@ exports.STATUS_MESSAGES = {
         ADDED: "Vendor has been added successfully.",
         UPDATED: "Vendor been updated successfully.",
         DELETED: "Vendor been deleted successfully.",
+        STATUS_CHANGED: "Vendor status changed successfully"
     },
     CART_ITEM: {
         ADDED: "Cart item has been added successfully.",
@@ -244,7 +245,8 @@ exports.STATUS_MESSAGES = {
         ADDED: "Category has been added successfully.",
         UPDATED: "Category been updated successfully.",
         DELETED: "Category been deleted successfully.",
-        INACTIVE: 'Category status is in active.'
+        INACTIVE: 'Category status is in active.',
+        STATUS_CHANGED: 'Category status changed.'
     },
     ORDER: {
         ADDED: "Order has been placed successfully.",
@@ -255,6 +257,7 @@ exports.STATUS_MESSAGES = {
         ADDED: "Product review has been placed successfully.",
         UPDATED: "Product review been updated successfully.",
         DELETED: "Product review been deleted successfully.",
+        STATUS_CHANGED: 'Product review status changed successfully'
     },
     CART_PRODUCT:{
         ADDED: "Product has been added in the cart.",
@@ -371,6 +374,7 @@ exports.STATUS_MESSAGES = {
             NAME: 'Please, enter name',
             MODULE: 'Please, enter module',
             SLUG: 'Please, enter slug',
+            PARENT_ID: 'enter parent id',
             ATTRIBUTE_VALUE: 'Please, enter attribute value',
             ATTRIBUTE: 'Please, enter attribute',
             VALUE: 'Please, enter value',
@@ -508,7 +512,8 @@ exports.ROLE = {
     SUPER_ADMIN: 1,
     ADMIN: 2,
     VENDOR: 3,
-    DELIVERY_PARTNER: 4
+    DELIVERY_PARTNER: 4,
+    CUSTOMER: 5
 }
 
 // Order status

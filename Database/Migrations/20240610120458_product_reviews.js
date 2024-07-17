@@ -22,11 +22,6 @@ module.exports = {
         type: Sequelize.BIGINT(20).UNSIGNED,
         references: {model: 'products', key: 'id'}
       },
-      product_variant_id: {
-        allowNull: false,
-        type: Sequelize.BIGINT(20).UNSIGNED,
-        references: {model: 'product_variants', key: 'id'}
-      },
       rating: {
         allowNull: false,
         type: Sequelize.TINYINT(1),
@@ -46,6 +41,16 @@ module.exports = {
         type: Sequelize.TINYINT(1),
         defaultValue: STATUS?.NOTDELETED,
         comment: "0 => Not Deleted 1 => Deleted"
+      },
+      created_by: {
+        allowNull: true,
+        type: Sequelize.BIGINT(20).UNSIGNED,
+        references: { model: 'admins', key: 'id' }
+      },
+      updated_by: {
+        allowNull: true,
+        type: Sequelize.BIGINT(20).UNSIGNED,
+        references: { model: 'admins', key: 'id' }
       },
       createdAt: {
         allowNull: false,

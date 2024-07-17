@@ -22,6 +22,10 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: 'language_id',
         onDelete: 'cascade'
       });
+      languages.hasMany(models.users, {
+        foreignKey: 'language_id',
+        onDelete: 'cascade'
+      })
     }
   }
   languages.init({

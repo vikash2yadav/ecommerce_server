@@ -32,34 +32,70 @@ module.exports = (sequelize, DataTypes) => {
       });
       admins.belongsTo(models.admins, {
         foreignKey: 'created_by',
+        as: 'adminCreatedBy',
         onDelete: 'cascade'
       });
       admins.belongsTo(models.admins, {
         foreignKey: 'updated_by',
+        as: 'adminUpdatedBy',
         onDelete: 'cascade'
       });
       admins.hasMany(models.admins, {
         foreignKey: 'created_by',
+        // as: 'adminCreatedBy',
         onDelete: 'cascade'
       });
       admins.hasMany(models.admins, {
         foreignKey: 'updated_by',
+        // as: 'adminUpdatedBy',
         onDelete: 'cascade'
       });
-      admins.belongsTo(models.admins,{
-        foreignKey: 'deleted_by',
+      admins.hasMany(models.categories, {
+        foreignKey: 'created_by',
+        as: 'createdBy',
+        onDelete: 'cascade'
+      })
+      admins.hasMany(models.categories, {
+        foreignKey: 'updated_by',
+        as: 'updatedBy',
         onDelete: 'cascade'
       });
-      admins.hasMany(models.admins,{
-        foreignKey: 'deleted_by',
+      admins.hasMany(models.users, {
+        foreignKey: 'created_by',
+        as: 'customerCreatedBy',
         onDelete: 'cascade'
       });
-      admins.belongsTo(models.admins,{
-        foreignKey: 'status_changed_by',
+      admins.hasMany(models.users, {
+        foreignKey: 'updated_by',
+        as: 'customerUpdatedBy',
         onDelete: 'cascade'
       });
-      admins.hasMany(models.admins,{
-        foreignKey: 'status_changed_by',
+      admins.hasMany(models.product_reviews, {
+        foreignKey: 'created_by',
+        as: 'productReviewCreatedBy',
+        onDelete: 'cascade'
+      });
+      admins.hasMany(models.product_reviews, {
+        foreignKey: 'updated_by',
+        as: 'productReviewUpdatedBy',
+        onDelete: 'cascade'
+      });
+      admins.hasMany(models.product_faqs, {
+        foreignKey: 'created_by',
+        as: 'productFaqCreatedBy',
+        onDelete: 'cascade'
+      });
+      admins.hasMany(models.product_faqs, {
+        foreignKey: 'updated_by',
+        as: 'productFaqUpdatedBy',
+        onDelete: 'cascade'
+      });
+      admins.hasMany(models.partners, {
+        foreignKey: 'created_by',
+        onDelete: 'cascade'
+      });
+      admins.hasMany(models.partners, {
+        foreignKey: 'updated_by',
         onDelete: 'cascade'
       });
     }
@@ -114,18 +150,9 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: true,
       type: DataTypes.STRING(255)
     },
-    country_code: {
-      allowNull: true,
-      type: DataTypes.STRING(5),
-      defaultValue: '91'
-    },
     contact_no: {
       allowNull: true,
       type: DataTypes.STRING(255)
-    },
-    alternative_country_code: {
-      allowNull: true,
-      type: DataTypes.STRING(5)
     },
     alternative_contact_no: {
       allowNull: true,
@@ -145,22 +172,12 @@ module.exports = (sequelize, DataTypes) => {
     created_by: {
       allowNull: true,
       type: DataTypes.BIGINT(20).UNSIGNED,
-      references: { model: 'admins', key: 'id' }
+      references: { model: 'admins', key: 'id', as: 'createdBy' }
     },
     updated_by: {
       allowNull: true,
       type: DataTypes.BIGINT(20).UNSIGNED,
-      references: { model: 'admins', key: 'id' }
-    },
-    status_changed_by:{
-      allowNull: true,
-      type: DataTypes.BIGINT(20).UNSIGNED,
-      references: { model: 'admins', key: 'id' }
-    },
-    deleted_by: {
-      allowNull: true,
-      type: DataTypes.BIGINT(20).UNSIGNED,
-      references: { model: 'admins', key: 'id' }
+      references: { model: 'admins', key: 'id', as: 'updatedBy' }
     },
     status: {
       allowNull: false,

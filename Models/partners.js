@@ -1,5 +1,5 @@
 const { STATUS_CODES, STATUS, STATUS_MESSAGES, ROLE } = require('../Config/constant');
-const { partners: partnerSchema, partner_tokens: partnerTokenSchema, partner_otp_verifications: partnerOtpSchema } = require("../Database/Schema");
+const { partners: partnerSchema, partner_tokens: partnerTokenSchema,languages: languageSchema, admins: adminSchema, partner_otp_verifications: partnerOtpSchema } = require("../Database/Schema");
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const moment = require('moment');
@@ -24,64 +24,6 @@ class partnerModel {
                 },
             ],
         })
-    }
-
-    // add
-    async addVendor(bodyData, adminInfo) {
-
-        // check email
-        let checkEmail = await partnerSchema.findOne({
-            where: {
-                email: bodyData?.email,
-                role_id : ROLE?.VENDOR
-            }
-        })
-
-        if (checkEmail) {
-            return {
-                status: STATUS_CODES.ALREADY_REPORTED,
-                message: STATUS_MESSAGES.EXISTS.EMAIL
-            }
-        }
-
-        let hashedPassword = await bcrypt.hash(bodyData?.password, 10);
-        bodyData.created_by = adminInfo?.id;
-        bodyData.role_id = ROLE?.VENDOR;
-        
-        return await partnerSchema.create({
-            ...bodyData,
-            password: hashedPassword
-        });
-
-    }
-
-     // add
-     async addDeliveryPartner(bodyData, adminInfo) {
-
-        // check email
-        let checkEmail = await partnerSchema.findOne({
-            where: {
-                email: bodyData?.email,
-                role_id : ROLE?.DELIVERY_PARTNER
-            }
-        })
-
-        if (checkEmail) {
-            return {
-                status: STATUS_CODES.ALREADY_REPORTED,
-                message: STATUS_MESSAGES.EXISTS.EMAIL
-            }
-        }
-
-        let hashedPassword = await bcrypt.hash(bodyData?.password, 10);
-        bodyData.created_by = adminInfo?.id;
-        bodyData.role_id = ROLE?.DELIVERY_PARTNER;
-        
-        return await partnerSchema.create({
-            ...bodyData,
-            password: hashedPassword
-        });
-
     }
 
     // sign in
@@ -344,17 +286,79 @@ class partnerModel {
         })
     }
 
-    // update profile 
-    async updateProfile(bodyData, adminInfo) {
 
-        let checkPartner = await partnerSchema.findOne({
+    // ----------------- admin -------------------
+
+     // add
+     async addVendor(bodyData, adminInfo) {
+
+        // check email
+        let checkEmail = await partnerSchema.findOne({
+            where: {
+                email: bodyData?.email,
+                role_id: ROLE?.VENDOR
+            }
+        })
+
+        if (checkEmail) {
+            return {
+                status: STATUS_CODES.ALREADY_REPORTED,
+                message: STATUS_MESSAGES.EXISTS.EMAIL
+            }
+        }
+
+        let hashedPassword = await bcrypt.hash(bodyData?.password, 10);
+        bodyData.created_by = adminInfo?.id;
+        bodyData.role_id = ROLE?.VENDOR;
+
+        return await partnerSchema.create({
+            ...bodyData,
+            password: hashedPassword
+        });
+
+    }
+
+    // add
+    async addDeliveryPartner(bodyData, adminInfo) {
+
+        // check email
+        let checkEmail = await partnerSchema.findOne({
+            where: {
+                email: bodyData?.email,
+                role_id: ROLE?.DELIVERY_PARTNER
+            }
+        })
+
+        if (checkEmail) {
+            return {
+                status: STATUS_CODES.ALREADY_REPORTED,
+                message: STATUS_MESSAGES.EXISTS.EMAIL
+            }
+        }
+
+        let hashedPassword = await bcrypt.hash(bodyData?.password, 10);
+        bodyData.created_by = adminInfo?.id;
+        bodyData.role_id = ROLE?.DELIVERY_PARTNER;
+
+        return await partnerSchema.create({
+            ...bodyData,
+            password: hashedPassword
+        });
+
+    }
+
+    // update vendor 
+    async vendorUpdate(bodyData, adminInfo) {
+
+        let checkVendor = await partnerSchema.findOne({
             where: {
                 id: bodyData?.id,
+                role_id: ROLE.VENDOR,
                 is_delete: STATUS.NOTDELETED
             }
         })
 
-        if (!checkPartner) {
+        if (!checkVendor) {
             return {
                 status: STATUS_CODES.NOT_FOUND
             }
@@ -384,12 +388,81 @@ class partnerModel {
         })
     }
 
+    // update delivery partner 
+    async deliveryPartnerUpdate(bodyData, adminInfo) {
+
+        let checkDeliveryPartner = await partnerSchema.findOne({
+            where: {
+                id: bodyData?.id,
+                role_id: ROLE.DELIVERY_PARTNER,
+                is_delete: STATUS.NOTDELETED
+            }
+        })
+
+        if (!checkDeliveryPartner) {
+            return {
+                status: STATUS_CODES.NOT_FOUND
+            }
+        }
+
+        // check already email
+        let checkEmail = await partnerSchema.findOne({
+            where: {
+                email: bodyData?.email,
+                id: { [Op.ne]: bodyData?.id }
+            }
+        })
+
+        if (checkEmail) {
+            return {
+                status: STATUS_CODES.ALREADY_REPORTED,
+                message: STATUS_MESSAGES.EXISTS.EMAIL
+            }
+        }
+
+        bodyData.updated_by = adminInfo?.id;
+
+        return await partnerSchema.update(bodyData, {
+            where: {
+                id: bodyData?.id
+            }
+        })
+    }
+
+    // vendor status change
+    async vendorStatusChange(bodyData, adminInfo) {
+
+        let vendor = await partnerSchema.findOne({
+            where: {
+                id: bodyData?.id,
+                role_id: ROLE.VENDOR,
+                is_delete: STATUS.NOTDELETED
+            }
+        })
+
+        if (!vendor) {
+            return {
+                status: STATUS_CODES.NOT_FOUND
+            }
+        }
+
+        bodyData.updated_by = adminInfo?.id;
+
+        return await partnerSchema.update(bodyData, {
+            where: {
+                id: bodyData?.id
+            }
+        })
+
+    }
+
     // partner status change
     async partnerStatusChange(bodyData, adminInfo) {
 
         let partner = await partnerSchema.findOne({
             where: {
                 id: bodyData?.id,
+                role_id: ROLE.DELIVERY_PARTNER,
                 is_delete: STATUS.NOTDELETED
             }
         })
@@ -400,7 +473,7 @@ class partnerModel {
             }
         }
 
-        bodyData.status_changed_by = adminInfo?.id;
+        bodyData.updated_by = adminInfo?.id;
 
         return await partnerSchema.update(bodyData, {
             where: {
@@ -410,21 +483,23 @@ class partnerModel {
 
     }
 
-    // delete partner
-    async deletePartner(id, adminInfo){
-        let data = await partnerSchema.findOne({
+    // delete vendor
+    async deleteVendor(id, adminInfo) {
+
+        let vendor = await partnerSchema.findOne({
             where: {
                 id: id,
+                role_id: ROLE.VENDOR,
                 is_delete: STATUS.NOTDELETED
             }
         })
-        if(!data){
-            return{
+        if (!vendor) {
+            return {
                 status: STATUS_CODES.NOT_FOUND
             }
         }
 
-        return await partnerSchema.update({ is_delete: STATUS.DELETED, deleted_by: adminInfo?.id } , {
+        return await partnerSchema.update({ is_delete: STATUS.DELETED, updated_by: adminInfo?.id }, {
             where: {
                 id: id
             }
@@ -432,16 +507,59 @@ class partnerModel {
 
     }
 
-    // get by id partner
-    async getPartnerById(id){
-        let data = await partnerSchema.findOne({
+    // delete partner
+    async deletePartner(id, adminInfo) {
+
+        let partner = await partnerSchema.findOne({
             where: {
                 id: id,
+                role_id: ROLE.DELIVERY_PARTNER,
                 is_delete: STATUS.NOTDELETED
             }
         })
-        if(!data){
-            return{
+        if (!partner) {
+            return {
+                status: STATUS_CODES.NOT_FOUND
+            }
+        }
+
+        return await partnerSchema.update({ is_delete: STATUS.DELETED, updated_by: adminInfo?.id }, {
+            where: {
+                id: id
+            }
+        })
+
+    }
+
+     // get by id vendor
+     async getVendorById(id) {
+        let data = await partnerSchema.findOne({
+            where: {
+                id: id,
+                role_id: ROLE.VENDOR,
+                is_delete: STATUS.NOTDELETED
+            }
+        })
+        if (!data) {
+            return {
+                status: STATUS_CODES.NOT_FOUND
+            }
+        }
+
+        return data;
+    }
+
+    // get by id partner
+    async getPartnerById(id) {
+        let data = await partnerSchema.findOne({
+            where: {
+                id: id,
+                role_id: ROLE.DELIVERY_PARTNER,
+                is_delete: STATUS.NOTDELETED
+            }
+        })
+        if (!data) {
+            return {
                 status: STATUS_CODES.NOT_FOUND
             }
         }
@@ -450,33 +568,237 @@ class partnerModel {
     }
 
     // get list
-    async getPartnerList(bodyData){
+    async getVendorList(bodyData) {
+        var currentPage,itemsPerPage,lastRecordIndex,firstRecordIndex;
+        if (bodyData?.currentPage && bodyData?.itemsPerPage) {
+            currentPage = bodyData.currentPage;
+            itemsPerPage = bodyData.itemsPerPage;
+            lastRecordIndex = currentPage * itemsPerPage;
+            firstRecordIndex = lastRecordIndex - itemsPerPage;
+        }
+
+        var sortBy = [];
+        if (bodyData?.sortBy && bodyData.sortBy.length > 0) {
+            bodyData.sortBy.forEach((sort) => {
+                if (sort.id !== "" && sort.desc !== "") {
+                    if (sort?.desc === true) {
+                        sortBy.push([sort.id, 'desc'])
+                    }else{
+                        sortBy.push([sort.id, 'asc'])
+                    }
+                }
+            });
+        }
+        if (sortBy.length < 1) {
+            sortBy = [['id', 'desc']];
+        }
+
+        var filterQuery = {}, createdByQuery = {}, updatedByQuery = {}, languageQuery={};
+        if (bodyData?.filters && bodyData.filters.length > 0) {
+            bodyData.filters.forEach((filter) => {
+                if (filter.id != "" && filter.value != "") {
+                    if (typeof (filter.value) === 'string') {
+                         if (filter.id === 'language.name') {
+                            languageQuery["name"] = {
+                                [SEQUELIZE.Op.like]: `%${filter.value.trim()}%`,
+                            };
+                        }else if (filter.id === 'partnerCreatedBy.full_name') {
+                            createdByQuery["full_name"] = {
+                                [SEQUELIZE.Op.like]: `%${filter.value.trim()}%`,
+                            };
+                        } else if (filter.id === 'partnerUpdatedBy.full_name') {
+                            updatedByQuery["full_name"] = {
+                                [SEQUELIZE.Op.like]: `%${filter.value.trim()}%`,
+                            };
+                        } else if (filter.id === 'status') {
+                            if (filter?.value === '2') {
+                                filterQuery;
+                            } else {
+                                filterQuery[filter.id] = {
+                                    [SEQUELIZE.Op.like]: `%${filter.value.trim()}%`,
+                                };
+                            }
+                        }
+                        else {
+                            filterQuery[filter.id] = {
+                                [SEQUELIZE.Op.like]: `%${filter.value.trim()}%`,
+                            };
+                        }
+                    }
+                }
+            });
+        }
+
+        const includeConditions = [];
+        if (Object.keys(createdByQuery).length > 0) {
+            includeConditions.push({
+                model: adminSchema,
+                as: 'partnerCreatedBy',
+                where: createdByQuery,
+            });
+        } else {
+            includeConditions.push({
+                model: adminSchema,
+                as: 'partnerCreatedBy',
+            });
+        }
+
+        if (Object.keys(languageQuery).length > 0) {
+            includeConditions.push({
+                model: languageSchema,
+                where: languageQuery,
+                 attributes: ["name"],
+            });
+        } else {
+            includeConditions.push({
+                model: languageSchema,
+                 attributes: ["name"],
+            });
+        }
+
+        if (Object.keys(updatedByQuery).length > 0) {
+            includeConditions.push({
+                model: adminSchema,
+                as: 'partnerUpdatedBy',
+                where: updatedByQuery,
+            });
+        } else {
+            includeConditions.push({
+                model: adminSchema,
+                as: 'partnerUpdatedBy',
+            });
+        }
+
         return await partnerSchema.findAndCountAll({
-            where: {
-               is_delete: STATUS.NOTDELETED
-            }
-        });
+            where:{
+                is_delete: STATUS.NOTDELETED,
+                role_id: ROLE.VENDOR,
+                ...filterQuery
+            },
+            include: includeConditions,
+            offset: firstRecordIndex,
+            limit: itemsPerPage,
+            order: sortBy,
+        })
     }
 
     // get list
-    async getVendorList(bodyData){
-        return await partnerSchema.findAndCountAll({
-            where: {
-               is_delete: STATUS.NOTDELETED,
-               role_id: ROLE.VENDOR
-            }
-        });
-    }
+    async getDeliveryPartnerList(bodyData) {
 
-    // get list
-    async getDeliveryPartnerList(bodyData){
+       var currentPage,itemsPerPage,lastRecordIndex,firstRecordIndex;
+        if (bodyData?.currentPage && bodyData?.itemsPerPage) {
+            currentPage = bodyData.currentPage;
+            itemsPerPage = bodyData.itemsPerPage;
+            lastRecordIndex = currentPage * itemsPerPage;
+            firstRecordIndex = lastRecordIndex - itemsPerPage;
+        }
+
+        var sortBy = [];
+        if (bodyData?.sortBy && bodyData.sortBy.length > 0) {
+            bodyData.sortBy.forEach((sort) => {
+                if (sort.id !== "" && sort.desc !== "") {
+                    if (sort?.desc === true) {
+                        sortBy.push([sort.id, 'desc'])
+                    }else{
+                        sortBy.push([sort.id, 'asc'])
+                    }
+                }
+            });
+        }
+        if (sortBy.length < 1) {
+            sortBy = [['id', 'desc']];
+        }
+
+        var filterQuery = {}, createdByQuery = {}, updatedByQuery = {}, languageQuery={};
+        if (bodyData?.filters && bodyData.filters.length > 0) {
+            bodyData.filters.forEach((filter) => {
+                if (filter.id != "" && filter.value != "") {
+                    if (typeof (filter.value) === 'string') {
+                         if (filter.id === 'language.name') {
+                            languageQuery["name"] = {
+                                [SEQUELIZE.Op.like]: `%${filter.value.trim()}%`,
+                            };
+                        }else if (filter.id === 'partnerCreatedBy.full_name') {
+                            createdByQuery["full_name"] = {
+                                [SEQUELIZE.Op.like]: `%${filter.value.trim()}%`,
+                            };
+                        } else if (filter.id === 'partnerUpdatedBy.full_name') {
+                            updatedByQuery["full_name"] = {
+                                [SEQUELIZE.Op.like]: `%${filter.value.trim()}%`,
+                            };
+                        } else if (filter.id === 'status') {
+                            if (filter?.value === '2') {
+                                filterQuery;
+                            } else {
+                                filterQuery[filter.id] = {
+                                    [SEQUELIZE.Op.like]: `%${filter.value.trim()}%`,
+                                };
+                            }
+                        }
+                        else {
+                            filterQuery[filter.id] = {
+                                [SEQUELIZE.Op.like]: `%${filter.value.trim()}%`,
+                            };
+                        }
+                    }
+                }
+            });
+        }
+
+        const includeConditions = [];
+        if (Object.keys(createdByQuery).length > 0) {
+            includeConditions.push({
+                model: adminSchema,
+                as: 'partnerCreatedBy',
+                where: createdByQuery,
+            });
+        } else {
+            includeConditions.push({
+                model: adminSchema,
+                as: 'partnerCreatedBy',
+            });
+        }
+
+        if (Object.keys(languageQuery).length > 0) {
+            includeConditions.push({
+                model: languageSchema,
+                where: languageQuery,
+                 attributes: ["name"],
+            });
+        } else {
+            includeConditions.push({
+                model: languageSchema,
+                 attributes: ["name"],
+            });
+        }
+
+        if (Object.keys(updatedByQuery).length > 0) {
+            includeConditions.push({
+                model: adminSchema,
+                as: 'partnerUpdatedBy',
+                where: updatedByQuery,
+            });
+        } else {
+            includeConditions.push({
+                model: adminSchema,
+                as: 'partnerUpdatedBy',
+            });
+        }
+
         return await partnerSchema.findAndCountAll({
-            where: {
-               is_delete: STATUS.NOTDELETED,
-               role_id: ROLE.DELIVERY_PARTNER
-            }
-        });
+            where:{
+                is_delete: STATUS.NOTDELETED,
+                role_id: ROLE.DELIVERY_PARTNER,
+                ...filterQuery
+            },
+            include: includeConditions,
+            offset: firstRecordIndex,
+            limit: itemsPerPage,
+            order: sortBy,
+        })
     }
+   
+
 }
 
 module.exports = partnerModel;

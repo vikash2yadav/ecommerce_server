@@ -85,6 +85,23 @@ class categoryController {
             res.handler.serverError(error);
         }
     }
+
+     // category status change
+     async categoryStatusChange(req, res) {
+        try {
+
+            let data = await categoryModel.categoryStatusChange(req?.adminInfo, req?.body);
+
+            if(data.status === STATUS_CODES.NOT_FOUND){
+                return res.handler.notFound(undefined, STATUS_MESSAGES?.NOT_FOUND?.CATEGORY);
+            }
+
+            return res.handler.success(data, STATUS_MESSAGES?.CATEGORY?.STATUS_CHANGED);
+
+        } catch (error) {
+            return res.handler.serverError(error);
+        }
+    }
 }
 
 module.exports = categoryController

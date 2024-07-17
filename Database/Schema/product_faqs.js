@@ -14,6 +14,16 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: 'product_faq_id',
         onDelete: 'cascade'
       });
+      product_faqs.belongsTo(models.admins, {
+        foreignKey: 'created_by',
+        as: 'productFaqCreatedBy',
+        onDelete: 'cascade'
+      });
+      product_faqs.belongsTo(models.admins, {
+        foreignKey: 'updated_by',
+        as: 'productFaqUpdatedBy',
+        onDelete: 'cascade'
+      });
     }
   }
   product_faqs.init({
@@ -35,6 +45,16 @@ module.exports = (sequelize, DataTypes) => {
     answer: {
       allowNull: false,
       type: DataTypes.TEXT
+    },
+    created_by: {
+      allowNull: true,
+      type: DataTypes.BIGINT(20).UNSIGNED,
+      references: { model: 'admins', key: 'id', as: 'productFaqCreatedBy' }
+    },
+    updated_by: {
+      allowNull: true,
+      type: DataTypes.BIGINT(20).UNSIGNED,
+      references: { model: 'admins', key: 'id', as: 'productFaqUpdatedBy' }
     },
     status: {
       allowNull: false,

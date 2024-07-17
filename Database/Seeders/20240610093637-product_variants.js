@@ -7,7 +7,7 @@ module.exports = {
       {
         product_id: 1,
         attribute_id: 1,
-        attribute_value_id: 1,
+        attribute_value: "red",
         price: 2000,
         discount: 10,
         stock: 2,
@@ -20,7 +20,7 @@ module.exports = {
       {
         product_id: 2,
         attribute_id: 2,
-        attribute_value_id: 1,
+        attribute_value: "small",
         price: 1000,
         discount: 30,
         stock: 20,

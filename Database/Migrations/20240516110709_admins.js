@@ -53,18 +53,9 @@ module.exports = {
         allowNull: true,
         type: Sequelize.STRING(255)
       },
-      country_code: {
-        allowNull: true,
-        type: Sequelize.STRING(5),
-        defaultValue: '91'
-      },
       contact_no: {
         allowNull: true,
         type: Sequelize.STRING(255)
-      },
-      alternative_country_code: {
-        allowNull: true,
-        type: Sequelize.STRING(5)
       },
       alternative_contact_no: {
         allowNull: true,
@@ -76,16 +67,6 @@ module.exports = {
         references: { model: 'admins', key: 'id' }
       },
       updated_by: {
-        allowNull: true,
-        type: Sequelize.BIGINT(20).UNSIGNED,
-        references: { model: 'admins', key: 'id' }
-      },
-      status_changed_by:{
-        allowNull: true,
-        type: Sequelize.BIGINT(20).UNSIGNED,
-        references: { model: 'admins', key: 'id' }
-      },
-      deleted_by: {
         allowNull: true,
         type: Sequelize.BIGINT(20).UNSIGNED,
         references: { model: 'admins', key: 'id' }

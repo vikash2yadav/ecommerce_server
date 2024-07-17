@@ -19,6 +19,10 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: 'role_id',
         onDelete: 'cascade'
       });
+      roles.hasMany(models.users, {
+        foreignKey: 'role_id',
+        onDelete: 'cascade'
+      })
     }
   }
   roles.init({

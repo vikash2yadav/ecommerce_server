@@ -27,4 +27,10 @@ router.route('/get/:id').get(adminAuth, categoryController.getCategory);
 // get all list
 router.route('/get/list').post(adminAuth, categoryController.getCategoryList);
 
+// status change
+router.route("/status_change").put(validate([
+    body("id").notEmpty().withMessage(STATUS_MESSAGES.VALIDATION.REQUIRED.ID),
+    body("status").notEmpty().withMessage(STATUS_MESSAGES.VALIDATION.REQUIRED.STATUS)
+]), adminAuth, categoryController.categoryStatusChange);
+
 module.exports = router;

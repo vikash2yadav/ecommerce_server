@@ -1,7 +1,7 @@
 'use strict';
 
 /** @type {import('sequelize-cli').Migration} */
-const {STATUS} = require("../../Config/constant");
+const {STATUS, ROLE} = require("../../Config/constant");
 
 module.exports = {
   async up(queryInterface, Sequelize) {
@@ -53,50 +53,36 @@ module.exports = {
       },
       gender: {
         allowNull: true,
-        type: Sequelize.TINYINT(1),
-        comment: '1 => Male 2 => Female 3 => Others'
-      },
-      country_code: {
-        allowNull: true,
-        type: Sequelize.STRING(5),
-        defaultValue: '91'
+        type: Sequelize.STRING(255)
       },
       contact_no: {
         allowNull: true,
         type: Sequelize.STRING(255)
       },
-      alternative_country_code: {
-        allowNull: true,
-        type: Sequelize.STRING(5)
-      },
       alternative_contact_no: {
         allowNull: true,
         type: Sequelize.STRING(255)
       },
+      role_id: {
+        allowNull: false,
+        type: Sequelize.BIGINT(20).UNSIGNED,
+        references: { model: 'roles', key: 'id' },
+        defaultValue: ROLE?.CUSTOMER
+      },
       language_id: {
-        allowNull: true,
+        allowNull: false,
         type: Sequelize.BIGINT(20).UNSIGNED,
         references: { model: 'languages', key: 'id' }
       },
       created_by: {
         allowNull: true,
         type: Sequelize.BIGINT(20).UNSIGNED,
-        references: { model: 'users', key: 'id' }
+        references: { model: 'admins', key: 'id' }
       },
       updated_by: {
         allowNull: true,
         type: Sequelize.BIGINT(20).UNSIGNED,
-        references: { model: 'users', key: 'id' }
-      },
-      status_changed_by:{
-        allowNull: true,
-        type: Sequelize.BIGINT(20).UNSIGNED,
-        references: { model: 'users', key: 'id' }
-      },
-      deleted_by: {
-        allowNull: true,
-        type: Sequelize.BIGINT(20).UNSIGNED,
-        references: { model: 'users', key: 'id' }
+        references: { model: 'admins', key: 'id' }
       },
       status: {
         allowNull: false,

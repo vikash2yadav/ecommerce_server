@@ -14,10 +14,16 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: 'user_id',
         onDelete: 'cascade'
       })
-      product_reviews.belongsTo(models.product_variants, {
-        foreignKey: 'product_variant_id',
+      product_reviews.belongsTo(models.admins, {
+        foreignKey: 'created_by',
+        as: 'productReviewCreatedBy',
         onDelete: 'cascade'
-      })
+      });
+      product_reviews.belongsTo(models.admins, {
+        foreignKey: 'updated_by',
+        as: 'productReviewUpdatedBy',
+        onDelete: 'cascade'
+      });
     }
   }
   product_reviews.init({
@@ -37,11 +43,6 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.BIGINT(20).UNSIGNED,
       references: { model: 'products', key: 'id' }
     },
-    product_variant_id: {
-      allowNull: false,
-      type: DataTypes.BIGINT(20).UNSIGNED,
-      references: { model: 'product_variants', key: 'id' }
-    },
     rating: {
       allowNull: false,
       type: DataTypes.TINYINT(1),
@@ -49,6 +50,16 @@ module.exports = (sequelize, DataTypes) => {
     comment: {
       allowNull: false,
       type: DataTypes.TEXT
+    },
+    created_by: {
+      allowNull: true,
+      type: DataTypes.BIGINT(20).UNSIGNED,
+      references: { model: 'admins', key: 'id', as: 'productReviewCreatedBy' }
+    },
+    updated_by: {
+      allowNull: true,
+      type: DataTypes.BIGINT(20).UNSIGNED,
+      references: { model: 'admins', key: 'id', as: 'productReviewUpdatedBy' }
     },
     status: {
       allowNull: false,
