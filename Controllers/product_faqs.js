@@ -8,7 +8,7 @@ class productFaqController {
     // add product faqs
     async addProductFaq(req, res) {
         try {
-            let data = await productFaqModel.addProductFaq(req?.body, req?.userInfo);
+            let data = await productFaqModel.addProductFaq(req?.body, req?.adminInfo);
 
             if (data.status === STATUS_CODES.ALREADY_REPORTED) {
                 return res.handler.conflict(undefined, STATUS_MESSAGES.EXISTS.PRODUCT_FAQ);
@@ -24,7 +24,7 @@ class productFaqController {
     // update product faqs
     async updateProductFaq(req, res) {
         try {
-            let data = await productFaqModel.updateProductFaq(req?.body);
+            let data = await productFaqModel.updateProductFaq(req?.body, req?.adminInfo);
                 
             if (data.status === STATUS_CODES.NOT_FOUND) {
                 return res.handler.notFound(undefined, STATUS_MESSAGES.NOT_FOUND.PRODUCT_FAQ);
@@ -41,7 +41,7 @@ class productFaqController {
     async deleteProductFaq(req, res) {
         try {
 
-            let data = await productFaqModel.deleteProductFaq(req?.params?.id);
+            let data = await productFaqModel.deleteProductFaq(req?.params?.id, req?.adminInfo);
 
             if (data.status === STATUS_CODES.NOT_FOUND) {
                 return res.handler.notFound(undefined, STATUS_MESSAGES.NOT_FOUND.PRODUCT_FAQ);

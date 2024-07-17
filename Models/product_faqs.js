@@ -6,14 +6,15 @@ class productFaqModel {
     // ---------------- admin route -----------------
 
     // add product faq
-    async addProductFaq(bodyData) {
+    async addProductFaq(bodyData, adminInfo) {
 
         // create product faq
+        bodyData.created_by = adminInfo?.id;
         return await productFaqSchema.create(bodyData);
     }
 
     // update product faq
-    async updateProductFaq(bodyData) {
+    async updateProductFaq(bodyData, adminInfo) {
 
         // check product faq exist or not
         let checkProductFaq = await productFaqSchema.findOne({
@@ -29,6 +30,8 @@ class productFaqModel {
             }
         }
 
+        bodyData.updated_by = adminInfo?.id;
+
         return await productFaqSchema.update(bodyData, {
             where: {
                 id: bodyData?.id
@@ -38,7 +41,7 @@ class productFaqModel {
     }
 
     // delete product faq
-    async deleteProductFaq(id) {
+    async deleteProductFaq(id, adminInfo) {
 
         // check product faq exist or not
         let checkProductFaq = await productFaqSchema.findOne({
@@ -54,7 +57,7 @@ class productFaqModel {
             }
         }
 
-        return await productFaqSchema.update({ is_delete: STATUS.DELETED }, {
+        return await productFaqSchema.update({ is_delete: STATUS.DELETED, updated_by: adminInfo?.id }, {
             where: {
                 id: id
             }

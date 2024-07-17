@@ -24,6 +24,16 @@ module.exports = {
         allowNull: false,
         type: Sequelize.TEXT
       },
+      created_by: {
+        allowNull: true,
+        type: Sequelize.BIGINT(20).UNSIGNED,
+        references: { model: 'admins', key: 'id' }
+      },
+      updated_by: {
+        allowNull: true,
+        type: Sequelize.BIGINT(20).UNSIGNED,
+        references: { model: 'admins', key: 'id' }
+      },
       status: {
         allowNull: false,
         type: Sequelize.TINYINT(1),

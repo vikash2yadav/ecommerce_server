@@ -3,6 +3,7 @@ const productFaqController = new (require('../Controllers/product_faqs'));
 const validate = require("../Middleware/validator").validate;
 const { body } = require("express-validator");
 const { STATUS_MESSAGES } = require('../Config/constant');
+const {adminAuth} = new(require('../Middleware/authentication'));
 
 // ------------------- admin route --------------------
 
@@ -11,7 +12,7 @@ router.route('/add').post(validate([
     body("product_id").notEmpty().withMessage(STATUS_MESSAGES.VALIDATION.REQUIRED.PRODUCT),
     body("question").notEmpty().withMessage(STATUS_MESSAGES.VALIDATION.REQUIRED.QUESTION),
     body("answer").notEmpty().withMessage(STATUS_MESSAGES.VALIDATION.REQUIRED.ANSWER),
-]), productFaqController.addProductFaq);
+]),adminAuth, productFaqController.addProductFaq);
 
 // update product faq
 router.route('/update').put(validate([
@@ -19,10 +20,10 @@ router.route('/update').put(validate([
     body("product_id").notEmpty().withMessage(STATUS_MESSAGES.VALIDATION.REQUIRED.PRODUCT),
     body("question").notEmpty().withMessage(STATUS_MESSAGES.VALIDATION.REQUIRED.QUESTION),
     body("answer").notEmpty().withMessage(STATUS_MESSAGES.VALIDATION.REQUIRED.ANSWER),
-]),productFaqController.updateProductFaq);
+]),adminAuth, productFaqController.updateProductFaq);
 
 // delete product faq
-router.route('/delete/:id').delete(productFaqController.deleteProductFaq);
+router.route('/delete/:id').delete(adminAuth, productFaqController.deleteProductFaq);
 
 // get by id
 router.route('/get/:id').get(productFaqController.getProductFaq);

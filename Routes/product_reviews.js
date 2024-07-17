@@ -3,7 +3,7 @@ const productReviewController = new (require('../Controllers/product_reviews'));
 const validate = require("../Middleware/validator").validate;
 const { body } = require("express-validator");
 const { STATUS_MESSAGES } = require('../Config/constant');
-const {adminAuth, partnerAuth} = new(require('../Middleware/authentication'));
+const {adminAuth} = new(require('../Middleware/authentication'));
 //-------------------- admin route ----------------------------
 
 // add product review
@@ -27,7 +27,7 @@ router.route("/status_change").put(validate([
 
 
 // delete product review
-router.route('/delete/:id').delete(productReviewController.deleteProductReview);
+router.route('/delete/:id').delete(adminAuth, productReviewController.deleteProductReview);
 
 // get by id
 router.route('/get/:id').get(productReviewController.getProductReview);
