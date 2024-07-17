@@ -57,7 +57,7 @@ router.route('/vendor/add').post(validate([
 ]), adminAuth, partnerController.addVendor);
 
 // add partner
-router.route('/partner/add').post(validate([
+router.route('/delivery_partner/add').post(validate([
     body("first_name").notEmpty().withMessage(STATUS_MESSAGES.VALIDATION.REQUIRED.FIRST_NAME),
     body("last_name").notEmpty().withMessage(STATUS_MESSAGES.VALIDATION.REQUIRED.LAST_NAME),
     body("email").notEmpty().withMessage(STATUS_MESSAGES.VALIDATION.REQUIRED.INVALID_EMAIL),
@@ -75,7 +75,7 @@ router.route("/vendor/update").put(validate([
 ]), adminAuth, partnerController.vendorUpdate);
 
 // update partner 
-router.route("/vendor/update").put(validate([
+router.route("/delivery_partner/update").put(validate([
     body("id").notEmpty().withMessage(STATUS_MESSAGES.VALIDATION.REQUIRED.ID),
     body("first_name").notEmpty().withMessage(STATUS_MESSAGES.VALIDATION.REQUIRED.FIRST_NAME),
     body("last_name").notEmpty().withMessage(STATUS_MESSAGES.VALIDATION.REQUIRED.LAST_NAME),
@@ -90,7 +90,7 @@ router.route("/vendor/status_change").put(validate([
 ]), adminAuth, partnerController.vendorStatusChange);
 
 // partner status change
-router.route("/vendor/status_change").put(validate([
+router.route("/delivery_partner/status_change").put(validate([
     body("id").notEmpty().withMessage(STATUS_MESSAGES.VALIDATION.REQUIRED.ID),
     body("status").notEmpty().withMessage(STATUS_MESSAGES.VALIDATION.REQUIRED.STATUS)
 ]), adminAuth, partnerController.partnerStatusChange);
@@ -99,19 +99,19 @@ router.route("/vendor/status_change").put(validate([
 router.route("/vendor/delete/:id").delete(adminAuth, partnerController.deleteVendor);
 
 // delete partner
-router.route("/partner/delete/:id").delete(adminAuth, partnerController.deletePartner);
+router.route("/delivery_partner/delete/:id").delete(adminAuth, partnerController.deletePartner);
 
 // get by id vendor
 router.route("/vendor/get/:id").get(adminAuth, partnerController.getVendorById);
 
 // get by id partner
-router.route("/partner/get/:id").get(adminAuth, partnerController.getPartnerById);
+router.route("/delivery_partner/get/:id").get(adminAuth, partnerController.getPartnerById);
 
 // get all list vendor
 router.route("/vendor/get/list").post(partnerController.getVendorList);
 
 // get all list partner
-router.route("/partner/get/list").post(partnerController.getDeliveryPartnerList);
+router.route("/delivery_partner/get/list").post(partnerController.getDeliveryPartnerList);
 
 
 module.exports = router

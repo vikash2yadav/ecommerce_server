@@ -86,7 +86,7 @@ class categoryController {
         }
     }
 
-     // admin status change
+     // category status change
      async categoryStatusChange(req, res) {
         try {
 

@@ -257,6 +257,7 @@ exports.STATUS_MESSAGES = {
         ADDED: "Product review has been placed successfully.",
         UPDATED: "Product review been updated successfully.",
         DELETED: "Product review been deleted successfully.",
+        STATUS_CHANGED: 'Product review status changed successfully'
     },
     CART_PRODUCT:{
         ADDED: "Product has been added in the cart.",

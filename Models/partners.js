@@ -672,6 +672,7 @@ class partnerModel {
         return await partnerSchema.findAndCountAll({
             where:{
                 is_delete: STATUS.NOTDELETED,
+                role_id: ROLE.VENDOR,
                 ...filterQuery
             },
             include: includeConditions,

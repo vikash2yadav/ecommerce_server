@@ -6,10 +6,6 @@ module.exports = (sequelize, DataTypes) => {
   class attributes extends Model {
     
     static associate(models) {
-      attributes.hasMany(models.attribute_values, {
-        foreignKey: 'attribute_id',
-        onDelete: 'cascade'
-       });
        attributes.hasMany(models.product_variants, {
         foreignKey: 'attribute_id',
         onDelete: 'cascade'

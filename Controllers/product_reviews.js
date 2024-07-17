@@ -33,6 +33,23 @@ class productReviewController {
         }
     }
 
+    // product review status change
+    async productReviewStatusChange(req, res) {
+        try {
+
+            let data = await productReviewModel.productReviewStatusChange(req?.adminInfo, req?.body);
+
+            if(data.status === STATUS_CODES.NOT_FOUND){
+                return res.handler.notFound(undefined, STATUS_MESSAGES?.NOT_FOUND?.PRODUCT_REVIEW);
+            }
+
+            return res.handler.success(data, STATUS_MESSAGES?.PRODUCT_REVIEW?.STATUS_CHANGED);
+
+        } catch (error) {
+            return res.handler.serverError(error);
+        }
+    }
+
     // delete product review
     async deleteProductReview(req, res) {
         try {
