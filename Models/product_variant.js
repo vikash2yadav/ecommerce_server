@@ -76,6 +76,28 @@ class productVariantModel {
 
     }
 
+        // get productVariant by id
+        async getProductVariantListByProductId(id) {
+
+            // check productVariant exist or not
+            let checkProductVariant = await productVariantSchema.findAndCountAll({
+                where:{
+                    product_id: id,
+                }
+            })
+            
+    
+            if (!checkProductVariant) {
+                return {
+                    status: STATUS_CODES.NOT_FOUND
+                }
+            }
+    
+            return checkProductVariant
+        }
+
+        
+
 
     // ---------------- vendor product variant -------------------
 

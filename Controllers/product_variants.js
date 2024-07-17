@@ -88,6 +88,23 @@ class productVariantController {
         }
     }
 
+    // get productVariant by id
+    async getProductVariantListByProductId(req, res) {
+        try {
+
+            let data = await productVariantModel.getProductVariantListByProductId(req?.params?.id);
+
+            if (data.status === STATUS_CODES.NOT_FOUND) {
+                return res.handler.notFound(undefined, STATUS_MESSAGES.NOT_FOUND.PRODUCT_VARIANT);
+            }
+
+            return res.handler.success(data);
+
+        } catch (error) {
+            res.handler.serverError(error);
+        }
+    }
+
 
     
     // ---------------- vendor product variant --------------------

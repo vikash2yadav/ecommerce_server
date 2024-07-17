@@ -1,4 +1,4 @@
-const { product_reviews: productReviewSchema, product_variants: productVariantSchema, attributes: attributeSchema, products: productSchema, users: userSchema } = require('../Database/Schema');
+const { product_reviews: productReviewSchema, attributes: attributeSchema, products: productSchema, users: userSchema } = require('../Database/Schema');
 const { STATUS_CODES, STATUS } = require('../Config/constant');
 
 class productReviewModel {
@@ -6,7 +6,7 @@ class productReviewModel {
     // -------------------- admin route ---------------------
 
     // add product review
-    async addProductReview(bodyData, userInfo) {
+    async addProductReview(bodyData, adminInfo) {
 
         let checkProductReview = await productReviewSchema.findOne({
             where: {
@@ -22,11 +22,13 @@ class productReviewModel {
             }
         }
 
+        bodyData.created_by = adminInfo?.id;
+
         return await productReviewSchema.create(bodyData);
     }
 
     // update product review
-    async updateProductReview(bodyData) {
+    async updateProductReview(bodyData, adminInfo) {
 
         let checkProductReview = await productReviewSchema.findOne({
             where: {
@@ -41,6 +43,8 @@ class productReviewModel {
             }
         }
 
+        bodyData.updated_by = adminInfo?.id;
+
         return await productReviewSchema.update(bodyData, {
             where: {
                 id: bodyData?.id
@@ -50,7 +54,7 @@ class productReviewModel {
     }
 
     // product review status change
-    async productReviewStatusChange(adminInfo, bodyData) {
+    async productReviewStatusChange(bodyData, adminInfo) {
 
         let review = await productReviewSchema.findOne({
             where: {
@@ -67,7 +71,7 @@ class productReviewModel {
 
         bodyData.updated_by = adminInfo?.id;
 
-        return await categorySchema.update(bodyData, {
+        return await productReviewSchema.update(bodyData, {
             where: {
                 id: bodyData?.id
             }
@@ -76,7 +80,7 @@ class productReviewModel {
     }
 
     // delete product review
-    async deleteProductReview(id) {
+    async deleteProductReview(id, adminInfo) {
 
         // check product review exist or not
         let checkProductReview = await productReviewSchema.findOne({
@@ -92,7 +96,7 @@ class productReviewModel {
             }
         }
 
-        return await productReviewSchema.update({ is_delete: STATUS.DELETED }, {
+        return await productReviewSchema.update({ is_delete: STATUS.DELETED, updated_by : adminInfo?.id }, {
             where: {
                 id: id
             }
@@ -116,12 +120,9 @@ class productReviewModel {
             }
         }
 
-        return await productReviewSchema.findOne({
-            where: {
-                id: id
-            }
-        })
+        return checkProductReview;
     }
+
 
     // get product review list
     async getProductReviewList(bodyData) {
@@ -159,11 +160,8 @@ class productReviewModel {
                             customerQuery["full_name"] = {
                                 [SEQUELIZE.Op.like]: `%${filter.value.trim()}%`,
                             };
-                        } else if (filter.id === 'product_variant.name') {
-                            productVariantQuery["attribute_value"] = {
-                                [SEQUELIZE.Op.like]: `%${filter.value.trim()}%`,
-                            };
-                        } else if (filter.id === 'product.name') {
+                        } 
+                        else if (filter.id === 'product.name') {
                             productQuery["name"] = {
                                 [SEQUELIZE.Op.like]: `%${filter.value.trim()}%`,
                             };
@@ -211,23 +209,6 @@ class productReviewModel {
             });
         }
 
-        if (Object.keys(productVariantQuery).length > 0) {
-            includeConditions.push({
-                model: productVariantSchema,
-                where: productVariantQuery,
-                include: [{model: attributeSchema,
-                    attributes: ["name"]
-                }]
-            });
-        } else {
-            includeConditions.push({
-                model: productVariantSchema,
-                include: [{model: attributeSchema,
-                    attributes: ["name"]
-                }]
-            });
-        }
-
         return await productReviewSchema.findAndCountAll({
             where: {
                 is_delete: STATUS.NOTDELETED,
@@ -241,6 +222,8 @@ class productReviewModel {
 
     }
 
+
+    
     // add new product review by admin
     async addNewProductReview(bodyData) {
 

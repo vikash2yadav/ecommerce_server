@@ -8,7 +8,7 @@ class productReviewController {
     // add product review
     async addProductReview(req, res) {
         try {
-            let data = await productReviewModel.addProductReview(req?.body, req?.userInfo);
+            let data = await productReviewModel.addProductReview(req?.body, req?.adminInfo);
 
             if (data.status === STATUS_CODES.ALREADY_REPORTED) {
                 return res.handler.conflict(undefined, STATUS_MESSAGES.EXISTS.PRODUCT_REVIEW);
@@ -24,7 +24,7 @@ class productReviewController {
     // update product review
     async updateProductReview(req, res) {
         try {
-            let data = await productReviewModel.updateProductReview(req?.body);
+            let data = await productReviewModel.updateProductReview(req?.body, req.adminInfo);
                 
             return res.handler.success(data, STATUS_MESSAGES.PRODUCT_REVIEW.UPDATED);
 
@@ -37,7 +37,7 @@ class productReviewController {
     async productReviewStatusChange(req, res) {
         try {
 
-            let data = await productReviewModel.productReviewStatusChange(req?.adminInfo, req?.body);
+            let data = await productReviewModel.productReviewStatusChange(req?.body, req?.adminInfo);
 
             if(data.status === STATUS_CODES.NOT_FOUND){
                 return res.handler.notFound(undefined, STATUS_MESSAGES?.NOT_FOUND?.PRODUCT_REVIEW);
@@ -54,7 +54,7 @@ class productReviewController {
     async deleteProductReview(req, res) {
         try {
 
-            let data = await productReviewModel.deleteProductReview(req?.params?.id);
+            let data = await productReviewModel.deleteProductReview(req?.params?.id, req?.adminInfo);
 
             if (data.status === STATUS_CODES.NOT_FOUND) {
                 return res.handler.notFound(undefined, STATUS_MESSAGES.NOT_FOUND.PRODUCT_REVIEW);
@@ -97,6 +97,7 @@ class productReviewController {
         }
     }
 
+    
     // add product review by admin
     async addNewProductReview(req, res) {
         try {

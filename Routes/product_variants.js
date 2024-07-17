@@ -44,6 +44,9 @@ router.route('/get/:id').get(productVariantController.getProductVariant);
 // get  product variant all list
 router.route('/get/list').post(productVariantController.getProductVariantList);
 
+// get  product variant by product id
+router.route('/get_list/:id').get(productVariantController.getProductVariantListByProductId);
+
 
 // -------------------- vendor route -----------------
 
