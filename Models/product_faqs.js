@@ -58,7 +58,7 @@ class productFaqModel {
 
         bodyData.updated_by = adminInfo?.id;
 
-        return await adminSchema.update(bodyData, {
+        return await productFaqSchema.update(bodyData, {
             where: {
                 id: bodyData?.id
             }
