@@ -37,6 +37,23 @@ class productFaqController {
         }
     }
 
+     // product faqs status change
+     async productFaqStatusChange(req, res) {
+        try {
+
+            let data = await productFaqModel.productFaqStatusChange(req?.adminInfo, req?.body);
+
+            if(data.status === STATUS_CODES.NOT_FOUND){
+                return res.handler.notFound(undefined, STATUS_MESSAGES.NOT_FOUND.PRODUCT_FAQ);
+            }
+
+            return res.handler.success(data, STATUS_MESSAGES.PRODUCT_FAQ.STATUS_CHANGED);
+
+        } catch (error) {
+            return res.handler.serverError(error);
+        }
+    }
+
     // delete product faqs
     async deleteProductFaq(req, res) {
         try {

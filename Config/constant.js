@@ -268,6 +268,7 @@ exports.STATUS_MESSAGES = {
         ADDED: "Product faq has been added successfully.",
         UPDATED: "Product faq been updated successfully.",
         DELETED: "Product faq been deleted successfully.",
+        STATUS_CHANGED: 'Faq status changed successfully'
     },
     PRODUCT_FAQ_REACTION:{
         ADDED: "Faq reaction has been added successfully.",

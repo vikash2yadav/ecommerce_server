@@ -22,6 +22,14 @@ router.route('/update').put(validate([
     body("answer").notEmpty().withMessage(STATUS_MESSAGES.VALIDATION.REQUIRED.ANSWER),
 ]),adminAuth, productFaqController.updateProductFaq);
 
+
+// status change
+router.route("/status_change").put(validate([
+    body("id").notEmpty().withMessage(STATUS_MESSAGES.VALIDATION.REQUIRED.ID),
+    body("status").notEmpty().withMessage(STATUS_MESSAGES.VALIDATION.REQUIRED.STATUS)
+]), adminAuth, productFaqController.productFaqStatusChange);
+
+
 // delete product faq
 router.route('/delete/:id').delete(adminAuth, productFaqController.deleteProductFaq);
 
