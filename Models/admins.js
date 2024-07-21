@@ -390,6 +390,7 @@ class adminModel {
 
     }
 
+    
     // get by id
     async getAdminById(id){
         let data = await adminSchema.findOne({

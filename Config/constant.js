@@ -178,7 +178,8 @@ exports.STATUS_MESSAGES = {
         ADDED: "Product has been added successfully.",
         UPDATED: "Product been updated successfully.",
         DELETED: "Product been deleted successfully.",
-        INACTIVE: 'Product status is in active.'
+        INACTIVE: 'Product status is in active.',
+        STATUS_CHANGED: 'Product status changed successfully'
     },
     DELIVERY_PARTNER:{
         ADDED: "Delivery Partner has been added successfully.",

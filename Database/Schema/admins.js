@@ -98,6 +98,10 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: 'updated_by',
         onDelete: 'cascade'
       });
+      admins.hasMany(models.products, {
+        foreignKey: 'last_updated_by',
+        onDelete: 'cascade'
+      })
     }
   }
   admins.init({

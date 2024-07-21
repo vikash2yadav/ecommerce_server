@@ -39,11 +39,28 @@ class productController {
         }
     }
 
+     // product status change
+     async productStatusChange(req, res) {
+        try {
+
+            let data = await productModel.productStatusChange(req?.adminInfo, req?.body);
+
+            if(data.status === STATUS_CODES.NOT_FOUND){
+                return res.handler.notFound(undefined, STATUS_MESSAGES.NOT_FOUND.PRODUCT);
+            }
+
+            return res.handler.success(data, STATUS_MESSAGES.PRODUCT.STATUS_CHANGED);
+
+        } catch (error) {
+            return res.handler.serverError(error);
+        }
+    }
+
     // delete product
     async deleteProduct(req, res) {
         try {
 
-            let data = await productModel.deleteProduct(req?.params?.id);
+            let data = await productModel.deleteProduct(req?.params?.id, req?.adminInfo);
 
             if (data.status === STATUS_CODES.NOT_FOUND) {
                 return res.handler.notFound(undefined, STATUS_MESSAGES.NOT_FOUND.PRODUCT);

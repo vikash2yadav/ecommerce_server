@@ -15,7 +15,7 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: 'vendor_id',
         onDelete: 'cascade'
       });
-      products.belongsTo(models.users, {
+      products.belongsTo(models.admins, {
         foreignKey: 'last_updated_by',
         onDelete: 'cascade'
       });
@@ -97,7 +97,7 @@ module.exports = (sequelize, DataTypes) => {
     last_updated_by: {
       allowNull: true,
       type: DataTypes.BIGINT(20).UNSIGNED,
-      references: {model: 'users', key: 'id'}
+      references: {model: 'admins', key: 'id'}
     },
     status: {
       allowNull: false,

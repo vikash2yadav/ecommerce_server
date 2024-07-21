@@ -1,6 +1,6 @@
 const slugify = require('slugify');
-const { products: productSchema, product_variants: productVariantSchema, attributes: attributeSchema, attribute_values: attributeValueSchema } = require('../Database/Schema');
-const { STATUS_CODES, STATUS, STATUS_MESSAGES } = require('../Config/constant');
+const { products: productSchema, product_variants: productVariantSchema, categories: categorySchema, partners: partnerSchema, attributes: attributeSchema, attribute_values: attributeValueSchema, admins: adminSchema } = require('../Database/Schema');
+const { STATUS_CODES, STATUS } = require('../Config/constant');
 const { Op } = require('sequelize');
 
 class productModel {
@@ -76,8 +76,34 @@ class productModel {
 
     }
 
+     // product status change
+     async productStatusChange(adminInfo, bodyData) {
+
+        let product = await productSchema.findOne({
+            where: {
+                id: bodyData?.id,
+                is_delete: STATUS.NOTDELETED
+            }
+        })
+
+        if (!product) {
+            return {
+                status: STATUS_CODES.NOT_FOUND
+            }
+        }
+
+        bodyData.last_updated_by = adminInfo?.id;
+
+        return await productSchema.update(bodyData, {
+            where: {
+                id: bodyData?.id
+            }
+        })
+
+    }
+
     // delete product
-    async deleteProduct(id) {
+    async deleteProduct(id, adminInfo) {
 
         // check product exist or not
         let checkProduct = await productSchema.findOne({
@@ -93,7 +119,8 @@ class productModel {
             }
         }
 
-        return await productSchema.update({ is_delete: STATUS.DELETED }, {
+        
+        return await productSchema.update({ is_delete: STATUS.DELETED, last_updated_by: adminInfo?.id }, {
             where: {
                 id: id
             }
@@ -108,7 +135,16 @@ class productModel {
             where: {
                 id: id,
                 is_delete: STATUS.NOTDELETED
-            }
+            },
+            include:
+            {
+                model: productVariantSchema,
+                include: [
+                    {
+                        model: attributeSchema
+                    }
+                ]
+            },
         })
 
         if (!checkProduct) {
@@ -117,35 +153,121 @@ class productModel {
             }
         }
 
-        return await productSchema.findOne({
-            where: {
-                id: id
-            },
-            include: 
-                {
-                    model: productVariantSchema,
-                    where:{
-                        attribute_id: 1
-                    },
-                    include: [
-                        {
-                            model: attributeSchema
-                        },
-                        {
-                            model: attributeValueSchema
-                        }
-                    ]
-                },
-            
-        })
+        return checkProduct;
     }
 
     // get product list
     async getProductList(bodyData) {
+        var currentPage, itemsPerPage, lastRecordIndex, firstRecordIndex;
+        if (bodyData?.currentPage && bodyData?.itemsPerPage) {
+            currentPage = bodyData.currentPage;
+            itemsPerPage = bodyData.itemsPerPage;
+            lastRecordIndex = currentPage * itemsPerPage;
+            firstRecordIndex = lastRecordIndex - itemsPerPage;
+        }
 
-        let data = await productSchema.findAndCountAll();
-        return data;
+        var sortBy = [];
+        if (bodyData?.sortBy && bodyData.sortBy.length > 0) {
+            bodyData.sortBy.forEach((sort) => {
+                if (sort.id !== "" && sort.desc !== "") {
+                    if (sort?.desc === true) {
+                        sortBy.push([sort.id, 'desc'])
+                    } else {
+                        sortBy.push([sort.id, 'asc'])
+                    }
+                }
+            });
+        }
+        if (sortBy.length < 1) {
+            sortBy = [['id', 'desc']];
+        }
 
+        var filterQuery = {}, partnerQuery = {}, categoryQuery = {}, adminQuery = {};
+        if (bodyData?.filters && bodyData.filters.length > 0) {
+            bodyData.filters.forEach((filter) => {
+                if (filter.id != "" && filter.value != "") {
+                    if (typeof (filter.value) === 'string') {
+                        if (filter.id === 'partner.full_name') {
+                            partnerQuery["full_name"] = {
+                                [SEQUELIZE.Op.like]: `%${filter.value.trim()}%`,
+                            };
+                        } else if (filter.id === 'category.name') {
+                            categoryQuery["name"] = {
+                                [SEQUELIZE.Op.like]: `%${filter.value.trim()}%`,
+                            };
+                        } else if (filter.id === 'last_updated_by.full_name') {
+                            adminQuery["full_name"] = {
+                                [SEQUELIZE.Op.like]: `%${filter.value.trim()}%`,
+                            };
+                        } else if (filter.id === 'status') {
+                            if (filter?.value === '2') {
+                                filterQuery;
+                            } else {
+                                filterQuery[filter.id] = {
+                                    [SEQUELIZE.Op.like]: `%${filter.value.trim()}%`,
+                                };
+                            }
+                        }
+                        else {
+                            filterQuery[filter.id] = {
+                                [SEQUELIZE.Op.like]: `%${filter.value.trim()}%`,
+                            };
+                        }
+                    }
+                }
+            });
+        }
+
+        const includeConditions = [];
+        if (Object.keys(partnerQuery).length > 0) {
+            includeConditions.push({
+                model: partnerSchema,
+                where: partnerQuery,
+            });
+        } else {
+            includeConditions.push({
+                model: partnerSchema,
+            });
+        }
+
+        if (Object.keys(categoryQuery).length > 0) {
+            includeConditions.push({
+                model: categorySchema,
+                where: categoryQuery,
+                attributes: ["name"],
+            });
+        } else {
+            includeConditions.push({
+                model: categorySchema,
+                attributes: ["name"],
+            });
+        }
+
+        if (Object.keys(adminQuery).length > 0) {
+            includeConditions.push({
+                model: adminSchema,
+                where: adminQuery,
+            });
+        } else {
+            includeConditions.push({
+                model: adminSchema,
+            });
+        }
+
+        includeConditions.push({
+            model: productVariantSchema
+        })
+        
+        return await productSchema.findAndCountAll({
+            where: {
+                is_delete: STATUS.NOTDELETED,
+                ...filterQuery
+            },
+            include: includeConditions,
+            offset: firstRecordIndex,
+            limit: itemsPerPage,
+            order: sortBy,
+        })
     }
 
 

@@ -40,7 +40,7 @@ module.exports = {
       last_updated_by: {
         allowNull: true,
         type: Sequelize.BIGINT(20).UNSIGNED,
-        references: {model: 'users', key: 'id'}
+        references: {model: 'admins', key: 'id'}
       },
       status: {
         allowNull: false,
