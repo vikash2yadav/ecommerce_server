@@ -203,6 +203,23 @@ class adminController {
         }
     }
 
+    // get self profile data
+    async getSelfProfileData(req,res) {
+        try {
+            let data = await adminModel.getSelfProfileData(req?.adminInfo);
+            
+            if(data.status === STATUS_CODES.NOT_FOUND){
+                return res.handler.notFound(undefined, STATUS_MESSAGES.NOT_FOUND.USER);
+            }
+
+            return res.handler.success(data);
+
+        } catch (error) {
+            return res.handler.serverError(error);
+        }
+    }
+
+
      // list
      async getAdminList(req,res) {
         try {

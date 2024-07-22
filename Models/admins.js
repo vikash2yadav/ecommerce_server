@@ -408,9 +408,28 @@ class adminModel {
         return data;
     }
 
+    // get self profile data
+    async getSelfProfileData(adminInfo){
+        let data = await adminSchema.findOne({
+            where:{
+                id: adminInfo?.id,
+                is_delete: STATUS.NOTDELETED
+            }
+        })
+        if(!data){
+            return {
+                status: STATUS_CODES.NOT_FOUND
+            }
+        }
+
+        return data;
+    }
+
+
+
       // list
       async getAdminList(bodyData){
-        var currentPage,itemsPerPage,lastRecordIndex,firstRecordIndex;
+        var currentPage = null,itemsPerPage,lastRecordIndex,firstRecordIndex;
         if (bodyData?.currentPage && bodyData?.itemsPerPage) {
             currentPage = bodyData.currentPage;
             itemsPerPage = bodyData.itemsPerPage;

@@ -76,6 +76,9 @@ router.route("/delete/:id").delete(adminAuth, adminController.deleteAdmin);
 // get by id
 router.route("/get/:id").get(adminAuth, adminController.getAdminById);
 
+// get admin self data
+router.route("/self/profile").get(adminAuth, adminController.getSelfProfileData);
+
 // list
 router.route("/get/list").post(adminAuth, adminController.getAdminList);
 

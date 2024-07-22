@@ -76,8 +76,8 @@ class productModel {
 
     }
 
-     // product status change
-     async productStatusChange(adminInfo, bodyData) {
+    // product status change
+    async productStatusChange(adminInfo, bodyData) {
 
         let product = await productSchema.findOne({
             where: {
@@ -119,7 +119,7 @@ class productModel {
             }
         }
 
-        
+
         return await productSchema.update({ is_delete: STATUS.DELETED, last_updated_by: adminInfo?.id }, {
             where: {
                 id: id
@@ -257,7 +257,7 @@ class productModel {
         includeConditions.push({
             model: productVariantSchema
         })
-        
+
         return await productSchema.findAndCountAll({
             where: {
                 is_delete: STATUS.NOTDELETED,
