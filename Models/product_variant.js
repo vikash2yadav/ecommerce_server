@@ -9,12 +9,39 @@ class productVariantModel {
     // add productVariant
     async addProductVariant(bodyData) {
 
+        let checkSku = await productVariantSchema.findOne({
+            where: {
+                sku: bodyData?.sku
+            }
+        })
+
+        if (checkSku) {
+            return {
+                status: STATUS_CODES?.ALREADY_REPORTED,
+                message: STATUS_MESSAGES?.EXISTS?.SKU_CODE
+            }
+        }
+
         // create productVariant
         return await productVariantSchema.create(bodyData);
     }
 
     // update productVariant
     async updateProductVariant(bodyData) {
+
+        let checkSku = await productSchema.findOne({
+            where: {
+                sku: bodyData?.sku,
+                id: { [Op.ne]: bodyData?.id }
+            }
+        })
+
+        if (checkSku) {
+            return {
+                status: STATUS_CODES?.ALREADY_REPORTED,
+                message: STATUS_MESSAGES?.EXISTS?.SKU_CODE
+            }
+        }
 
         return await productVariantSchema.update(bodyData, {
             where: {
@@ -52,7 +79,7 @@ class productVariantModel {
         // check productVariant exist or not
         let checkProductVariant = await productVariantSchema.findOne({
             where: {
-                id: id,
+                id: id
             }
         })
 
@@ -65,6 +92,9 @@ class productVariantModel {
         return await productVariantSchema.findOne({
             where: {
                 id: id
+            }, 
+            include: {
+                model: productSchema
             }
         })
     }
@@ -76,27 +106,30 @@ class productVariantModel {
 
     }
 
-        // get productVariant by id
-        async getProductVariantListByProductId(id) {
+    // get productVariant by id
+    async getProductVariantListByProductId(id) {
 
-            // check productVariant exist or not
-            let checkProductVariant = await productVariantSchema.findAndCountAll({
-                where:{
-                    product_id: id,
-                }
-            })
-            
-    
-            if (!checkProductVariant) {
-                return {
-                    status: STATUS_CODES.NOT_FOUND
-                }
+        // check productVariant exist or not
+        let checkProductVariant = await productVariantSchema.findAndCountAll({
+            where: {
+                product_id: id,
+            },
+            include: {
+                model: productSchema
             }
-    
-            return checkProductVariant
+        })
+
+
+        if (!checkProductVariant) {
+            return {
+                status: STATUS_CODES.NOT_FOUND
+            }
         }
 
-        
+        return checkProductVariant
+    }
+
+
 
 
     // ---------------- vendor product variant -------------------
@@ -105,12 +138,12 @@ class productVariantModel {
     async getVendorProductVariantList(bodyData) {
 
         return await productVariantSchema.findAndCountAll({
-                include: [{
-                    model: productSchema,
-                    where: {
-                        vendor_id: 1,       
-                    }
-                }]
+            include: [{
+                model: productSchema,
+                where: {
+                    vendor_id: 1,
+                }
+            }]
         });
 
     }

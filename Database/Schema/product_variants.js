@@ -45,35 +45,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       type: DataTypes.STRING(255),
     },
-    price: {
-      allowNull: false,
-      type: DataTypes.BIGINT(20)
-    },
-    discount: {
-      allowNull: false,
-      type: DataTypes.BIGINT(3),
-      defaultValue: STATUS.ZERO,
-      comment: "percentages"
-    },
-    stock: {
-      allowNull: false,
-      type: DataTypes.BIGINT(20)
-    },
-    weight: {
-      allowNull: false,
-      type: DataTypes.STRING(255),
-      comment: "in kg"
-    },
-    dimensions: {
-      allowNull: false,
-      type: DataTypes.STRING(255),
-      comment: "lenght * width * height "
-    },
-    material: {
-      allowNull: false,
-      type: DataTypes.STRING(255)
-    },
-    image: {
+    sku: {
       allowNull: false,
       type: DataTypes.TEXT
     },

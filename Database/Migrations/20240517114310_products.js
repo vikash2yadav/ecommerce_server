@@ -37,6 +37,19 @@ module.exports = {
         type: Sequelize.BIGINT(20).UNSIGNED,
         references: {model: 'categories', key: 'id'}
       },
+      sku:{
+        allowNull: false,
+        type: Sequelize.TEXT
+      },
+      Keywords:{
+        allowNull: true,
+        type: Sequelize.TEXT
+      },
+      parent_id: {
+        allowNull: true,
+        type: Sequelize.BIGINT(20).UNSIGNED,
+        references: {model: 'products', key: 'id'}
+      },
       last_updated_by: {
         allowNull: true,
         type: Sequelize.BIGINT(20).UNSIGNED,

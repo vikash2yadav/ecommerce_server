@@ -1,6 +1,6 @@
 const slugify = require('slugify');
 const { products: productSchema, product_variants: productVariantSchema, categories: categorySchema, partners: partnerSchema, attributes: attributeSchema, attribute_values: attributeValueSchema, admins: adminSchema } = require('../Database/Schema');
-const { STATUS_CODES, STATUS } = require('../Config/constant');
+const { STATUS_CODES, STATUS, STATUS_MESSAGES } = require('../Config/constant');
 const { Op } = require('sequelize');
 
 class productModel {
@@ -23,7 +23,22 @@ class productModel {
 
         if (existSlug) {
             return {
-                status: STATUS_CODES?.ALREADY_REPORTED
+                status: STATUS_CODES?.ALREADY_REPORTED,
+                message: STATUS_MESSAGES?.EXISTS?.SLUG
+            }
+        }
+
+        let checkSku = await productSchema.findOne({
+            where: {
+                sku: bodyData?.sku,
+                id: { [Op.ne]: bodyData?.id }
+            }
+        })
+
+        if (checkSku) {
+            return {
+                status: STATUS_CODES?.ALREADY_REPORTED,
+                message: STATUS_MESSAGES?.EXISTS?.SKU_CODE
             }
         }
 
@@ -64,7 +79,22 @@ class productModel {
 
         if (checkSlug) {
             return {
-                status: STATUS_CODES.ALREADY_REPORTED
+                status: STATUS_CODES.ALREADY_REPORTED,
+                message: STATUS_MESSAGES.EXISTS.SLUG
+            }
+        }
+
+        let checkSku = await productSchema.findOne({
+            where: {
+                sku: bodyData?.sku,
+                id: { [Op.ne]: bodyData?.id }
+            }
+        })
+
+        if (checkSku) {
+            return {
+                status: STATUS_CODES.ALREADY_REPORTED,
+                message: STATUS_MESSAGES.EXISTS.SKU_CODE
             }
         }
 
@@ -137,6 +167,12 @@ class productModel {
                 is_delete: STATUS.NOTDELETED
             },
             include:
+            [
+                {
+                    model: productSchema,
+                    as: 'parent_product',
+                    attributes: ['name', 'sku']
+                },
             {
                 model: productVariantSchema,
                 include: [
@@ -145,6 +181,7 @@ class productModel {
                     }
                 ]
             },
+        ]
         })
 
         if (!checkProduct) {
@@ -256,6 +293,12 @@ class productModel {
 
         includeConditions.push({
             model: productVariantSchema
+        })
+
+        includeConditions.push({
+            model: productSchema,
+            as: 'parent_product',
+            attributes: ['name', 'sku']
         })
 
         return await productSchema.findAndCountAll({

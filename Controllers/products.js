@@ -9,7 +9,7 @@ class productController {
             let data = await productModel.addProduct(req?.body);
 
             if (data.status === STATUS_CODES.ALREADY_REPORTED) {
-                return res.handler.conflict(undefined, STATUS_MESSAGES.EXISTS.PRODUCT);
+                return res.handler.conflict(undefined, data?.message);
             }
 
             return res.handler.success(data, STATUS_MESSAGES.PRODUCT.ADDED);
@@ -29,7 +29,7 @@ class productController {
             }
 
             if (data.status === STATUS_CODES.ALREADY_REPORTED) {
-                return res.handler.notFound(undefined, STATUS_MESSAGES.EXISTS.PRODUCT);
+                return res.handler.notFound(undefined, data?.message);
             }
 
             return res.handler.success(data, STATUS_MESSAGES.PRODUCT.UPDATED);

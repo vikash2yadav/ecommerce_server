@@ -11,7 +11,7 @@ class productVariantController {
             let data = await productVariantModel.addProductVariant(req?.body);
 
             if (data.status === STATUS_CODES.ALREADY_REPORTED) {
-                return res.handler.conflict(undefined, STATUS_MESSAGES.EXISTS.PRODUCT_VARIANT);
+                return res.handler.conflict(undefined, data?.message);
             }
 
             return res.handler.success(data, STATUS_MESSAGES.PRODUCT_VARIANT.ADDED);
@@ -27,7 +27,7 @@ class productVariantController {
             let data = await productVariantModel.updateProductVariant(req?.body);
 
             if (data.status === STATUS_CODES.NOT_FOUND) {
-                return res.handler.notFound(undefined, STATUS_MESSAGES.NOT_FOUND.PRODUCT_VARIANT);
+                return res.handler.notFound(undefined, data?.message);
             }
 
             if (data.status === STATUS_CODES.ALREADY_REPORTED) {

@@ -55,6 +55,7 @@ exports.STATUS_MESSAGES = {
     EXISTS: {
         ACCOUNT_TYPE: 'Account Type is already exist!',
         USERNAME_OR_EMAIL: 'Username or email is already exist!',
+        SKU_CODE: 'This sku code is already exist',
         ATTRIBUTE: 'Attribute is already exist',
         USER: "User already exist!",
         PRODUCT_VARIANT: 'This variat is already exist in our system',
@@ -373,6 +374,7 @@ exports.STATUS_MESSAGES = {
     },
     VALIDATION: {
         REQUIRED: {
+            SKU_CODE: 'Please, enter sku code',
             NAME: 'Please, enter name',
             MODULE: 'Please, enter module',
             SLUG: 'Please, enter slug',

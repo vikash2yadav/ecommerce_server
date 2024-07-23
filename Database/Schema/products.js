@@ -59,6 +59,16 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: 'product_id',
         onDelete: 'cascade'
       })
+      products.belongsTo(models.products, {
+        foreignKey: 'parent_id',
+        as: 'parent_product',
+        onDelete: 'cascade'
+      })
+      products.hasMany(models.products, {
+        foreignKey: 'parent_id',
+        // as: 'parent_product',
+        onDelete: 'cascade'
+      })
     }
   }
   products.init({
@@ -93,6 +103,19 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       type: DataTypes.BIGINT(20).UNSIGNED,
       references: {model: 'categories', key: 'id'}
+    },
+    sku:{
+      allowNull: false,
+      type: DataTypes.TEXT
+    },
+    Keywords:{
+      allowNull: true,
+      type: DataTypes.TEXT
+    },
+    parent_id: {
+      allowNull: true,
+      type: DataTypes.BIGINT(20).UNSIGNED,
+      references: {model: 'products', key: 'id', as: 'parent_product'}
     },
     last_updated_by: {
       allowNull: true,
