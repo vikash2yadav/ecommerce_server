@@ -1,5 +1,5 @@
 const slugify = require('slugify');
-const { products: productSchema, product_variants: productVariantSchema, categories: categorySchema, partners: partnerSchema, attributes: attributeSchema, attribute_values: attributeValueSchema, admins: adminSchema } = require('../Database/Schema');
+const { products: productSchema, product_variant_details: productVariantDetailSchema, product_variants: productVariantSchema, categories: categorySchema, partners: partnerSchema, attributes: attributeSchema, attribute_values: attributeValueSchema, admins: adminSchema } = require('../Database/Schema');
 const { STATUS_CODES, STATUS, STATUS_MESSAGES } = require('../Config/constant');
 const { Op } = require('sequelize');
 
@@ -28,23 +28,85 @@ class productModel {
             }
         }
 
-        let checkSku = await productSchema.findOne({
-            where: {
-                sku: bodyData?.sku,
-                id: { [Op.ne]: bodyData?.id }
+        if (bodyData?.variants) {
+            for (let item of bodyData.variants) {
+                let checkSku = await productSchema.findOne({
+                    where: {
+                        sku: item?.sku
+                    }
+                });
+        
+                if (checkSku) {
+                    return {
+                        status: STATUS_CODES?.ALREADY_REPORTED,
+                        message: STATUS_MESSAGES?.EXISTS?.SKU_CODE
+                    };
+                }
+        
+                let createdProduct = await productSchema.create({ ...bodyData, sku: item?.sku });
+        
+                if (createdProduct) {
+                    for (let items of item.attributes) {
+                        let createdVariant = await productVariantSchema.create({
+                            sku: item?.sku,
+                            attribute_id: items?.attribute_id,
+                            attribute_value: items?.attribute_value,
+                            product_id: createdProduct?.id
+                        });
+                        
+                        if(!createdVariant && createdProduct){
+                            await productVariantSchema.destroy({
+                                where: {
+                                    product_id: createdProduct?.id
+                                }
+                            })
+                            await productSchema.destroy({
+                                where: {
+                                    id: createdProduct?.id
+                                }
+                            })
+                            return {
+                                status: STATUS_CODES.NOT_ACCEPTABLE,
+                                message: STATUS_MESSAGES.PRODUCT.TRY_AGAIN
+                            }
+                        }
+                    }
+                }
+        
+                await productVariantDetailSchema.create({
+                    strike_price: item?.strike_price,
+                    price: item?.price,
+                    stock: item?.stock,
+                    sku: item?.sku
+                });
             }
-        })
+            return { status: 200, message: STATUS_MESSAGES.PRODUCT.ADDED };
+        }    
+        else 
+        {
+            if (bodyData?.sku) {
+                let checkSku = await productSchema.findOne({
+                    where: {
+                        sku: bodyData?.sku
+                    }
+                })
+    
+                if (checkSku) {
+                    return {
+                        status: STATUS_CODES?.ALREADY_REPORTED,
+                        message: STATUS_MESSAGES?.EXISTS?.SKU_CODE
+                    }
+                }
+            }
 
-        if (checkSku) {
-            return {
-                status: STATUS_CODES?.ALREADY_REPORTED,
-                message: STATUS_MESSAGES?.EXISTS?.SKU_CODE
+            let details = await productVariantDetailSchema.create(bodyData);
+            if (details) {
+                await productSchema.create(bodyData);
+                return { status: 200, message: STATUS_MESSAGES.PRODUCT.ADDED };
             }
         }
-
-        // create product
-        return await productSchema.create(bodyData);
     }
+
 
     // update product
     async updateProduct(bodyData) {
@@ -167,21 +229,21 @@ class productModel {
                 is_delete: STATUS.NOTDELETED
             },
             include:
-            [
-                {
-                    model: productSchema,
-                    as: 'parent_product',
-                    attributes: ['name', 'sku']
-                },
-            {
-                model: productVariantSchema,
-                include: [
+                [
                     {
-                        model: attributeSchema
-                    }
+                        model: productSchema,
+                        as: 'parent_product',
+                        attributes: ['name', 'sku']
+                    },
+                    {
+                        model: productVariantSchema,
+                        include: [
+                            {
+                                model: attributeSchema
+                            }
+                        ]
+                    },
                 ]
-            },
-        ]
         })
 
         if (!checkProduct) {
