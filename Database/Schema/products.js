@@ -87,18 +87,6 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       type: DataTypes.STRING(255)
     },
-    slug: {
-      allowNull: false,
-      type: DataTypes.TEXT
-    },
-    title: {
-      allowNull: false,
-      type: DataTypes.STRING(255)
-    },
-    description: {
-      allowNull: false,
-      type: DataTypes.TEXT
-    },
     category_id: {
       allowNull: false,
       type: DataTypes.BIGINT(20).UNSIGNED,

@@ -9,8 +9,8 @@ const { adminAuth } = new (require("../Middleware/authentication"));
 
 // add product
 router.route('/add').post(adminAuth, validate([
-    body("title").notEmpty().withMessage(STATUS_MESSAGES.VALIDATION.REQUIRED.TITLE),
-    body("description").notEmpty().withMessage(STATUS_MESSAGES.VALIDATION.REQUIRED.DESCRIPTION),
+    // body("title").notEmpty().withMessage(STATUS_MESSAGES.VALIDATION.REQUIRED.TITLE),
+    // body("description").notEmpty().withMessage(STATUS_MESSAGES.VALIDATION.REQUIRED.DESCRIPTION),
     // body("sku").notEmpty().withMessage(STATUS_MESSAGES.VALIDATION.REQUIRED.SKU_CODE),
     // body("image").notEmpty().withMessage(STATUS_MESSAGES.VALIDATION.REQUIRED.IMAGE),
     body("category_id").notEmpty().withMessage(STATUS_MESSAGES.VALIDATION.REQUIRED.CATEGORY),
@@ -24,11 +24,11 @@ router.route('/add').post(adminAuth, validate([
 ]),adminAuth, productController.addProduct);
 
 // update product
-router.route('/update').put(adminAuth, validate([
+router.route('/update/:id').put(adminAuth, validate([
     body("id").notEmpty().withMessage(STATUS_MESSAGES.VALIDATION.REQUIRED.ID),
-    body("title").notEmpty().withMessage(STATUS_MESSAGES.VALIDATION.REQUIRED.TITLE),
+    // body("title").notEmpty().withMessage(STATUS_MESSAGES.VALIDATION.REQUIRED.TITLE),
     body("sku").notEmpty().withMessage(STATUS_MESSAGES.VALIDATION.REQUIRED.SKU_CODE),
-    body("description").notEmpty().withMessage(STATUS_MESSAGES.VALIDATION.REQUIRED.DESCRIPTION),
+    // body("description").notEmpty().withMessage(STATUS_MESSAGES.VALIDATION.REQUIRED.DESCRIPTION),
     // body("image").notEmpty().withMessage(STATUS_MESSAGES.VALIDATION.REQUIRED.IMAGE),
     body("category_id").notEmpty().withMessage(STATUS_MESSAGES.VALIDATION.REQUIRED.CATEGORY),
     // body("price").notEmpty().withMessage(STATUS_MESSAGES.VALIDATION.REQUIRED.PRICE),

@@ -20,18 +20,6 @@ module.exports = {
         allowNull: false,
         type: Sequelize.STRING(255)
       },
-      slug: {
-        allowNull: false,
-        type: Sequelize.TEXT
-      },
-      title: {
-        allowNull: false,
-        type: Sequelize.STRING(255)
-      },
-      description: {
-        allowNull: false,
-        type: Sequelize.TEXT
-      },
       category_id: {
         allowNull: false,
         type: Sequelize.BIGINT(20).UNSIGNED,

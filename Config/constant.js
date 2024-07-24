@@ -55,7 +55,8 @@ exports.STATUS_MESSAGES = {
     EXISTS: {
         ACCOUNT_TYPE: 'Account Type is already exist!',
         USERNAME_OR_EMAIL: 'Username or email is already exist!',
-        SKU_CODE: 'This sku code is already exist',
+        PRODUCT_VARIANT_SKU_CODE: 'This sku code is already exist for product variant',
+        SKU_CODE: 'This sku is exist for primary product',
         ATTRIBUTE: 'Attribute is already exist',
         USER: "User already exist!",
         PRODUCT_VARIANT: 'This variat is already exist in our system',
@@ -88,6 +89,7 @@ exports.STATUS_MESSAGES = {
 
     NOT_FOUND: {
         USERNAME: 'Username is not available in our system.',
+        SKU_CODE: 'This sku is not found in our system.',
         ACCOUNT_TYPE: 'Account Type is not available in our system.',
         USER: "You are not available in our system!",
         ROLE: "Role is not available in our system!",

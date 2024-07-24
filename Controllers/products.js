@@ -8,13 +8,16 @@ class productController {
         try {
             let data = await productModel.addProduct(req?.body);
 
-            console.log(data)
             if (data.status === STATUS_CODES.ALREADY_REPORTED) {
                 return res.handler.conflict(undefined, data?.message);
             }
 
             if (data.status === STATUS_CODES.NOT_ACCEPTABLE) {
-                return res.handler.conflict(undefined, STATUS_MESSAGES.PRODUCT.TRY_AGAIN);
+                return res.handler.conflict(undefined, data?.message);
+            }
+
+            if (data.status === STATUS_CODES.NOT_FOUND) {
+                return res.handler.conflict(undefined, data?.message);
             }
 
             return res.handler.success(data, STATUS_MESSAGES.PRODUCT.ADDED);
@@ -27,7 +30,7 @@ class productController {
     // update product
     async updateProduct(req, res) {
         try {
-            let data = await productModel.updateProduct(req?.body);
+            let data = await productModel.updateProduct(req?.params?.id, req?.body, req?.adminInfo);
 
             if (data.status === STATUS_CODES.NOT_FOUND) {
                 return res.handler.notFound(undefined, STATUS_MESSAGES.NOT_FOUND.PRODUCT);
