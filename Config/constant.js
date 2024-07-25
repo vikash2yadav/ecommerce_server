@@ -55,6 +55,7 @@ exports.STATUS_MESSAGES = {
     EXISTS: {
         ACCOUNT_TYPE: 'Account Type is already exist!',
         USERNAME_OR_EMAIL: 'Username or email is already exist!',
+        PRIMARY_CRREATED_VARIANT_NOT_ALL: 'Primary Product created but problem in variant creation',
         PRODUCT_VARIANT_SKU_CODE: 'This sku code is already exist for product variant',
         SKU_CODE: 'This sku is exist for primary product',
         ATTRIBUTE: 'Attribute is already exist',

@@ -32,19 +32,9 @@ class productModel {
                 });
 
                 if (checkSku) {
-                    await productVariantDetailSchema.destroy({
-                        where: {
-                            sku: parentProduct?.sku
-                        }
-                    })
-                    await productSchema.destroy({
-                        where: {
-                            id: parentProduct?.id
-                        }
-                    })
                     return {
                         status: STATUS_CODES?.ALREADY_REPORTED,
-                        message: STATUS_MESSAGES?.EXISTS?.PRODUCT_VARIANT_SKU_CODE
+                        message: STATUS_MESSAGES?.EXISTS?.PRIMARY_CRREATED_VARIANT_NOT_ALL
                     };
                 }
 
