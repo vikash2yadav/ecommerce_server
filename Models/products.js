@@ -80,7 +80,8 @@ class productModel {
 
     let checkProduct = await productSchema.findOne({
         where: {
-            id: id
+            id: id,
+            is_delete: STATUS.NOTDELETED
         }
     });
 
@@ -91,22 +92,36 @@ class productModel {
         };
     }
 
-    await productVariantSchema.destroy({
+    let checkSku = await productSchema.findOne({
         where: {
-            product_id: id
-        }
-    })
-    await productSchema.destroy({
-        where: {
-            id: id
-        }
-    })
-    await productVariantDetailSchema.destroy({
-        where: {
-            sku: checkProduct?.sku
+            sku: bodyData?.sku,
+            id: { [Op.ne]: item?.id }
         }
     })
 
+    if (checkSku) {
+        return {
+            status: STATUS_CODES?.ALREADY_REPORTED,
+            message: STATUS_MESSAGES?.EXISTS?.SKU_CODE
+        }
+    }else{
+        await productVariantSchema.destroy({
+            where: {
+                product_id: id
+            }
+        })
+        await productSchema.destroy({
+            where: {
+                id: id
+            }
+        })
+        await productVariantDetailSchema.destroy({
+            where: {
+                sku: checkProduct?.sku
+            }
+        })
+    }
+    
     bodyData.last_updated_by = adminInfo?.id;
     let parentProduct = await productSchema.create(bodyData);
 
@@ -139,25 +154,7 @@ class productModel {
                 }
             }
 
-            
-            await productVariantDetailSchema.destroy({
-                where: {
-                    sku: checkProduct?.sku
-                }
-            })
-
-            await productVariantSchema.destroy({
-                where: {
-                    product_id: checkProduct?.id
-                }
-            })
-
-            await productSchema.destroy({
-                where: {
-                    id: checkProduct?.id
-                }
-            })
-
+            item.last_updated_by = adminInfo?.id;
             let createdProduct = await productSchema.create({ ...item, vendor_id: parentProduct?.vendor_id, category_id: parentProduct?.category_id, parent_id: parentProduct?.id});
 
             if (createdProduct) {
@@ -201,6 +198,7 @@ class productModel {
         return {status : STATUS_CODES.SUCCESS, message: STATUS_MESSAGES.PRODUCT.UPDATED}
     }
 }
+
 
     // product status change
     async productStatusChange(adminInfo, bodyData) {
@@ -400,6 +398,7 @@ class productModel {
     return await productSchema.findAndCountAll({
         where: {
             is_delete: STATUS.NOTDELETED,
+            parent_id: null,
             ...filterQuery
         },
         include: includeConditions,
