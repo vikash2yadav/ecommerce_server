@@ -29,7 +29,7 @@ module.exports = {
         allowNull: false,
         type: Sequelize.TEXT
       },
-      Keywords:{
+      keywords:{
         allowNull: true,
         type: Sequelize.TEXT
       },

@@ -96,7 +96,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       type: DataTypes.TEXT
     },
-    Keywords:{
+    keywords:{
       allowNull: true,
       type: DataTypes.TEXT
     },
