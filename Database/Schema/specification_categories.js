@@ -14,6 +14,10 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: 'parent_id',
         onDelete: 'cascade'
       })
+      specification_categories.hasMany(models.product_specifications,{
+        foreignKey: 'specification_category_id',
+        onDelete: 'cascade'
+      });
     }
   }
   specification_categories.init({
@@ -28,7 +32,7 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING(255)
     },
     parent_id: {
-      allowNull: false,
+      allowNull: true,
       type: DataTypes.BIGINT(20).UNSIGNED,
       references: {model: 'specification_categories', key: 'id'}
     },

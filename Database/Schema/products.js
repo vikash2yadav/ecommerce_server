@@ -68,6 +68,18 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: 'parent_id',
         // as: 'parent_product',
         onDelete: 'cascade'
+      });
+      products.hasMany(models.product_specifications,{
+        foreignKey: 'product_id',
+        onDelete: 'cascade'
+      })
+      products.hasMany(models.product_highlights,{
+        foreignKey: 'product_id',
+        onDelete: 'cascade'
+      });
+      products.hasMany(models.product_variant_details,{
+        foreignKey: 'id',
+        onDelete: 'cascade'
       })
     }
   }

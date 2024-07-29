@@ -5,7 +5,7 @@ module.exports = {
   async up (queryInterface, Sequelize) {
     return await queryInterface.bulkInsert("product_variant_details", [
       {
-        sku: 'grs1',
+        product_id: 1,
         strike_price: 2000,
         price: 1200,
         stock: 20,
@@ -13,7 +13,7 @@ module.exports = {
         updatedAt: new Date()
       },
       {
-        sku: 'grs133',
+        product_id: 2,
         strike_price: 23000,
         price: 13200,
         stock: 203,
@@ -24,11 +24,6 @@ module.exports = {
   },
 
   async down (queryInterface, Sequelize) {
-    /**
-     * Add commands to revert seed here.
-     *
-     * Example:
-     * await queryInterface.bulkDelete('People', null, {});
-     */
+    return await queryInterface.bulkDelete("product_variant_details", null, {});
   }
 };

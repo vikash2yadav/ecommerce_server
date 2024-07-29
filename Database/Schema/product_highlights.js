@@ -3,40 +3,27 @@ const {
   Model
 } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-  class product_specifications extends Model {
+  class product_highlights extends Model {
     static associate(models) {
-      product_specifications.belongsTo(models.specification_categories,{
-        foreignKey: 'specification_category_id',
-        onDelete: 'cascade'
-      });
-      product_specifications.belongsTo(models.products,{
+      product_highlights.belongsTo(models.products,{
         foreignKey: 'product_id',
         onDelete: 'cascade'
-      })
+      });
     }
   }
-  product_specifications.init({
+  product_highlights.init({
     id: {
       allowNull: false,
       autoIncrement: true,
       primaryKey: true,
       type: DataTypes.BIGINT(20).UNSIGNED
     },
-    specification_category_id: {
-      allowNull: false,
-      type: DataTypes.BIGINT(20).UNSIGNED,
-      references: {model: 'specification_categories', key: 'id'}
-    },
     product_id: {
       allowNull: false,
       type: DataTypes.BIGINT(20).UNSIGNED,
       references: {model: 'products', key: 'id'}
     },
-    title: {
-      allowNull: false,
-      type: DataTypes.STRING(255)
-    },
-    value: {
+    content: {
       allowNull: false,
       type: DataTypes.TEXT
     },
@@ -50,7 +37,7 @@ module.exports = (sequelize, DataTypes) => {
     }
   }, {
     sequelize,
-    modelName: 'product_specifications',
+    modelName: 'product_highlights',
   });
-  return product_specifications;
+  return product_highlights;
 };

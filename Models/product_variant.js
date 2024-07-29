@@ -1,4 +1,4 @@
-const { product_variants: productVariantSchema, products: productSchema, partners: partnerSchema } = require('../Database/Schema');
+const { product_variants: productVariantSchema, products: productSchema, partners: partnerSchema, product_variant_details: productVariantDetailSchema } = require('../Database/Schema');
 const { STATUS_CODES, STATUS, STATUS_MESSAGES } = require('../Config/constant');
 const { Op } = require('sequelize');
 
@@ -110,13 +110,17 @@ class productVariantModel {
     async getProductVariantListByProductId(id) {
 
         // check productVariant exist or not
-        let checkProductVariant = await productVariantSchema.findAndCountAll({
+        let checkProductVariant = await productSchema.findAndCountAll({
             where: {
-                product_id: id,
+                parent_id: id,
             },
-            include: {
-                model: productSchema
+            include: [{
+                model: productVariantSchema
+            },
+            {
+                model: productVariantDetailSchema
             }
+        ]
         })
 
 

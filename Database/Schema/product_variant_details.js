@@ -5,7 +5,10 @@ const {
 module.exports = (sequelize, DataTypes) => {
   class product_variant_details extends Model {
     static associate(models) {
-      // define association here
+      product_variant_details.belongsTo(models.products,{
+        foreignKey: 'id',
+        onDelete: 'cascade'
+      })
     }
   }
   product_variant_details.init({
@@ -15,9 +18,10 @@ module.exports = (sequelize, DataTypes) => {
       primaryKey: true,
       type: DataTypes.BIGINT(20).UNSIGNED
     },
-    sku: {
+    product_id: {
       allowNull: false,
-      type: DataTypes.TEXT
+      type: DataTypes.BIGINT(20).UNSIGNED,
+      references: {model: 'products', key: 'id'}
     },
     strike_price: {
       allowNull: false,

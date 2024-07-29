@@ -3,20 +3,22 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up (queryInterface, Sequelize) {
-    return await queryInterface.bulkInsert("product_specifications", [
+    return await queryInterface.bulkInsert("product_highlights", [
       {
-        specification_category_id: 1,
         product_id: 1,
-        title: 'material',
-        value: 'plastic',
+        content: 'this is very thin product',
         createdAt: new Date(),
         updatedAt: new Date()
       },
       {
-        specification_category_id: 2,
         product_id: 2,
-        title: 'price',
-        value: '2000',
+        content: 'price is most loyal',
+        createdAt: new Date(),
+        updatedAt: new Date()
+      },
+      {
+        product_id: 2,
+        content: 'ease to use and throw',
         createdAt: new Date(),
         updatedAt: new Date()
       }
@@ -24,6 +26,6 @@ module.exports = {
   },
 
   async down (queryInterface, Sequelize) {
-    return await queryInterface.bulkDelete("product_specifications", null, {});
+    return await queryInterface.bulkDelete("product_highlights", null, {});
   }
 };

@@ -17,7 +17,7 @@ module.exports = {
         type: Sequelize.STRING(255)
       },
       parent_id: {
-        allowNull: false,
+        allowNull: true,
         type: Sequelize.BIGINT(20).UNSIGNED,
         references: {model: 'specification_categories', key: 'id'}
       },
