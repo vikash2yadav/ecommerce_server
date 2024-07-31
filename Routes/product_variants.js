@@ -8,10 +8,10 @@ const { STATUS_MESSAGES } = require('../Config/constant');
 
 // add product variant
 router.route('/add').post(validate([
-    body("product_id").notEmpty().withMessage(STATUS_MESSAGES.VALIDATION.REQUIRED.PRODUCT),
-    body("attribute_id").notEmpty().withMessage(STATUS_MESSAGES.VALIDATION.REQUIRED.ATTRIBUTE),
-    body("attribute_value_id").notEmpty().withMessage(STATUS_MESSAGES.VALIDATION.REQUIRED.ATTRIBUTE_VALUE),
-    body("sku").notEmpty().withMessage(STATUS_MESSAGES.VALIDATION.REQUIRED.SKU_CODE),
+    // body("product_id").notEmpty().withMessage(STATUS_MESSAGES.VALIDATION.REQUIRED.PRODUCT),
+    // body("attribute_id").notEmpty().withMessage(STATUS_MESSAGES.VALIDATION.REQUIRED.ATTRIBUTE),
+    // body("attribute_value_id").notEmpty().withMessage(STATUS_MESSAGES.VALIDATION.REQUIRED.ATTRIBUTE_VALUE),
+    // body("sku").notEmpty().withMessage(STATUS_MESSAGES.VALIDATION.REQUIRED.SKU_CODE),
     // body("image").notEmpty().withMessage(STATUS_MESSAGES.VALIDATION.REQUIRED.IMAGE),
     // body("price").notEmpty().withMessage(STATUS_MESSAGES.VALIDATION.REQUIRED.PRICE),
     // body("discount").notEmpty().withMessage(STATUS_MESSAGES.VALIDATION.REQUIRED.DISCOUNT),

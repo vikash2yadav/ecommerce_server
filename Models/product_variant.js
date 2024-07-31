@@ -8,22 +8,26 @@ class productVariantModel {
 
     // add productVariant
     async addProductVariant(bodyData) {
-
-        let checkSku = await productVariantSchema.findOne({
-            where: {
-                sku: bodyData?.sku
+        bodyData?.variants && bodyData.variants.map(async (variant)=>{
+            let checkSku = await productVariantSchema.findOne({
+                where: {
+                    sku: variant?.sku
+                }
+            })
+    
+            if (checkSku) {
+                return {
+                    status: STATUS_CODES?.ALREADY_REPORTED,
+                    message: STATUS_MESSAGES?.EXISTS?.SKU_CODE
+                }
             }
+    
+            // create productVariant
+            await productVariantSchema.create(variant);     
         })
-
-        if (checkSku) {
-            return {
-                status: STATUS_CODES?.ALREADY_REPORTED,
-                message: STATUS_MESSAGES?.EXISTS?.SKU_CODE
-            }
+        return {
+            status: STATUS_CODES?.SUCCESS
         }
-
-        // create productVariant
-        return await productVariantSchema.create(bodyData);
     }
 
     // update productVariant

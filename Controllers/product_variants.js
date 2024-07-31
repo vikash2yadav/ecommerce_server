@@ -8,6 +8,7 @@ class productVariantController {
     // add productVariant
     async addProductVariant(req, res) {
         try {
+            console.log(req?.body)
             let data = await productVariantModel.addProductVariant(req?.body);
 
             if (data.status === STATUS_CODES.ALREADY_REPORTED) {

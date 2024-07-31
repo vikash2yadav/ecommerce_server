@@ -1,4 +1,4 @@
-const { product_specifications: productSpecificationSchema } = require('../Database/Schema');
+const { product_specifications: productSpecificationSchema, specification_categories: specificationCategorySchema } = require('../Database/Schema');
 const { STATUS_CODES, STATUS } = require('../Config/constant');
 
 class productSpecificationModel {
@@ -109,7 +109,11 @@ class productSpecificationModel {
 
         return await productSpecificationSchema.findAndCountAll({
             where: {
-                product_id: id
+                product_id: id,
+            }, 
+            include: {
+                model: specificationCategorySchema,
+                attributes: ['name']
             }
         });
     }
