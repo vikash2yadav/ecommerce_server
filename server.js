@@ -31,7 +31,7 @@ app.use((req, res, next) => {
 
 // Performing routes
 try {
-const appRoutes = require('./Routes/index')
+const appRoutes = require('./Routes/index');
 appRoutes(app)
 } catch (error) {
 console.log("Route Crash -> ", error)

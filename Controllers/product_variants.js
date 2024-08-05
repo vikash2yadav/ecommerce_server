@@ -8,7 +8,6 @@ class productVariantController {
     // add productVariant
     async addProductVariant(req, res) {
         try {
-            console.log(req?.body)
             let data = await productVariantModel.addProductVariant(req?.body);
 
             if (data.status === STATUS_CODES.ALREADY_REPORTED) {
@@ -75,6 +74,25 @@ class productVariantController {
             res.handler.serverError(error);
         }
     }
+
+
+    // get parent product
+    async getParentProduct(req, res) {
+        try {
+
+            let data = await productVariantModel.getParentProduct(req?.params?.id);
+
+            if (data.status === STATUS_CODES.NOT_FOUND) {
+                return res.handler.notFound(undefined, STATUS_MESSAGES.NOT_FOUND.PRODUCT);
+            }
+
+            return res.handler.success(data);
+
+        } catch (error) {
+            res.handler.serverError(error);
+        }
+    }
+
 
     // get product Variant list
     async getProductVariantList(req, res) {

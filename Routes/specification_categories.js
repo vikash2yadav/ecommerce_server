@@ -33,7 +33,7 @@ router.route('/delete/:id').delete(adminAuth, specificationCategoryController.de
 router.route('/get/:id').get(specificationCategoryController.getSpecificationCategoryById);
 
 // get all list
-router.route('/get/list/:id').post(specificationCategoryController.getSpecificationCategoryList);
+router.route('/get/list').post(specificationCategoryController.getSpecificationCategoryList);
 
 
 module.exports = router;

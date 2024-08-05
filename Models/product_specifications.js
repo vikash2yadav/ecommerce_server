@@ -111,9 +111,10 @@ class productSpecificationModel {
             where: {
                 product_id: id,
             }, 
+            order: [["title", "asc"]],
             include: {
                 model: specificationCategorySchema,
-                attributes: ['name']
+                attributes: ['name'],
             }
         });
     }
