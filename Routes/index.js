@@ -86,4 +86,7 @@ module.exports = (app) => {
 
     //  route specification category
     app.use("/specification_category", require("./specification_categories.js"));
+
+    // shipped address route
+    app.use("/shipped_address", require("./shipped_addresses.js"));
 };

@@ -13,6 +13,10 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: 'country_id',
         onDelete: 'cascade'
       })
+      countries.hasMany(models.shipped_addresses,{
+        foreignKey: 'country_id',
+        onDelete: 'cascade'
+      })
     }
   }
   countries.init({

@@ -66,10 +66,10 @@ class orderItemController {
     }
 
     // get order list
-    async getOrderItemList(req, res) {
+    async getOrderItemListById(req, res) {
         
         try {
-            let data = await orderItemModel.getOrderItemList(req?.body);
+            let data = await orderItemModel.getOrderItemListById(req?.params?.id);
 
             return res.handler.success(data);
 

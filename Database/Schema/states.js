@@ -17,6 +17,10 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: 'state_id',
         onDelete: 'cascade'
       })
+      states.hasMany(models.shipped_addresses,{
+        foreignKey: 'state_id',
+        onDelete: 'cascade'
+      })
     }
   }
   states.init({

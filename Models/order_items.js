@@ -80,9 +80,19 @@ class orderItemModel {
     }
 
     // get Order Item list
-    async getOrderItemList(bodyData) {
+    async getOrderItemListById(id) {
 
-        return await orderItemSchema.findAndCountAll();
+        return await orderItemSchema.findAndCountAll({
+            where: {
+                order_id: id
+            },
+            include: [
+                {
+                    model: productSchema,
+                    attributes: ['name', 'sku']
+                }
+            ]
+        });
 
     }
 
