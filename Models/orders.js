@@ -34,6 +34,32 @@ class orderModel {
 
     }
 
+
+    // order status change
+    async orderStatusChange(adminInfo, bodyData) {
+
+        let order = await orderSchema.findOne({
+            where: {
+                id: bodyData?.id,
+                is_delete: STATUS.NOTDELETED
+            }
+        })
+
+        if (!order) {
+            return {
+                status: STATUS_CODES.NOT_FOUND
+            }
+        }
+
+        return await orderSchema.update(bodyData, {
+            where: {
+                id: bodyData?.id
+            }
+        })
+
+    }
+
+
     // delete Order
     async deleteOrder(id) {
 

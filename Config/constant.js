@@ -276,6 +276,7 @@ exports.STATUS_MESSAGES = {
         ADDED: "Order has been placed successfully.",
         UPDATED: "Order been updated successfully.",
         DELETED: "Order been deleted successfully.",
+        STATUS_CHANGED: 'Order status change successfully'
     },
     PRODUCT_REVIEW:{
         ADDED: "Product review has been placed successfully.",
