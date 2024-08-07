@@ -3,32 +3,29 @@ const {
   Model
 } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-  class countries extends Model {
+  class product_highlights extends Model {
     static associate(models) {
-      countries.hasMany(models.states, {
-        foreignKey: 'country_id',
+      product_highlights.belongsTo(models.products,{
+        foreignKey: 'product_id',
         onDelete: 'cascade'
       });
-      countries.hasMany(models.user_addresses, {
-        foreignKey: 'country_id',
-        onDelete: 'cascade'
-      })
-      countries.hasMany(models.shipped_addresses,{
-        foreignKey: 'country_id',
-        onDelete: 'cascade'
-      })
     }
   }
-  countries.init({
+  product_highlights.init({
     id: {
       allowNull: false,
       autoIncrement: true,
       primaryKey: true,
       type: DataTypes.BIGINT(20).UNSIGNED
     },
-    name: {
+    product_id: {
       allowNull: false,
-      type: DataTypes.STRING(255)
+      type: DataTypes.BIGINT(20).UNSIGNED,
+      references: {model: 'products', key: 'id'}
+    },
+    content: {
+      allowNull: false,
+      type: DataTypes.TEXT
     },
     createdAt: {
       allowNull: false,
@@ -40,7 +37,7 @@ module.exports = (sequelize, DataTypes) => {
     }
   }, {
     sequelize,
-    modelName: 'countries',
+    modelName: 'product_highlights',
   });
-  return countries;
+  return product_highlights;
 };

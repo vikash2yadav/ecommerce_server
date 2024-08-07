@@ -1,38 +1,37 @@
 'use strict';
+
+const { STATUS } = require('../../Config/constant');
+
 /** @type {import('sequelize-cli').Migration} */
-const {STATUS} = require("../../Config/constant");
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('product_variants', {
+    await queryInterface.createTable('specification_categories', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.BIGINT(20).UNSIGNED
       },
-      product_id: {
-        allowNull: false,
-        type: Sequelize.BIGINT(20).UNSIGNED,
-        references: { model: 'products', key: 'id' }
-      },
-      attribute_id: {
-        allowNull: false,
-        type: Sequelize.BIGINT(20).UNSIGNED,
-        references: { model: 'attributes', key: 'id' }
-      },
-      attribute_value: {
+      name: {
         allowNull: false,
         type: Sequelize.STRING(255)
       },
-      sku: {
-        allowNull: false,
-        type: Sequelize.TEXT
+      parent_id: {
+        allowNull: true,
+        type: Sequelize.BIGINT(20).UNSIGNED,
+        references: {model: 'specification_categories', key: 'id'}
       },
-      is_default: {
+      status: {
         allowNull: false,
         type: Sequelize.TINYINT(1),
-        defaultValue: STATUS?.NOT_DEFAULT,
-        commet: "0 => not default 1 => default"
+        defaultValue: STATUS?.ACTIVE,
+        comment: "0 => In Active 1 => Active"
+      },
+      is_delete: {
+        allowNull: false,
+        type: Sequelize.TINYINT(1),
+        defaultValue: STATUS?.NOTDELETED,
+        comment: "0 => Not Deleted 1 => Deleted"
       },
       createdAt: {
         allowNull: false,
@@ -45,6 +44,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('product_variants');
+    await queryInterface.dropTable('specification_categories');
   }
 };

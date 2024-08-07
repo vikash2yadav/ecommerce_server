@@ -11,7 +11,7 @@ class productVariantController {
             let data = await productVariantModel.addProductVariant(req?.body);
 
             if (data.status === STATUS_CODES.ALREADY_REPORTED) {
-                return res.handler.conflict(undefined, STATUS_MESSAGES.EXISTS.PRODUCT_VARIANT);
+                return res.handler.conflict(undefined, data?.message);
             }
 
             return res.handler.success(data, STATUS_MESSAGES.PRODUCT_VARIANT.ADDED);
@@ -27,7 +27,7 @@ class productVariantController {
             let data = await productVariantModel.updateProductVariant(req?.body);
 
             if (data.status === STATUS_CODES.NOT_FOUND) {
-                return res.handler.notFound(undefined, STATUS_MESSAGES.NOT_FOUND.PRODUCT_VARIANT);
+                return res.handler.notFound(undefined, data?.message);
             }
 
             if (data.status === STATUS_CODES.ALREADY_REPORTED) {
@@ -74,6 +74,25 @@ class productVariantController {
             res.handler.serverError(error);
         }
     }
+
+
+    // get parent product
+    async getParentProduct(req, res) {
+        try {
+
+            let data = await productVariantModel.getParentProduct(req?.params?.id);
+
+            if (data.status === STATUS_CODES.NOT_FOUND) {
+                return res.handler.notFound(undefined, STATUS_MESSAGES.NOT_FOUND.PRODUCT);
+            }
+
+            return res.handler.success(data);
+
+        } catch (error) {
+            res.handler.serverError(error);
+        }
+    }
+
 
     // get product Variant list
     async getProductVariantList(req, res) {

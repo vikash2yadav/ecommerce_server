@@ -9,6 +9,18 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: 'shipped_addresses_id',
         onDelete: 'cascade'
       })
+      shipped_addresses.belongsTo(models.cities,{
+        foreignKey: 'city_id',
+        onDelete: 'cascade'
+      })
+      shipped_addresses.belongsTo(models.states,{
+        foreignKey: 'state_id',
+        onDelete: 'cascade'
+      })
+      shipped_addresses.belongsTo(models.countries,{
+        foreignKey: 'country_id',
+        onDelete: 'cascade'
+      })
     }
   }
   shipped_addresses.init({
@@ -32,15 +44,18 @@ module.exports = (sequelize, DataTypes) => {
     },
     city_id: {
       allowNull: false,
-      type: DataTypes.BIGINT(20).UNSIGNED
+      type: DataTypes.BIGINT(20).UNSIGNED,
+      references: {model: 'cities', key: 'id'}
     },
     state_id: {
       allowNull: false,
-      type: DataTypes.BIGINT(20).UNSIGNED
+      type: DataTypes.BIGINT(20).UNSIGNED,
+      references: {model: 'states', key: 'id'}
     },
     country_id: {
       allowNull: false,
-      type: DataTypes.BIGINT(20).UNSIGNED
+      type: DataTypes.BIGINT(20).UNSIGNED,
+      references: {model: 'countries', key: 'id'}
     },
     createdAt: {
       allowNull: false,

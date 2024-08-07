@@ -20,22 +20,23 @@ module.exports = {
         allowNull: false,
         type: Sequelize.STRING(255)
       },
-      slug: {
-        allowNull: false,
-        type: Sequelize.TEXT
-      },
-      title: {
-        allowNull: false,
-        type: Sequelize.STRING(255)
-      },
-      description: {
-        allowNull: false,
-        type: Sequelize.TEXT
-      },
       category_id: {
         allowNull: false,
         type: Sequelize.BIGINT(20).UNSIGNED,
         references: {model: 'categories', key: 'id'}
+      },
+      sku:{
+        allowNull: false,
+        type: Sequelize.TEXT
+      },
+      keywords:{
+        allowNull: true,
+        type: Sequelize.TEXT
+      },
+      parent_id: {
+        allowNull: true,
+        type: Sequelize.BIGINT(20).UNSIGNED,
+        references: {model: 'products', key: 'id'}
       },
       last_updated_by: {
         allowNull: true,

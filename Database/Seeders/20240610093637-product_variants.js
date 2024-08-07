@@ -8,27 +8,13 @@ module.exports = {
         product_id: 1,
         attribute_id: 1,
         attribute_value: "red",
-        price: 2000,
-        discount: 10,
-        stock: 2,
-        weight: '2',
         is_default: 1,
-        dimensions: '2 * 3* 6',
-        material: 'wood',
-        image: 'red_image'
       },
       {
         product_id: 2,
         attribute_id: 2,
         attribute_value: "small",
-        price: 1000,
-        discount: 30,
-        stock: 20,
-        weight: '20',
-        is_default: 0,
-        dimensions: '2 * 3* 6',
-        material: 'wood',
-        image: 'red_image'
+        is_default: 0
       }
     ])
   },

@@ -48,6 +48,25 @@ class orderController {
         }
     }
 
+
+     // order status change
+     async orderStatusChange(req, res) {
+        try {
+
+            let data = await orderModel.orderStatusChange(req?.adminInfo, req?.body);
+
+            if(data.status === STATUS_CODES.NOT_FOUND){
+                return res.handler.notFound(undefined, STATUS_MESSAGES.NOT_FOUND.ORDER);
+            }
+
+            return res.handler.success(data, STATUS_MESSAGES.ORDER.STATUS_CHANGED);
+
+        } catch (error) {
+            return res.handler.serverError(error);
+        }
+    }
+
+
     // get order
     async getOrder(req, res) {
         try {

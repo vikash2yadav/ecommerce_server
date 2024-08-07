@@ -1,9 +1,8 @@
 'use strict';
 /** @type {import('sequelize-cli').Migration} */
-const {STATUS} = require("../../Config/constant");
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('product_variants', {
+    await queryInterface.createTable('product_variant_details', {
       id: {
         allowNull: false,
         autoIncrement: true,
@@ -13,26 +12,23 @@ module.exports = {
       product_id: {
         allowNull: false,
         type: Sequelize.BIGINT(20).UNSIGNED,
-        references: { model: 'products', key: 'id' }
+        references: {model: 'products', key: 'id'}
       },
-      attribute_id: {
+      strike_price: {
         allowNull: false,
-        type: Sequelize.BIGINT(20).UNSIGNED,
-        references: { model: 'attributes', key: 'id' }
+        type: Sequelize.BIGINT(20)
       },
-      attribute_value: {
+      price: {
         allowNull: false,
-        type: Sequelize.STRING(255)
+        type: Sequelize.BIGINT(20)
       },
-      sku: {
-        allowNull: false,
-        type: Sequelize.TEXT
+      tag: {
+        allowNull: true,
+        type: Sequelize.TINYINT(1)
       },
-      is_default: {
+      stock: {
         allowNull: false,
-        type: Sequelize.TINYINT(1),
-        defaultValue: STATUS?.NOT_DEFAULT,
-        commet: "0 => not default 1 => default"
+        type: Sequelize.BIGINT(20)
       },
       createdAt: {
         allowNull: false,
@@ -45,6 +41,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('product_variants');
+    await queryInterface.dropTable('product_variant_details');
   }
 };

@@ -55,6 +55,9 @@ exports.STATUS_MESSAGES = {
     EXISTS: {
         ACCOUNT_TYPE: 'Account Type is already exist!',
         USERNAME_OR_EMAIL: 'Username or email is already exist!',
+        PRIMARY_CRREATED_VARIANT_NOT_ALL: 'Primary Product created but problem in variant creation',
+        PRODUCT_VARIANT_SKU_CODE: 'This sku code is already exist for product variant',
+        SKU_CODE: 'This sku is exist for primary product',
         ATTRIBUTE: 'Attribute is already exist',
         USER: "User already exist!",
         PRODUCT_VARIANT: 'This variat is already exist in our system',
@@ -87,13 +90,17 @@ exports.STATUS_MESSAGES = {
 
     NOT_FOUND: {
         USERNAME: 'Username is not available in our system.',
+        SKU_CODE: 'This sku is not found in our system.',
         ACCOUNT_TYPE: 'Account Type is not available in our system.',
         USER: "You are not available in our system!",
+        PRODUCT_HIGHLIGHT: 'this product highlight is not found in our system',
         ROLE: "Role is not available in our system!",
         ATTRIBUTE_VALUE: 'This value is not available in our system',
         CART_ITEM: 'This item is not fount in our system',
         COUNTRY: 'This country is not found in our system',
         INQUIRY: 'This inquiry is not found in our system',
+        SPECIFICATION_CATEGORY: 'This specification category is not found in our system',
+        PRODUCT_SPECIFICATION: 'This product specification is not found in our system',
         CITY: 'This city is not found',
         STATE: 'This state is not found in our system',
         EMAIL: "Email is not available in our system!",
@@ -179,12 +186,28 @@ exports.STATUS_MESSAGES = {
         UPDATED: "Product been updated successfully.",
         DELETED: "Product been deleted successfully.",
         INACTIVE: 'Product status is in active.',
-        STATUS_CHANGED: 'Product status changed successfully'
+        STATUS_CHANGED: 'Product status changed successfully',
+        TRY_AGAIN: 'There is some problem detected, please try again !'
     },
     DELIVERY_PARTNER:{
         ADDED: "Delivery Partner has been added successfully.",
         UPDATED: "Delivery Partner been updated successfully.",
         DELETED: "Delivery Partner been deleted successfully.",
+    },
+    PRODUCT_HIGHLIGHT:{
+        ADDED: "HighLight has been added successfully.",
+        UPDATED: "HighLight been updated successfully.",
+        DELETED: "HighLight been deleted successfully.",
+    },
+    PRODUCT_SPECIFICATION:{
+        ADDED: "Product specification has been added successfully.",
+        UPDATED: "Product specification been updated successfully.",
+        DELETED: "Product specification been deleted successfully.",
+    },
+    SPECIFICATION_CATEGORY:{
+        ADDED: "Specification category has been added successfully.",
+        UPDATED: "Specification category been updated successfully.",
+        DELETED: "Specification category been deleted successfully.",
     },
     OUR_CHOICE: {
         ADDED: "Our choice has been added successfully.",
@@ -253,6 +276,7 @@ exports.STATUS_MESSAGES = {
         ADDED: "Order has been placed successfully.",
         UPDATED: "Order been updated successfully.",
         DELETED: "Order been deleted successfully.",
+        STATUS_CHANGED: 'Order status change successfully'
     },
     PRODUCT_REVIEW:{
         ADDED: "Product review has been placed successfully.",
@@ -373,6 +397,8 @@ exports.STATUS_MESSAGES = {
     },
     VALIDATION: {
         REQUIRED: {
+            SKU_CODE: 'Please, enter sku code',
+            SPECIFICATION_CATEGORY: 'Please, enter specification category',
             NAME: 'Please, enter name',
             MODULE: 'Please, enter module',
             SLUG: 'Please, enter slug',

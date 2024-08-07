@@ -77,4 +77,16 @@ module.exports = (app) => {
 
     // inquiry route
     app.use("/inquiry", require("./inquiries"));
+
+    // product highlights route
+    app.use("/highlight", require("./product_highlights"));
+
+    //  route product specification
+    app.use("/product_specification", require("./product_specifications.js"));
+
+    //  route specification category
+    app.use("/specification_category", require("./specification_categories.js"));
+
+    // shipped address route
+    app.use("/shipped_address", require("./shipped_addresses.js"));
 };

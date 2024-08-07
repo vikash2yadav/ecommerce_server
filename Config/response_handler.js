@@ -1,3 +1,5 @@
+const { STATUS_CODES } = require("./constant");
+
 class ResponseHandler {
     constructor(req, res) {
         this.req = req;
@@ -75,7 +77,7 @@ class ResponseHandler {
 
     conflict(data, message, info) {
         this.sender(
-            STATUS_CODES.CONFLICT,
+            STATUS_CODES?.CONFLICT,
             message || 'Provided information already exist!',
             data, info
         )

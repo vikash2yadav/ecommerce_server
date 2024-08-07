@@ -33,7 +33,7 @@ router.route('/delete/:id').delete(orderItemController.deleteOrderItem);
 // get order item by id
 router.route('/get/:id').get(orderItemController.getOrderItem);
 
-// get order item all list
-router.route('/get/list').post(orderItemController.getOrderItemList);
+// get order item all list by order id
+router.route('/get_list/:id').get(orderItemController.getOrderItemListById);
 
 module.exports = router;
