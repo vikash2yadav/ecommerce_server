@@ -6,11 +6,15 @@ module.exports = {
     return queryInterface.bulkInsert("wishlists", [
       {
         product_id:1,
-        user_id: 2
+        user_id: 2,
+        createdAt: new Date(),
+        updatedAt: new Date()
       },
       {
         product_id:2,
-        user_id: 1
+        user_id: 1,
+        createdAt: new Date(),
+        updatedAt: new Date()
       }
     ])
   },

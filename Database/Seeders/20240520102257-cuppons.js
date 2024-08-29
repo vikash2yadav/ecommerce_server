@@ -10,7 +10,9 @@ module.exports = {
       value: 10,
       code: "1scD&#e!JdNbxdl",
       expired_time: "2024-08-28",
-      created_by: 1
+      created_by: 1,
+      createdAt: new Date(),
+      updatedAt: new Date()
     },
     {
       name: "30% off",
@@ -18,7 +20,9 @@ module.exports = {
       value: 30,
       code: "1scDGh03bxdl",
       expired_time: "2024-06-08",
-      created_by: 1
+      created_by: 1,
+      createdAt: new Date(),
+      updatedAt: new Date()
     }
    ])
   },

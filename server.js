@@ -3,7 +3,7 @@ const bodyParser = require('body-parser') // TO PARSE POST REQUEST
 const cors = require('cors') // ALLOW CROSS ORIGIN REQUESTS
 const swaggerJsdoc = require('swagger-jsdoc');
 const swaggerUi = require('swagger-ui-express');
-require('./config/global');
+require('./Config/global');
 const app = express();
 const http = require('http');
 require('./Config/database');  // DATABASE CONNECTION

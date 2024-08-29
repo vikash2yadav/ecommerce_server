@@ -6,11 +6,15 @@ module.exports = {
     return queryInterface.bulkInsert("user_coupon_relations", [
       {
         user_id: 1,
-        coupon_id: 2
+        coupon_id: 2,
+        createdAt: new Date(),
+        updatedAt: new Date()
       },
       {
         user_id: 2,
-        coupon_id: 1
+        coupon_id: 1,
+        createdAt: new Date(),
+        updatedAt: new Date()
       }
     ])
   },

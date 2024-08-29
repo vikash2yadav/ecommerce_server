@@ -1,25 +1,29 @@
-'use strict';
+"use strict";
 
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
-  async up (queryInterface, Sequelize) {
+  async up(queryInterface, Sequelize) {
     return await queryInterface.bulkInsert("product_reviews", [
       {
-        user_id: 1, 
+        user_id: 1,
         product_id: 1,
         rating: 2,
-        comment: "nice product"
+        comment: "nice product",
+        createdAt: new Date(),
+        updatedAt: new Date(),
       },
       {
-        user_id: 2, 
+        user_id: 2,
         product_id: 2,
         rating: 2,
-        comment: "worst product"
-      }
-    ])
+        comment: "worst product",
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+    ]);
   },
 
-  async down (queryInterface, Sequelize) {
+  async down(queryInterface, Sequelize) {
     return await queryInterface.bulkDelete("product_reviews", null, {});
-  }
+  },
 };

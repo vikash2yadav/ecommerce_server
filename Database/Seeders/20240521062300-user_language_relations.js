@@ -6,11 +6,15 @@ module.exports = {
     return queryInterface.bulkInsert("user_language_relations", [
       {
         user_id: 2,
-        language_id: 1
+        language_id: 1,
+        createdAt: new Date(),
+        updatedAt: new Date()
       },
       {
         user_id: 1,
-        language_id: 1
+        language_id: 1,
+        createdAt: new Date(),
+        updatedAt: new Date()
       }
     ]);
   },

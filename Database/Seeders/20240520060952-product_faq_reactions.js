@@ -8,11 +8,15 @@ module.exports = {
         product_faq_id: 1,
         user_id: 2,
         reaction_type: 1,
+        createdAt: new Date(),
+        updatedAt: new Date()
       },
       {
         product_faq_id: 2,
         user_id: 1,
         reaction_type: 0,
+        createdAt: new Date(),
+        updatedAt: new Date()
       }
     ]);
   },

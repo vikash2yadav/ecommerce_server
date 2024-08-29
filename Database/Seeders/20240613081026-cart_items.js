@@ -20,6 +20,7 @@ module.exports = {
         product_variant_id:2,
         vendor_id: 1,
         quantity: 1,
+        total_price: 200,
         createdAt: new Date(),
         updatedAt: new Date()
       }

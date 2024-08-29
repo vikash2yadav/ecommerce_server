@@ -7,12 +7,16 @@ module.exports = {
       {
         product_id: 1,
         question: 'what is this product',
-        answer: "This is smart book"
+        answer: "This is smart book",
+        createdAt: new Date(),
+        updatedAt: new Date()
       },
       {
         product_id: 1,
         question: 'Is it expensive',
-        answer: "No, it is under your budget"
+        answer: "No, it is under your budget",
+        createdAt: new Date(),
+        updatedAt: new Date()
       }
     ])
   },
