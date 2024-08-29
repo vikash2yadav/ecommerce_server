@@ -552,6 +552,12 @@ exports.ORDER_STATUS = {
     CANCELLED: 3
 }
 
+// languages
+exports.LANGUAGES = {
+    ENGLISH : 1,
+    HINDI: 2
+}
+
 // Generic Status
 exports.STATUS = {
     ZERO: 0,

@@ -2,7 +2,7 @@
 const {
   Model
 } = require('sequelize');
-const { STATUS, ROLE } = require('../../Config/constant');
+const { STATUS, ROLE, LANGUAGES } = require('../../Config/constant');
 module.exports = (sequelize, DataTypes) => {
   class users extends Model {
     static associate(models) {
@@ -142,7 +142,8 @@ module.exports = (sequelize, DataTypes) => {
     language_id: {
       allowNull: false,
       type: DataTypes.BIGINT(20).UNSIGNED,
-      references: { model: 'languages', key: 'id' }
+      references: { model: 'languages', key: 'id' },
+      defaultValue: LANGUAGES.ENGLISH
     },
     created_by: {
       allowNull: true,
